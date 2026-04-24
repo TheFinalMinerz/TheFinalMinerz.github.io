@@ -442,20 +442,22 @@ section {
     backface-visibility: hidden;
 }
 
-/* Desktop Only Interactions */
+/* Desktop Only Interactions (Strictly disabled if a touchscreen is used) */
 @media (hover: hover) and (pointer: fine) {
-    .btn:hover, .mobile-cta:hover, .nav-cta:hover {
+    body:not(.is-touch-device) .btn:hover, 
+    body:not(.is-touch-device) .mobile-cta:hover, 
+    body:not(.is-touch-device) .nav-cta:hover {
         transform: translateY(-2px);
         box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
     }
-    .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
-    .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
-    .card:hover { transform: translateY(-5px) translateZ(0); }
-    .card.no-lift:hover { transform: none; }
-    .tech-item:hover { opacity: 1; transform: scale(1.05); }
+    body:not(.is-touch-device) .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
+    body:not(.is-touch-device) .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
+    body:not(.is-touch-device) .card:hover { transform: translateY(-5px) translateZ(0); }
+    body:not(.is-touch-device) .card.no-lift:hover { transform: none; }
+    body:not(.is-touch-device) .tech-item:hover { opacity: 1; transform: scale(1.05); }
     
     /* CRITICAL: Marquee ONLY pauses for mouse, never for touch */
-    .marquee-wrapper:hover { animation-play-state: paused; }
+    body:not(.is-touch-device) .marquee-wrapper:hover { animation-play-state: paused; }
 }
 
 /* --- INFINITE SCROLLING MARQUEE --- */
@@ -468,7 +470,6 @@ section {
     overflow: hidden;
     position: relative;
     margin-bottom: 2rem;
-    /* Fixed Syntax Error */
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     touch-action: pan-y;

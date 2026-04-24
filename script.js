@@ -1,3 +1,8 @@
+// Detect touch devices on the first tap to permanently disable conflicting desktop CSS hover effects
+document.addEventListener('touchstart', function() {
+    document.body.classList.add('is-touch-device');
+}, { once: true });
+
 // Utility: Throttle function for performance optimization
 function throttle(func, delay) {
     let lastCall = 0;
@@ -254,42 +259,84 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
 });
 
 // --- High-Performance Universal Spotlight Effect Tracker ---
-document.querySelectorAll('.hover-spotlight').forEach(element => {
-    let ticking = false;
-    const overlay = element.querySelector('.spotlight-overlay');
-    
-    const updateSpotlight = (clientX, clientY) => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const rect = element.getBoundingClientRect();
-                const x = clientX - rect.left;
-                const y = clientY - rect.top;
-                element.style.setProperty('--mouse-x', `${x}px`);
-                element.style.setProperty('--mouse-y', `${y}px`);
-                ticking = false;
-            });
-            ticking = true;
-        }
-    };
+let currentSpotlightCard = null;
 
-    // Desktop Mouse Tracking
-    element.addEventListener('mousemove', e => updateSpotlight(e.clientX, e.clientY));
-    
-    // Mobile Touch Tracking (Fluid Spotlight dragging)
-    element.addEventListener('touchmove', e => updateSpotlight(e.touches[0].clientX, e.touches[0].clientY), {passive: true});
-    
-    // Make spotlight visible when finger touches the card
-    element.addEventListener('touchstart', (e) => {
-        if(overlay) overlay.style.opacity = '1';
-        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
-    }, {passive: true});
-    
-    // Hide spotlight when finger lifts
-    element.addEventListener('touchend', () => { if(overlay) overlay.style.opacity = '0'; });
-    element.addEventListener('touchcancel', () => { if(overlay) overlay.style.opacity = '0'; });
+const updateSpotlightPosition = (card, clientX, clientY) => {
+    window.requestAnimationFrame(() => {
+        const rect = card.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+    });
+};
+
+// 1. Desktop Mouse Tracking (Standard)
+document.querySelectorAll('.hover-spotlight').forEach(element => {
+    element.addEventListener('mousemove', e => {
+        updateSpotlightPosition(element, e.clientX, e.clientY);
+    });
 });
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
+// 2. Mobile Touch Tracking (Fluid cross-element dragging)
+document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (!elementUnderFinger) return;
+
+    const card = elementUnderFinger.closest('.hover-spotlight');
+
+    // Fade out old card if we dragged onto a new one
+    if (currentSpotlightCard && currentSpotlightCard !== card) {
+        const oldOverlay = currentSpotlightCard.querySelector('.spotlight-overlay');
+        if (oldOverlay) oldOverlay.style.opacity = '0';
+    }
+
+    // Update new card
+    if (card) {
+        const overlay = card.querySelector('.spotlight-overlay');
+        if (overlay) overlay.style.opacity = '1';
+        updateSpotlightPosition(card, touch.clientX, touch.clientY);
+        currentSpotlightCard = card;
+    } else {
+        // If finger slides off all cards, clear the current one
+        if(currentSpotlightCard) {
+            const oldOverlay = currentSpotlightCard.querySelector('.spotlight-overlay');
+            if (oldOverlay) oldOverlay.style.opacity = '0';
+            currentSpotlightCard = null;
+        }
+    }
+}, { passive: true });
+
+// Show glow on initial tap
+document.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (!elementUnderFinger) return;
+    
+    const card = elementUnderFinger.closest('.hover-spotlight');
+    if (card) {
+        const overlay = card.querySelector('.spotlight-overlay');
+        if (overlay) overlay.style.opacity = '1';
+        updateSpotlightPosition(card, touch.clientX, touch.clientY);
+        currentSpotlightCard = card;
+    }
+}, { passive: true });
+
+// Clear glow when finger lifts
+const clearSpotlight = () => {
+    if (currentSpotlightCard) {
+        const overlay = currentSpotlightCard.querySelector('.spotlight-overlay');
+        if (overlay) overlay.style.opacity = '0';
+        currentSpotlightCard = null;
+    }
+};
+
+document.addEventListener('touchend', clearSpotlight);
+document.addEventListener('touchcancel', clearSpotlight);
+
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 
 // Aggressively scrubs the entire document of stuck highlight classes
