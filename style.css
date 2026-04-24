@@ -455,8 +455,8 @@ section {
     body:not(.is-touch-device) .card:hover { transform: translateY(-5px) translateZ(0); }
     body:not(.is-touch-device) .card.no-lift:hover { transform: none; }
     
-    /* Elegant scale for marquee buttons, without rendering shadow boxes */
-    body:not(.is-touch-device) .tech-item.hover-spotlight:hover {
+    /* Clean scale for marquee text on hover */
+    body:not(.is-touch-device) .tech-item:hover {
         opacity: 1;
         transform: scale(1.05);
     }
@@ -507,25 +507,23 @@ section {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    gap: 4.5rem;
+    gap: 4.5rem; 
     padding-right: 4.5rem;
     flex-shrink: 0;
 }
 
-/* Marquee Item - Floating Text with Micro-Spotlight Logic */
+/* Marquee Item - Clean Floating Text */
 .tech-item {
-    position: relative;
-    overflow: hidden;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 12px;
     background: transparent;
     border: none;
-    border-radius: 50px;
     padding: 0.5rem 1rem;
     opacity: 0.6;
     transition: opacity 0.3s ease, transform 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
-    transform-origin: center center;
     
     /* Enterprise Touch Safeguards */
     -webkit-tap-highlight-color: transparent;
@@ -534,19 +532,10 @@ section {
     -webkit-user-drag: none;
 }
 
-.tech-item .spotlight-content-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-/* Overrides the 800px massive spotlight with a tiny, soft orb for text */
-.tech-item .spotlight-overlay {
-    background: radial-gradient(
-        60px circle at var(--mouse-x) var(--mouse-y), 
-        rgba(255, 255, 255, 0.15),
-        transparent 100%
-    );
+.tech-item:active {
+    opacity: 1;
+    transform: scale(1.02);
+    transition: opacity 0.1s, transform 0.1s;
 }
 
 .tech-item img {
@@ -753,6 +742,47 @@ footer {
 }
 
 .newsletter-form button:hover { opacity: 0.9; }
+
+/* Compliance Miniature Cards */
+.compliance-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 2rem;
+}
+
+.compliance-card {
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    min-width: 180px;
+}
+
+.compliance-card .spotlight-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.compliance-card h4 {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-main);
+    font-family: 'Inter', sans-serif;
+}
+
+.compliance-card p {
+    margin: 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.compliance-card svg {
+    color: var(--accent-glow);
+    flex-shrink: 0;
+}
 
 .footer-bottom {
     text-align: center;
