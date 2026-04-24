@@ -194,6 +194,15 @@ document.querySelectorAll('.reveal').forEach((el) => {
     observer.observe(el);
 });
 
+window.addEventListener('load', () => {
+    document.querySelectorAll('.reveal').forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            el.classList.add('active');
+        }
+    });
+});
+
 // Seamless AJAX Form Submission for Newsletter
 const form = document.querySelector('.newsletter-form');
 if (form) {
