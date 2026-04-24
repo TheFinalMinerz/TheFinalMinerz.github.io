@@ -639,7 +639,7 @@
         box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
     }
 
-    .expert-info h4 {
+    .expert-info h3 {
         font-size: 1.2rem;
         color: var(--text-main);
         margin-bottom: 0.2rem;
@@ -684,7 +684,7 @@
         margin-bottom: 4rem;
     }
 
-    .footer-col h4 {
+    .footer-col h3 {
         font-size: 1.2rem;
         margin-bottom: 1.5rem;
         color: var(--text-main);
