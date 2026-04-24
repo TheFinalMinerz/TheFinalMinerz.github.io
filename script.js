@@ -260,4 +260,14 @@ if (form) {
             btn.style.opacity = '1';
         }, 3000);
     });
+    
 }
+
+// Accessibility: Prevent marquee containers from auto-scrolling when tabbing quickly
+document.querySelectorAll('.trust-banner').forEach(banner => {
+    banner.addEventListener('scroll', function() {
+        // Forces the container to stay locked at the far left edge
+        // letting the CSS transform handle all the visual movement safely.
+        this.scrollLeft = 0;
+    });
+});

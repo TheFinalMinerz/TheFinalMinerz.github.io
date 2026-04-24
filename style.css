@@ -502,7 +502,7 @@
         align-items: center;
         justify-content: flex-start;
         gap: 4.5rem;
-        padding-right: 2rem;
+        padding-right: 4.5rem;
         flex-shrink: 0;
     }
 
