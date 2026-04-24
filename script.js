@@ -338,6 +338,7 @@ document.addEventListener('touchcancel', clearSpotlight);
 
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
+let isDragging = false;
 
 const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
@@ -346,26 +347,29 @@ const clearAllTouches = () => {
     currentTouchedItem = null;
 };
 
-// Handle fluid finger dragging across the screen
+// Handle fluid finger dragging with GPU requestAnimationFrame for 60fps performance
 document.addEventListener('touchmove', (e) => {
-    const touch = e.touches[0];
-    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (isDragging) return;
+    isDragging = true;
     
-    if (!element) {
-        clearAllTouches();
-        return;
-    }
-
-    const techItem = element.closest('.tech-item');
-    
-    // Swap the highlight instantly if the finger moves to a new item
-    if (techItem !== currentTouchedItem) {
-        clearAllTouches();
-        if (techItem) {
-            techItem.classList.add('touch-active');
-            currentTouchedItem = techItem;
+    window.requestAnimationFrame(() => {
+        const touch = e.touches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        
+        if (!element) {
+            clearAllTouches();
+        } else {
+            const techItem = element.closest('.tech-item');
+            if (techItem !== currentTouchedItem) {
+                clearAllTouches();
+                if (techItem) {
+                    techItem.classList.add('touch-active');
+                    currentTouchedItem = techItem;
+                }
+            }
         }
-    }
+        isDragging = false;
+    });
 }, { passive: true });
 
 // Handle initial tap
@@ -379,14 +383,17 @@ document.addEventListener('touchstart', (e) => {
     }
 }, { passive: true });
 
-// Delay the cleanup slightly so it fires AFTER Apple's simulated click
+// Clean up when finger lifts
 document.addEventListener('touchend', () => setTimeout(clearAllTouches, 150));
 document.addEventListener('touchcancel', () => setTimeout(clearAllTouches, 150));
 
-// Failsafe: Hardkill the browser's native click-focus retention
+// Failsafe: Hardkill native focus retention asynchronously to prevent layout thrashing
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
-        this.blur(); // Strips native focus
-        setTimeout(clearAllTouches, 150); // Defeats the iOS sticky-hover bug
+        // Offload to the next frame to guarantee the marquee doesn't stutter on tap
+        setTimeout(() => {
+            this.blur(); 
+            clearAllTouches();
+        }, 150); 
     });
 });

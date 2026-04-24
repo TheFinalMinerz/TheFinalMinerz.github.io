@@ -536,6 +536,10 @@ section {
     text-decoration: none;
     white-space: nowrap;
     
+    /* CRITICAL FIX: GPU Hardware Acceleration Isolation */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    
     /* Enterprise Touch Safeguards */
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
