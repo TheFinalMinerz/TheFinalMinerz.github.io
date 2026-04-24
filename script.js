@@ -276,12 +276,6 @@ document.querySelectorAll('.hover-spotlight').forEach(element => {
     element.addEventListener('mousemove', e => {
         updateSpotlightPosition(element, e.clientX, e.clientY);
     });
-    // CRITICAL FIX: Reset glow to center on mouse leave so it doesn't get "stuck" on moving marquee items
-    element.addEventListener('mouseleave', () => {
-        const rect = element.getBoundingClientRect();
-        element.style.setProperty('--mouse-x', `${rect.width / 2}px`);
-        element.style.setProperty('--mouse-y', `${rect.height / 2}px`);
-    });
 });
 
 // 2. Mobile Touch Tracking (Fluid cross-element dragging)

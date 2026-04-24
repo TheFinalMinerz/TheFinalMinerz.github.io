@@ -452,8 +452,14 @@ section {
     }
     body:not(.is-touch-device) .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
     body:not(.is-touch-device) .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
+    
     body:not(.is-touch-device) .card:hover { transform: translateY(-5px) translateZ(0); }
     body:not(.is-touch-device) .card.no-lift:hover { transform: none; }
+    
+    /* CRITICAL FIX: Ensures the new compliance cards do not move upward on hover */
+    body:not(.is-touch-device) .compliance-card:hover {
+        transform: none; 
+    }
     
     /* Clean scale for marquee text on hover */
     body:not(.is-touch-device) .tech-item:hover {
@@ -461,7 +467,7 @@ section {
         transform: scale(1.05);
     }
     
-    /* CRITICAL: Marquee ONLY pauses for mouse, never for touch */
+    /* Marquee ONLY pauses for mouse, never for touch */
     body:not(.is-touch-device) .marquee-wrapper:hover { animation-play-state: paused; }
 }
 
