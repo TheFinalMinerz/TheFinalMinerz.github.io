@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <meta name="theme-color" content="#0a0a0f"> 
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; style-src 'unsafe-inline'">
+    <meta name="theme-color" content="#0a0a0f">
+    <link rel="canonical" href="https://egusystems.com"> 
     
     <meta property="og:title" content="EguSystems LLC | IT Infrastructure & Cybersecurity">
     <meta property="og:description" content="We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.">
@@ -30,17 +31,21 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "ITUtility",
+      "@type": "Organization",
       "name": "EguSystems LLC",
-      "image": "https://egusystems.com/favicon.svg",
-      "@id": "https://egusystems.com",
       "url": "https://egusystems.com",
-      "telephone": "N/A",
+      "image": "https://egusystems.com/favicon.svg",
       "email": "contact@egusystems.com",
       "description": "Next-Generation IT Infrastructure and Full-Stack Cybersecurity solutions for modern businesses.",
-      "sameAs": [
-        "https://egusystems.com"
-      ]
+      "areaServed": "US",
+      "knowsAbout": ["IT Infrastructure", "Cybersecurity", "Proxmox Virtualization", "Data Protection"],
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://egusystems.com/favicon.svg",
+        "width": 96,
+        "height": 96
+      },
+      "sameAs": ["https://egusystems.com"]
     }
     </script>
 
@@ -1222,7 +1227,7 @@
                 <div class="footer-col">
                     <h4>Stay Updated</h4>
                     <p>Get monthly insights, tips, and updates straight from EguSystems.</p>
-                    <form class="newsletter-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                    <form class="newsletter-form" action="https://formspree.io/f/xykllrow" method="POST">
                         <input type="email" name="email" placeholder="Email address" aria-label="Email address" required>
                         <button type="submit">Join</button>
                     </form>
@@ -1248,8 +1253,29 @@
     <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
 
     <script>
-        // Scroll Progress Bar & Back to Top Logic
-        window.addEventListener('scroll', () => {
+        // Utility: Throttle function for performance optimization
+        function throttle(func, delay) {
+            let lastCall = 0;
+            return function(...args) {
+                const now = Date.now();
+                if (now - lastCall >= delay) {
+                    lastCall = now;
+                    func(...args);
+                }
+            };
+        }
+
+        // Utility: Debounce function for resize events
+        function debounce(func, delay) {
+            let timeoutId;
+            return function(...args) {
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(() => func(...args), delay);
+            };
+        }
+
+        // Scroll Progress Bar & Back to Top Logic (Throttled)
+        const handleScroll = throttle(() => {
             const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrolled = (winScroll / height) * 100;
@@ -1261,13 +1287,15 @@
             } else {
                 backToTopBtn.classList.remove('visible');
             }
-        });
+        }, 16); // ~60fps throttle
 
-        // Scrollspy (Active Nav Link Tracker)
+        window.addEventListener('scroll', handleScroll);
+
+        // Scrollspy (Active Nav Link Tracker - Throttled)
         const sections = document.querySelectorAll("section");
         const navLinks = document.querySelectorAll(".nav-link");
 
-        window.addEventListener("scroll", () => {
+        const handleScrollspy = throttle(() => {
             let current = "";
             sections.forEach((section) => {
                 const sectionTop = section.offsetTop;
@@ -1282,7 +1310,9 @@
                     link.classList.add("active-link");
                 }
             });
-        });
+        }, 16);
+
+        window.addEventListener("scroll", handleScrollspy);
 
         // Cookie Banner Logic
         window.addEventListener('DOMContentLoaded', () => {
@@ -1321,7 +1351,7 @@
             };
 
             refreshMarqueeLoop();
-            window.addEventListener('resize', () => requestAnimationFrame(refreshMarqueeLoop));
+            window.addEventListener('resize', debounce(() => requestAnimationFrame(refreshMarqueeLoop), 250));
         });
 
         // Smooth Mobile Menu Toggle Logic
@@ -1411,6 +1441,7 @@
                 const originalText = btn.innerHTML;
                 
                 btn.innerHTML = 'Sending...';
+                btn.disabled = true;
                 btn.style.opacity = '0.7';
 
                 try {
@@ -1426,15 +1457,22 @@
                         btn.innerHTML = 'Subscribed! ✓';
                         btn.style.background = '#10b981'; 
                         form.reset();
+                        console.log('Newsletter subscription successful');
                     } else {
-                        btn.innerHTML = 'Error!';
+                        const errorData = await response.json().catch(() => ({}));
+                        btn.innerHTML = errorData.message || 'Error submitting form';
+                        btn.style.background = '#ef4444';
+                        console.error('Subscription error:', errorData);
                     }
                 } catch (error) {
-                    btn.innerHTML = 'Error!';
+                    btn.innerHTML = 'Network error - please try again';
+                    btn.style.background = '#ef4444';
+                    console.error('Newsletter submission error:', error);
                 }
 
                 setTimeout(() => {
                     btn.innerHTML = originalText;
+                    btn.disabled = false;
                     btn.style.background = ''; 
                     btn.style.opacity = '1';
                 }, 3000);
