@@ -113,7 +113,8 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
 document.addEventListener('keydown', (e) => {
     if (!mobileDropdown.classList.contains('active')) return;
     
-    const focusableElements = mobileDropdown.querySelectorAll('a, button');
+    const dropdownElements = Array.from(mobileDropdown.querySelectorAll('a, button'));
+    const focusableElements = [mobileToggle, ...dropdownElements];
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -121,7 +122,7 @@ document.addEventListener('keydown', (e) => {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
-        mobileToggle.innerHTML = '☰';
+        setTimeout(() => { if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰'; }, 400);
         mobileToggle.focus();
     }
 
