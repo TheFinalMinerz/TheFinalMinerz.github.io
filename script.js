@@ -73,32 +73,7 @@ window.addEventListener('DOMContentLoaded', () => {
         cookieBanner.classList.remove('show');
     });
 
-    const marqueeWrappers = document.querySelectorAll('.marquee-wrapper');
-    const marqueeBases = new Map();
-
-    marqueeWrappers.forEach(wrapper => {
-        marqueeBases.set(wrapper, Array.from(wrapper.children).map(child => child.cloneNode(true)));
-    });
-
-    const refreshMarqueeLoop = () => {
-        marqueeWrappers.forEach(wrapper => {
-            const baseItems = marqueeBases.get(wrapper);
-            if (!baseItems?.length) return;
-
-            wrapper.innerHTML = '';
-            baseItems.forEach(item => wrapper.appendChild(item.cloneNode(true)));
-
-            const minWidth = wrapper.parentElement.clientWidth * 2;
-            while (wrapper.scrollWidth < minWidth) {
-                baseItems.forEach(item => wrapper.appendChild(item.cloneNode(true)));
-            }
-        });
-    };
-
-    refreshMarqueeLoop();
-    window.addEventListener('resize', debounce(() => requestAnimationFrame(refreshMarqueeLoop), 250));
-});
-
+    
 // Smooth Mobile Menu Toggle Logic
 const mobileToggle = document.getElementById('mobileToggle');
 const mobileDropdown = document.getElementById('mobileDropdown');
