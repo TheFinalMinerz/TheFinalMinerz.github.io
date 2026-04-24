@@ -455,10 +455,8 @@
         .card:hover { transform: translateY(-5px) translateZ(0); }
         .card.no-lift:hover { transform: none; }
         
-        .tech-item:hover { 
-            opacity: 1; 
-            transform: scale(1.05);
-        }
+        .tech-item:hover {
+            opacity: 1;            transform: scale(1.05);        }
     }
 
     /* Infinite Scrolling Banners */
@@ -502,7 +500,7 @@
         flex-wrap: nowrap;
         align-items: center;
         justify-content: flex-start;
-        gap: 4rem;
+        gap: 4.5rem;
         padding-right: 2rem;
         flex-shrink: 0;
     }
@@ -514,6 +512,9 @@
         opacity: 0.6;
         transition: opacity 0.3s ease, transform 0.2s ease;
         text-decoration: none;
+        white-space: nowrap;
+        transform-origin: center center;
+        padding: 0 0.25rem;
     }
 
     .tech-item img {
@@ -538,6 +539,7 @@
 
     .tech-item span {
         font-weight: 700;
+        white-space: nowrap;
         font-size: 1.1rem;
         letter-spacing: 1px;
         color: var(--text-main);
