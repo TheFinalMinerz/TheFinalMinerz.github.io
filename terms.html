@@ -241,6 +241,35 @@
         </div>
     </footer>
 
+    <div class="theme-settings-wrapper">
+        <button class="theme-toggle-btn" aria-label="Theme Settings">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        </button>
+        <div class="theme-panel">
+            <h4>Theme Settings</h4>
+            
+            <div class="theme-control">
+                <label for="color1Picker">Primary Color</label>
+                <input type="color" id="color1Picker" value="#3b82f6" aria-label="Select Primary Color">
+            </div>
+            
+            <div class="theme-control">
+                <label for="color2Picker">Secondary Color</label>
+                <input type="color" id="color2Picker" value="#8b5cf6" aria-label="Select Secondary Color">
+            </div>
+            
+            <div class="theme-control" style="margin-top: 1.5rem;">
+                <label for="animToggle">Background Animation</label>
+                <label class="switch">
+                    <input type="checkbox" id="animToggle" checked aria-label="Toggle Background Animation">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <button id="resetTheme" class="cookie-btn" style="width: 100%; margin-top: 1.5rem;">Reset Defaults</button>
+        </div>
+    </div>
+
     <div class="cookie-banner" id="cookieBanner">
         <p>We use cookies to secure your experience and analyze traffic. <a href="/privacy.html">Privacy Policy</a>.</p>
         <button class="cookie-btn" id="acceptCookies">Accept</button>

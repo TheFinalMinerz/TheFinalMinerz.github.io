@@ -341,13 +341,12 @@ document.addEventListener('touchcancel', clearSpotlight);
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 let isDragging = false;
-let isNavigating = false; // Lock out interactions while browser opens new tab
+let isNavigating = false; 
 
 const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
     });
-    // Remove pause lock
     document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
         wrapper.classList.remove('is-paused');
     });
@@ -372,7 +371,6 @@ document.addEventListener('touchmove', (e) => {
                 if (techItem) {
                     techItem.classList.add('touch-active');
                     
-                    // Pause parent marquee during drag
                     const wrapper = techItem.closest('.marquee-wrapper');
                     if (wrapper) wrapper.classList.add('is-paused');
                     
@@ -393,7 +391,6 @@ document.addEventListener('touchstart', (e) => {
     if (techItem) {
         techItem.classList.add('touch-active');
         
-        // Pause parent marquee instantly on touch
         const wrapper = techItem.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
         
@@ -401,7 +398,7 @@ document.addEventListener('touchstart', (e) => {
     }
 }, { passive: true });
 
-// Clean up when finger lifts (but checks if a click was registered to prevent rebound)
+// Clean up when finger lifts 
 document.addEventListener('touchend', () => {
     setTimeout(() => {
         if (!isNavigating) clearAllTouches();
@@ -417,22 +414,18 @@ document.addEventListener('touchcancel', () => {
 // THE HOLY GRAIL: Defeating Mobile Focus-Snap natively
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function(e) {
-        // 1. Instantly stop the mobile browser from executing a native "focus snap" layout shift
         e.preventDefault(); 
         
         if (isNavigating) return;
         isNavigating = true; 
         
-        // 2. Visually lock the state
         this.classList.add('touch-active');
         const wrapper = this.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
         
-        // 3. Manually handle the routing
         const href = this.getAttribute('href');
         const target = this.getAttribute('target');
         
-        // Give the UI exactly 50ms to render the beautiful frozen frame before opening the tab
         setTimeout(() => {
             if (href && href.startsWith('#')) {
                 window.location.href = href;
@@ -440,7 +433,6 @@ document.querySelectorAll('.tech-item').forEach(item => {
                 window.open(href, target || '_self', 'noopener,noreferrer');
             }
             
-            // 4. Quietly reset the button state in the background 1 second later
             setTimeout(() => {
                 isNavigating = false; 
                 clearAllTouches();
@@ -448,4 +440,87 @@ document.querySelectorAll('.tech-item').forEach(item => {
             
         }, 50);
     });
+});
+
+// --- Theme Personalization Engine ---
+const themeBtn = document.querySelector('.theme-toggle-btn');
+const themePanel = document.querySelector('.theme-panel');
+const color1Picker = document.getElementById('color1Picker');
+const color2Picker = document.getElementById('color2Picker');
+const animToggle = document.getElementById('animToggle');
+const resetThemeBtn = document.getElementById('resetTheme');
+
+const defaultColor1 = '#3b82f6';
+const defaultColor2 = '#8b5cf6';
+
+// Toggle Panel Visibility
+if (themeBtn && themePanel) {
+    themeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        themePanel.classList.toggle('active');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!themePanel.contains(e.target) && !themeBtn.contains(e.target)) {
+            themePanel.classList.remove('active');
+        }
+    });
+}
+
+// Global Color Application
+const updateColors = (c1, c2) => {
+    document.documentElement.style.setProperty('--color-1', c1);
+    document.documentElement.style.setProperty('--color-2', c2);
+    
+    localStorage.setItem('themeColor1', c1);
+    localStorage.setItem('themeColor2', c2);
+}
+
+if (color1Picker && color2Picker) {
+    color1Picker.addEventListener('input', (e) => updateColors(e.target.value, color2Picker.value));
+    color2Picker.addEventListener('input', (e) => updateColors(color1Picker.value, e.target.value));
+}
+
+// Background Animation Toggle
+if (animToggle) {
+    animToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.body.classList.remove('disable-bg-animation');
+            localStorage.setItem('bgAnimation', 'enabled');
+        } else {
+            document.body.classList.add('disable-bg-animation');
+            localStorage.setItem('bgAnimation', 'disabled');
+        }
+    });
+}
+
+// Factory Reset
+if (resetThemeBtn) {
+    resetThemeBtn.addEventListener('click', () => {
+        color1Picker.value = defaultColor1;
+        color2Picker.value = defaultColor2;
+        updateColors(defaultColor1, defaultColor2);
+        
+        animToggle.checked = true;
+        document.body.classList.remove('disable-bg-animation');
+        localStorage.setItem('bgAnimation', 'enabled');
+    });
+}
+
+// Boot Sequencer (Load User Preferences)
+window.addEventListener('DOMContentLoaded', () => {
+    const savedC1 = localStorage.getItem('themeColor1');
+    const savedC2 = localStorage.getItem('themeColor2');
+    const savedAnim = localStorage.getItem('bgAnimation');
+
+    if (savedC1 && savedC2) {
+        if(color1Picker) color1Picker.value = savedC1;
+        if(color2Picker) color2Picker.value = savedC2;
+        updateColors(savedC1, savedC2);
+    }
+
+    if (savedAnim === 'disabled') {
+        if(animToggle) animToggle.checked = false;
+        document.body.classList.add('disable-bg-animation');
+    }
 });
