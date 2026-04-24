@@ -254,7 +254,6 @@ if (form) {
 // Accessibility: Prevent marquee containers from auto-scrolling when tabbing quickly
 document.querySelectorAll('.trust-banner').forEach(banner => {
     banner.addEventListener('scroll', function() {
-        // Only force layout if it actually scrolled, avoiding unnecessary background thrashing
         if (this.scrollLeft !== 0) {
             this.scrollLeft = 0;
         }
@@ -348,6 +347,10 @@ const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
     });
+    // Remove pause lock
+    document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
+        wrapper.classList.remove('is-paused');
+    });
     currentTouchedItem = null;
 };
 
@@ -368,6 +371,11 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
+                    
+                    // Pause parent marquee during drag
+                    const wrapper = techItem.closest('.marquee-wrapper');
+                    if (wrapper) wrapper.classList.add('is-paused');
+                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -384,6 +392,11 @@ document.addEventListener('touchstart', (e) => {
     
     if (techItem) {
         techItem.classList.add('touch-active');
+        
+        // Pause parent marquee instantly on touch
+        const wrapper = techItem.closest('.marquee-wrapper');
+        if (wrapper) wrapper.classList.add('is-paused');
+        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -401,20 +414,38 @@ document.addEventListener('touchcancel', () => {
     }, 300);
 });
 
-// Failsafe: Hardkill native focus retention asynchronously to prevent layout thrashing
+// THE HOLY GRAIL: Defeating Mobile Focus-Snap natively
 document.querySelectorAll('.tech-item').forEach(item => {
-    item.addEventListener('click', function() {
+    item.addEventListener('click', function(e) {
+        // 1. Instantly stop the mobile browser from executing a native "focus snap" layout shift
+        e.preventDefault(); 
+        
+        if (isNavigating) return;
         isNavigating = true; 
+        
+        // 2. Visually lock the state
         this.classList.add('touch-active');
+        const wrapper = this.closest('.marquee-wrapper');
+        if (wrapper) wrapper.classList.add('is-paused');
         
-        // CRITICAL FIX: Instantly strip native focus the millisecond the tap registers 
-        // to completely stop the browser from attempting a focus-scroll layout shift
-        this.blur();
+        // 3. Manually handle the routing
+        const href = this.getAttribute('href');
+        const target = this.getAttribute('target');
         
-        // Wait a full second before visually stripping OUR custom highlight class
+        // Give the UI exactly 50ms to render the beautiful frozen frame before opening the tab
         setTimeout(() => {
-            isNavigating = false; 
-            clearAllTouches();
-        }, 1000); 
+            if (href && href.startsWith('#')) {
+                window.location.href = href;
+            } else if (href) {
+                window.open(href, target || '_self', 'noopener,noreferrer');
+            }
+            
+            // 4. Quietly reset the button state in the background 1 second later
+            setTimeout(() => {
+                isNavigating = false; 
+                clearAllTouches();
+            }, 1000); 
+            
+        }, 50);
     });
 });
