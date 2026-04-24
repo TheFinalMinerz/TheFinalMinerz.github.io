@@ -789,17 +789,20 @@
         gap: 1rem;
         opacity: 0;
         transform: translateY(20px);
-        transition: opacity 0.5s ease, transform 0.5s ease, width 0.4s ease, bottom 0.4s ease, left 0.4s ease, right 0.4s ease;
         pointer-events: none;
-        visibility: hidden;
+        visibility: hidden; /* Completely removes the invisible banner from the tab sequence */
+        /* Delays the visibility swap by 0.5s so the opacity fade-out can finish first */
+        transition: opacity 0.5s ease, transform 0.5s ease, width 0.4s ease, bottom 0.4s ease, left 0.4s ease, right 0.4s ease, visibility 0s linear 0.5s;
     }
 
     .cookie-banner.show {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
-        visibility: visible;
-    }
+        visibility: visible; /* Brings the banner back into the tab sequence when active */
+        /* Triggers visibility instantly when fading in */
+        transition: opacity 0.5s ease, transform 0.5s ease, width 0.4s ease, bottom 0.4s ease, left 0.4s ease, right 0.4s ease, visibility 0s linear 0s;
+    }  
 
     .cookie-banner p {
         font-size: 0.9rem;
