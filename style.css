@@ -455,12 +455,10 @@ section {
     body:not(.is-touch-device) .card:hover { transform: translateY(-5px) translateZ(0); }
     body:not(.is-touch-device) .card.no-lift:hover { transform: none; }
     
-    /* Replaces the old tech-item scale effect with a beautiful lift and glow */
+    /* Elegant scale for marquee buttons, without rendering shadow boxes */
     body:not(.is-touch-device) .tech-item.hover-spotlight:hover {
         opacity: 1;
-        transform: translateY(-2px);
-        border-color: rgba(255, 255, 255, 0.2);
-        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        transform: scale(1.05);
     }
     
     /* CRITICAL: Marquee ONLY pauses for mouse, never for touch */
@@ -509,24 +507,25 @@ section {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    gap: 2.5rem; /* Adjusted gap to account for new card padding */
-    padding-right: 2.5rem;
+    gap: 4.5rem; /* Restored natural gap */
+    padding-right: 4.5rem;
     flex-shrink: 0;
 }
 
-/* Marquee Item as a Miniature Card */
+/* Marquee Item - Floating Text with Micro-Spotlight Logic */
 .tech-item {
     position: relative;
     overflow: hidden;
     display: block;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-glass);
-    border-radius: 12px;
-    padding: 0.8rem 1.2rem;
-    opacity: 0.7;
-    transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    background: transparent; /* Forces transparency so NO boxes show */
+    border: none; /* Forces transparency so NO boxes show */
+    border-radius: 50px; /* Pill shape for the inner clip */
+    padding: 0.5rem 1rem;
+    opacity: 0.6;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
+    transform-origin: center center;
     
     /* Enterprise Touch Safeguards */
     -webkit-tap-highlight-color: transparent;
@@ -539,6 +538,15 @@ section {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+/* Overrides the 800px massive spotlight with a tiny, soft orb for text */
+.tech-item .spotlight-overlay {
+    background: radial-gradient(
+        60px circle at var(--mouse-x) var(--mouse-y), 
+        rgba(255, 255, 255, 0.15),
+        transparent 100%
+    );
 }
 
 .tech-item img {
