@@ -713,6 +713,37 @@
 
     .footer-col a:hover { color: var(--accent-glow); }
 
+    /* Footer Trust Badges */
+.compliance-badges {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-glass);
+    margin-top: 2rem;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.4rem 0.8rem;
+    border-radius: 50px;
+    border: 1px solid var(--border-glass);
+    transition: all 0.2s ease;
+    cursor: default;
+}
+
+.badge:hover {
+    color: var(--text-main);
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
     .newsletter-form {
         display: flex;
         flex-wrap: wrap;
