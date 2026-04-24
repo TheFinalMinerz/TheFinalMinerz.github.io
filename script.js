@@ -254,8 +254,11 @@ if (form) {
 // Accessibility: Prevent marquee containers from auto-scrolling when tabbing quickly
 document.querySelectorAll('.trust-banner').forEach(banner => {
     banner.addEventListener('scroll', function() {
-        this.scrollLeft = 0;
-    });
+        // Only force layout if it actually scrolled, avoiding unnecessary background thrashing
+        if (this.scrollLeft !== 0) {
+            this.scrollLeft = 0;
+        }
+    }, { passive: true });
 });
 
 // --- High-Performance Universal Spotlight Effect Tracker ---
@@ -404,9 +407,12 @@ document.querySelectorAll('.tech-item').forEach(item => {
         isNavigating = true; 
         this.classList.add('touch-active');
         
-        // Wait a full second before visually stripping the focus state in the background
+        // CRITICAL FIX: Instantly strip native focus the millisecond the tap registers 
+        // to completely stop the browser from attempting a focus-scroll layout shift
+        this.blur();
+        
+        // Wait a full second before visually stripping OUR custom highlight class
         setTimeout(() => {
-            this.blur(); 
             isNavigating = false; 
             clearAllTouches();
         }, 1000); 

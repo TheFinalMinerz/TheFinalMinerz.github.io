@@ -483,7 +483,9 @@ section {
     padding: 2rem 0;
     background: rgba(255, 255, 255, 0.01);
     text-align: center;
+    /* CRITICAL FIX: overflow clip physically forbids the browser from tracking focus and snapping the container */
     overflow: hidden;
+    overflow: clip; 
     position: relative;
     margin-bottom: 2rem;
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
