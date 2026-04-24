@@ -3,926 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; style-src 'unsafe-inline'">
+
+    <!-- Enhanced CSP for security -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; img-src 'self' data: https:; connect-src 'self' https://formspree.io; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io">
+
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-glow focus:text-white focus:rounded">Skip to main content</a>
+
     <meta name="theme-color" content="#0a0a0f">
-    <link rel="canonical" href="https://egusystems.com"> 
-    
-    <meta property="og:title" content="EguSystems LLC | IT Infrastructure & Cybersecurity">
+    <link rel="canonical" href="https://egusystems.com">
+
+    <!-- Enhanced SEO Metadata -->
+    <meta name="description" content="EguSystems LLC provides enterprise-grade IT infrastructure, cybersecurity solutions, and Proxmox virtualization services. Secure your business with our expert team.">
+    <meta name="keywords" content="IT infrastructure, cybersecurity, Proxmox virtualization, data protection, enterprise IT, network security, cloud solutions">
+    <meta name="author" content="EguSystems LLC">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="EguSystems LLC | Enterprise IT Infrastructure & Cybersecurity">
     <meta property="og:description" content="We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.">
     <meta property="og:image" content="https://egusystems.com/og-image.png">
     <meta property="og:url" content="https://egusystems.com">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:site_name" content="EguSystems LLC">
 
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="EguSystems LLC | Enterprise IT Infrastructure & Cybersecurity">
+    <meta name="twitter:description" content="We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.">
+    <meta name="twitter:image" content="https://egusystems.com/og-image.png">
+
+    <!-- Favicon and Icons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="EguSystems" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>EguSystems LLC | IT Infrastructure & Cybersecurity</title>
 
+    <title>EguSystems LLC | Enterprise IT Infrastructure & Cybersecurity</title>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Enhanced Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Organization",
       "name": "EguSystems LLC",
       "url": "https://egusystems.com",
-      "image": "https://egusystems.com/favicon.svg",
-      "email": "contact@egusystems.com",
-      "description": "Next-Generation IT Infrastructure and Full-Stack Cybersecurity solutions for modern businesses.",
-      "areaServed": "US",
-      "knowsAbout": ["IT Infrastructure", "Cybersecurity", "Proxmox Virtualization", "Data Protection"],
       "logo": {
         "@type": "ImageObject",
         "url": "https://egusystems.com/favicon.svg",
         "width": 96,
         "height": 96
       },
+      "image": "https://egusystems.com/favicon.svg",
+      "email": "contact@egusystems.com",
+      "telephone": "+1-XXX-XXX-XXXX",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "US"
+      },
+      "description": "Next-Generation IT Infrastructure and Full-Stack Cybersecurity solutions for modern businesses.",
+      "areaServed": "US",
+      "knowsAbout": ["IT Infrastructure", "Cybersecurity", "Proxmox Virtualization", "Data Protection", "Network Security", "Cloud Solutions"],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "IT Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "IT Infrastructure Design",
+              "description": "Custom hardware architecture and network design for optimal performance"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Cybersecurity Solutions",
+              "description": "Comprehensive security assessments and implementation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Proxmox Virtualization",
+              "description": "Enterprise-grade virtualization solutions for efficient resource management"
+            }
+          }
+        ]
+      },
       "sameAs": ["https://egusystems.com"]
     }
     </script>
 
-    <style>
-        :root {
-            --bg-base: #0a0a0f;
-            --bg-surface: rgba(255, 255, 255, 0.03);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-glow: #3b82f6; 
-            --accent-purple: #8b5cf6; 
-            --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-            --border-glass: rgba(255, 255, 255, 0.08);
-            --nav-height: 80px;
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-family: 'Inter', Arial, sans-serif;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            overflow-x: hidden;
-            line-height: 1.6;
-        }
-
-        h1, h2, h3, h4, h5, h6,
-        .logo-text,
-        .nav-cta,
-        .mobile-cta,
-        .btn,
-        .card-icon,
-        .expert-info h4,
-        .footer-col h4 {
-            font-family: 'Sora', Arial, sans-serif;
-        }
-
-        /* Accessibility: Respect OS "Reduce Motion" settings */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation: none !important;
-                transition: none !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
-        /* Top Progress Bar */
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--accent-gradient);
-            width: 0%;
-            z-index: 10001;
-            transition: width 0.1s ease-out;
-            box-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        /* Custom Brand Text Selection */
-        ::selection {
-            background: var(--accent-purple);
-            color: #ffffff;
-        }
-
-        /* Custom Dark Theme Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
-
-        /* Keyboard Accessibility Focus States */
-        :focus-visible {
-            outline: 2px solid var(--accent-glow);
-            outline-offset: 4px;
-            border-radius: 4px;
-        }
-
-        /* Ambient Background */
-        .bg-glow {
-            position: fixed;
-            width: 60vw;
-            height: 60vw;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            filter: blur(120px);
-            opacity: 0.12;
-            z-index: -1;
-            animation: float 20s ease-in-out infinite alternate;
-        }
-        .bg-glow.top { top: -20%; left: -10%; }
-        .bg-glow.bottom { bottom: -20%; right: -10%; animation-delay: -10s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5%, 10%) scale(1.1); }
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        /* Navigation Base */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            height: var(--nav-height);
-            z-index: 1000;
-            background: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-glass);
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            position: relative;
-        }
-
-        /* Logo Configuration - fixed clipping and wrapping */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            line-height: 1.2; 
-        }
-
-        .logo-icon {
-            height: 1.2em; 
-            width: auto;
-            display: block;
-            flex-shrink: 0;
-        }
-
-        .logo-text {
-            font-weight: 800;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-            display: block;
-            padding-bottom: 0.05em; 
-            white-space: nowrap; /* Prevents wrapping of LLC */
-        }
-
-        /* Desktop Nav Links */
-        .desktop-nav {
-            display: flex;
-            align-items: center;
-            gap: 2.5rem;
-            list-style: none;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            transform-origin: right center;
-            opacity: 1;
-            transform: translateX(0) scale(1);
-        }
-
-        .desktop-nav a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            position: relative;
-            padding: 0.5rem 0;
-            transition: color 0.3s;
-        }
-
-        .desktop-nav a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background: var(--accent-gradient);
-            transition: width 0.3s ease;
-        }
-
-        .desktop-nav a:hover, .desktop-nav a.active-link { color: var(--accent-glow); }
-        .desktop-nav a:hover::after, .desktop-nav a.active-link::after { width: 100%; }
-
-        .nav-cta {
-            background: var(--accent-gradient);
-            color: white !important;
-            padding: 0.6rem 1.5rem !important;
-            border-radius: 6px;
-            font-weight: 600 !important;
-            transition: transform 0.2s, box-shadow 0.2s !important;
-        }
-        .nav-cta::after { display: none !important; } 
-
-        /* Mobile Toggle Icon */
-        .mobile-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            right: 2rem;
-            background: none;
-            border: none;
-            color: var(--text-main);
-            font-size: 1.8rem;
-            cursor: pointer;
-            opacity: 0;
-            transform: rotate(0deg) scale(0.5);
-            pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
-
-        /* Mobile Dropdown Menu */
-        .mobile-dropdown {
-            position: absolute;
-            top: var(--nav-height);
-            left: 0;
-            width: 100%;
-            background: rgba(10, 10, 15, 0.98);
-            padding: 2.5rem 2rem;
-            border-bottom: 1px solid var(--border-glass);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transform: translateY(-20px);
-            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
-            z-index: 999;
-        }
-
-        .mobile-dropdown.active {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transform: translateY(0);
-        }
-
-        @media (min-width: 901px) {
-            /* Keep the mobile dropdown absolutely positioned and hidden via opacity/visibility
-               so it can smoothly fade out when resizing from mobile to desktop. */
-            .mobile-dropdown { position: absolute; }
-        }
-
-        .mobile-nav-links {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .mobile-nav-links a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            display: inline-block;
-            position: relative;
-            padding: 0.2rem 0;
-            transition: color 0.3s;
-        }
-
-        .mobile-nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background: var(--accent-gradient);
-            transition: width 0.3s ease;
-        }
-
-        .mobile-nav-links a:hover, .mobile-nav-links a.active-link { color: var(--accent-glow); }
-        .mobile-nav-links a:hover::after, .mobile-nav-links a.active-link::after { width: 100%; }
-
-        .mobile-cta {
-            background: var(--accent-gradient);
-            color: white !important;
-            padding: 1rem !important;
-            border-radius: 6px;
-            font-weight: 600;
-            text-align: center;
-            margin-top: 1rem;
-            display: block !important;
-            width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s !important;
-        }
-        
-        .mobile-cta::after { display: none !important; }
-
-        /* --- LAYOUT SPACING --- */
-        section { 
-            padding: 5rem 0; 
-            scroll-margin-top: var(--nav-height); 
-        }
-
-        #about {
-            padding-bottom: 2rem; 
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: var(--text-muted);
-            max-width: 700px;
-            margin: 0 auto;
-            font-size: 1.1rem;
-        }
-
-        /* Hero */
-        .hero {
-            padding: calc(var(--nav-height) + 6rem) 0 5rem;
-            text-align: center;
-        }
-
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            animation: fadeUp 0.8s ease forwards;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 750px;
-            margin: 0 auto 2.5rem;
-            padding: 0 1rem;
-            opacity: 0;
-            animation: fadeUp 0.8s ease 0.2s forwards;
-        }
-
-        .hero .btn {
-            opacity: 0;
-            animation: fadeUp 0.8s ease 0.4s forwards;
-        }
-
-        .btn {
-            display: inline-block;
-            background: var(--accent-gradient);
-            color: white;
-            padding: 1.2rem 3rem;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: none;
-            cursor: pointer;
-        }
-
-        /* Universal Spotlight Engine */
-        .hover-spotlight {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .spotlight-overlay {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                800px circle at var(--mouse-x) var(--mouse-y), 
-                rgba(255, 255, 255, 0.08),
-                transparent 40%
-            );
-            z-index: 0;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none; 
-        }
-
-        .spotlight-content-wrapper {
-            position: relative;
-            z-index: 1;
-            transform: translateZ(0); 
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-
-        /* Desktop Only Hover Effects */
-        @media (hover: hover) and (pointer: fine) {
-            .nav-cta:hover, .mobile-cta:hover, .btn:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
-            }
-
-            .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
-            .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
-            .card:hover { transform: translateY(-5px) translateZ(0); }
-            
-            .tech-item:hover { 
-                opacity: 1; 
-                transform: scale(1.05);
-            }
-        }
-
-        /* Infinite Scrolling Banners */
-        .trust-banner {
-            border-top: 1px solid var(--border-glass);
-            border-bottom: 1px solid var(--border-glass);
-            padding: 2rem 0; 
-            background: rgba(255, 255, 255, 0.01);
-            text-align: center;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 2rem;
-        }
-
-        .trust-banner p {
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-        }
-
-        .marquee-wrapper {
-            display: flex;
-            flex-wrap: nowrap;
-            width: max-content;
-            animation: marquee 35s linear infinite;
-            position: relative;
-            z-index: 1;
-            will-change: transform;
-            transform: translate3d(0,0,0);
-        }
-
-        .marquee-wrapper:hover { animation-play-state: paused; }
-
-        .tech-list {
-            display: flex;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 4rem;
-            padding-right: 2rem;
-            flex-shrink: 0;
-        }
-
-        .tech-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            opacity: 0.6;
-            transition: opacity 0.3s ease, transform 0.2s ease;
-            text-decoration: none;
-        }
-
-        .tech-item img {
-            height: 24px;
-            width: 24px;
-            object-fit: contain;
-            filter: grayscale(100%) brightness(1.5); 
-            border-radius: 4px;
-        }
-
-        .tech-item .placeholder-icon {
-            height: 24px;
-            width: 24px;
-            border-radius: 50%;
-            border: 2px dashed rgba(255, 255, 255, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .tech-item span {
-            font-weight: 700;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-            color: var(--text-main);
-        }
-
-        .trust-banner::before, .trust-banner::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 100px;
-            height: 100%;
-            z-index: 2;
-        }
-        .trust-banner::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
-        .trust-banner::after { right: 0; background: linear-gradient(to left, var(--bg-base), transparent); }
-
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-
-        /* Services Grid */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 5rem;
-        }
-
-        .card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 2.5rem;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            /* Hardware Acceleration Fixes */
-            transform: translateZ(0); 
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transition: transform 0.3s ease, border-color 0.3s ease;
-        }
-
-        .card-icon {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            display: inline-block;
-        }
-
-        .card h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-
-        /* Callout Sections (About/Trust) */
-        .callout-box {
-            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
-            border: 1px solid var(--border-glass);
-            border-radius: 20px;
-            padding: 4rem;
-            text-align: center;
-            position: relative;
-        }
-
-        .callout-box h2 {
-            font-size: clamp(1.8rem, 4vw, 2.2rem);
-            margin-bottom: 1.5rem;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Expert Profile Component */
-        .expert-profile {
-            display: inline-flex;
-            align-items: center;
-            gap: 1.25rem;
-            margin-top: 2.5rem;
-            text-align: left;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 1rem 2rem 1rem 1rem;
-            border-radius: 50px;
-            border: 1px solid var(--border-glass);
-        }
-
-        .expert-avatar {
-            width: 60px;
-            height: 60px;
-            background: var(--bg-base);
-            border-radius: 50%;
-            padding: 12px;
-            border: 2px solid var(--accent-glow);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-        }
-
-        .expert-info h4 {
-            font-size: 1.2rem;
-            color: var(--text-main);
-            margin-bottom: 0.2rem;
-        }
-
-        .expert-info p {
-            color: var(--accent-glow) !important;
-            font-weight: 600;
-            font-size: 0.9rem !important;
-            margin: 0 !important;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        /* Footer Logo Consistency - Prevent Wrap and Clipping */
-        .footer-col .logo-container {
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            line-height: 1.2;
-            width: max-content; /* Critical: Stops container from squishing */
-        }
-
-        .footer-col .logo-text {
-            font-size: 1.5rem; 
-            margin: 0;
-            padding-bottom: 0.05em; 
-            white-space: nowrap; /* Forces EguSystems LLC onto one line */
-        }
-
-        /* Footer & Contact */
-        footer {
-            border-top: 1px solid var(--border-glass);
-            padding: 5rem 0 2rem;
-            background: rgba(0,0,0,0.3);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 4rem; /* Increased gap to prevent clipping */
-            margin-bottom: 4rem;
-        }
-
-        .footer-col h4 {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            color: var(--text-main);
-        }
-
-        .footer-col p, .footer-col a, .footer-col span {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-bottom: 0.8rem;
-            display: block;
-            font-size: 0.95rem;
-            transition: color 0.2s;
-        }
-
-        .footer-col a:hover { color: var(--accent-glow); }
-
-        .newsletter-form {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-            gap: 0.5rem;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            min-width: 150px;
-            padding: 0.8rem 1rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid var(--border-glass);
-            border-radius: 6px;
-            color: white;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .newsletter-form input:focus { border-color: var(--accent-glow); }
-        
-        /* HTML5 Form Validation Feedback */
-        .newsletter-form input.touched:invalid { border-color: #ef4444; }
-
-        .newsletter-form button {
-            padding: 0.8rem 1.5rem;
-            background: var(--accent-gradient);
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .newsletter-form button:hover { opacity: 0.9; }
-
-        .footer-bottom {
-            text-align: center;
-            border-top: 1px solid var(--border-glass);
-            padding-top: 2.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .copyright-line {
-            color: var(--text-main); 
-            font-size: 1rem;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .legal-links {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-        }
-        
-        .legal-links a {
-            color: var(--text-muted);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-
-        /* Cookie Consent Banner - Responsive Fix */
-        .cookie-banner {
-            position: fixed;
-            bottom: 2rem;
-            left: 2rem;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glass);
-            padding: 1.5rem;
-            border-radius: 12px;
-            z-index: 9999;
-            width: min(350px, calc(100% - 4rem));
-            max-width: 350px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease, width 0.4s ease, bottom 0.4s ease, left 0.4s ease, right 0.4s ease;
-            pointer-events: none;
-        }
-
-        .cookie-banner.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
-
-        .cookie-banner p {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .cookie-banner a {
-            color: var(--accent-glow);
-            text-decoration: none;
-        }
-
-        .cookie-btn {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-glass);
-            color: white;
-            padding: 0.6rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        .cookie-btn:hover { background: rgba(255, 255, 255, 0.1); }
-
-        /* Back To Top Button */
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--border-glass);
-            color: var(--text-main);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            z-index: 999;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .back-to-top:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--accent-glow);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* Scroll Animations (GPU Pre-allocation) */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-            will-change: opacity, transform;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive Breakpoints */
-        @media (max-width: 900px) {
-            .desktop-nav {
-                position: absolute;
-                right: 3rem;
-                opacity: 0;
-                transform: translateX(30px) scale(0.6);
-                pointer-events: none;
-            }
-            .mobile-toggle {
-                opacity: 1;
-                transform: rotate(0deg) scale(1);
-                pointer-events: auto;
-            }
-            .mobile-toggle.is-open {
-                transform: rotate(90deg) scale(1);
-            }
-            .hero { padding: calc(var(--nav-height) + 6rem) 0 5rem; }
-            .callout-box { padding: 4rem 1.5rem; }
-            .trust-banner::before, .trust-banner::after { width: 40px; }
-            .back-to-top { bottom: 1.5rem; right: 1.5rem; }
-            
-            .cookie-banner {
-                bottom: 1rem;
-                left: 1rem;
-                right: 1rem;
-                width: calc(100% - 2rem);
-                max-width: 350px;
-            }
-        }
-    </style>
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -934,7 +122,7 @@
     <nav>
         <div class="nav-content">
             <a href="#home" class="logo-container">
-                <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon">
+                <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
                 <span class="logo-text">EguSystems LLC</span>
             </a>
             
@@ -945,7 +133,7 @@
                 <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
             </ul>
 
-            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileDropdown">☰</button>
         </div>
 
         <div class="mobile-dropdown" id="mobileDropdown">
@@ -959,7 +147,7 @@
     </nav>
 
     <div class="container">
-        <main>
+        <main id="main-content">
             <section class="hero" id="home">
                 <h1>Next-Generation<br>IT Infrastructure.</h1>
                 <p>We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.</p>
@@ -974,30 +162,30 @@
             <p>Architecting environments utilizing</p>
             <div class="marquee-wrapper">
                 <div class="tech-list">
-                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy"><span>GEMINI</span></a>
-                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy"><span>PROXMOX</span></a>
-                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy"><span>CLOUDFLARE</span></a>
-                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy"><span>TAILSCALE</span></a>
-                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy"><span>HOME ASSISTANT</span></a>
-                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy"><span>ADGUARD</span></a>
-                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy"><span>SNIPE-IT</span></a>
-                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy"><span>WLED</span></a>
-                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy"><span>PORKBUN</span></a>
-                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy"><span>ZOHO</span></a>
-                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy"><span>ACTION1</span></a>
+                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy" width="24" height="24"><span>GEMINI</span></a>
+                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy" width="24" height="24"><span>PROXMOX</span></a>
+                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy" width="24" height="24"><span>CLOUDFLARE</span></a>
+                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy" width="24" height="24"><span>TAILSCALE</span></a>
+                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy" width="24" height="24"><span>HOME ASSISTANT</span></a>
+                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy" width="24" height="24"><span>ADGUARD</span></a>
+                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy" width="24" height="24"><span>SNIPE-IT</span></a>
+                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy" width="24" height="24"><span>WLED</span></a>
+                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy" width="24" height="24"><span>PORKBUN</span></a>
+                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy" width="24" height="24"><span>ZOHO</span></a>
+                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy" width="24" height="24"><span>ACTION1</span></a>
                 </div>
                 <div class="tech-list">
-                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy"><span>GEMINI</span></a>
-                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy"><span>PROXMOX</span></a>
-                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy"><span>CLOUDFLARE</span></a>
-                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy"><span>TAILSCALE</span></a>
-                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy"><span>HOME ASSISTANT</span></a>
-                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy"><span>ADGUARD</span></a>
-                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy"><span>SNIPE-IT</span></a>
-                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy"><span>WLED</span></a>
-                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy"><span>PORKBUN</span></a>
-                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy"><span>ZOHO</span></a>
-                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy"><span>ACTION1</span></a>
+                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy" width="24" height="24"><span>GEMINI</span></a>
+                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy" width="24" height="24"><span>PROXMOX</span></a>
+                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy" width="24" height="24"><span>CLOUDFLARE</span></a>
+                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy" width="24" height="24"><span>TAILSCALE</span></a>
+                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy" width="24" height="24"><span>HOME ASSISTANT</span></a>
+                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy" width="24" height="24"><span>ADGUARD</span></a>
+                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy" width="24" height="24"><span>SNIPE-IT</span></a>
+                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy" width="24" height="24"><span>WLED</span></a>
+                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy" width="24" height="24"><span>PORKBUN</span></a>
+                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy" width="24" height="24"><span>ZOHO</span></a>
+                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy" width="24" height="24"><span>ACTION1</span></a>
                 </div>
             </div>
         </div>
@@ -1172,7 +360,7 @@
             <div class="marquee-wrapper">
                 <div class="tech-list">
                     <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
-                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy" width="24" height="24">
                         <span>PREFERENCE CONSULTING</span>
                     </a>
                     
@@ -1182,7 +370,7 @@
                     </a>
                     
                     <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
-                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy" width="24" height="24">
                         <span>PREFERENCE CONSULTING</span>
                     </a>
 
@@ -1193,7 +381,7 @@
                 </div>
                 <div class="tech-list">
                     <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
-                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy" width="24" height="24">
                         <span>PREFERENCE CONSULTING</span>
                     </a>
                     
@@ -1203,7 +391,7 @@
                     </a>
                     
                     <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
-                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                        <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy" width="24" height="24">
                         <span>PREFERENCE CONSULTING</span>
                     </a>
 
@@ -1238,7 +426,8 @@
                     <h4>Stay Updated</h4>
                     <p>Get monthly insights, tips, and updates straight from EguSystems.</p>
                     <form class="newsletter-form" action="https://formspree.io/f/xykllrow" method="POST">
-                        <input type="email" name="email" placeholder="Email address" aria-label="Email address" required>
+                        <label for="newsletter-email" class="sr-only">Email address for newsletter</label>
+                        <input type="email" id="newsletter-email" name="email" placeholder="Email address" aria-label="Email address" required>
                         <button type="submit">Join</button>
                     </form>
                 </div>
@@ -1262,248 +451,7 @@
 
     <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
 
-    <script>
-        // Utility: Throttle function for performance optimization
-        function throttle(func, delay) {
-            let lastCall = 0;
-            return function(...args) {
-                const now = Date.now();
-                if (now - lastCall >= delay) {
-                    lastCall = now;
-                    func(...args);
-                }
-            };
-        }
-
-        // Utility: Debounce function for resize events
-        function debounce(func, delay) {
-            let timeoutId;
-            return function(...args) {
-                clearTimeout(timeoutId);
-                timeoutId = setTimeout(() => func(...args), delay);
-            };
-        }
-
-        // Scroll Progress Bar & Back to Top Logic (Throttled)
-        const handleScroll = throttle(() => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById('scrollProgress').style.width = scrolled + '%';
-
-            const backToTopBtn = document.getElementById('backToTop');
-            if (winScroll > 500) {
-                backToTopBtn.classList.add('visible');
-            } else {
-                backToTopBtn.classList.remove('visible');
-            }
-        }, 16); // ~60fps throttle
-
-        window.addEventListener('scroll', handleScroll);
-
-        // Scrollspy (Active Nav Link Tracker - Throttled)
-        const sections = document.querySelectorAll("section");
-        const navLinks = document.querySelectorAll(".nav-link");
-
-        const handleScrollspy = throttle(() => {
-            let current = "";
-            sections.forEach((section) => {
-                const sectionTop = section.offsetTop;
-                if (pageYOffset >= sectionTop - 250) {
-                    current = section.getAttribute("id");
-                }
-            });
-
-            navLinks.forEach((link) => {
-                link.classList.remove("active-link");
-                if (link.getAttribute("href").includes(current)) {
-                    link.classList.add("active-link");
-                }
-            });
-        }, 16);
-
-        window.addEventListener("scroll", handleScrollspy);
-
-        // Cookie Banner Logic
-        window.addEventListener('DOMContentLoaded', () => {
-            const cookieBanner = document.getElementById('cookieBanner');
-            if (!localStorage.getItem('cookiesAccepted')) {
-                setTimeout(() => {
-                    cookieBanner.classList.add('show');
-                }, 2000); 
-            }
-
-            document.getElementById('acceptCookies').addEventListener('click', () => {
-                localStorage.setItem('cookiesAccepted', 'true');
-                cookieBanner.classList.remove('show');
-            });
-
-            const marqueeWrappers = document.querySelectorAll('.marquee-wrapper');
-            const marqueeBases = new Map();
-
-            marqueeWrappers.forEach(wrapper => {
-                marqueeBases.set(wrapper, Array.from(wrapper.children).map(child => child.cloneNode(true)));
-            });
-
-            const refreshMarqueeLoop = () => {
-                marqueeWrappers.forEach(wrapper => {
-                    const baseItems = marqueeBases.get(wrapper);
-                    if (!baseItems?.length) return;
-
-                    wrapper.innerHTML = '';
-                    baseItems.forEach(item => wrapper.appendChild(item.cloneNode(true)));
-
-                    const minWidth = wrapper.parentElement.clientWidth * 2;
-                    while (wrapper.scrollWidth < minWidth) {
-                        baseItems.forEach(item => wrapper.appendChild(item.cloneNode(true)));
-                    }
-                });
-            };
-
-            refreshMarqueeLoop();
-            window.addEventListener('resize', debounce(() => requestAnimationFrame(refreshMarqueeLoop), 250));
-        });
-
-        // Smooth Mobile Menu Toggle Logic
-        const mobileToggle = document.getElementById('mobileToggle');
-        const mobileDropdown = document.getElementById('mobileDropdown');
-
-        mobileToggle.addEventListener('click', () => {
-            const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
-            mobileToggle.setAttribute('aria-expanded', !isExpanded);
-            
-            mobileDropdown.classList.toggle('active');
-            mobileToggle.classList.toggle('is-open');
-            
-            if(mobileToggle.classList.contains('is-open')){
-                mobileToggle.innerHTML = '✕'; 
-            } else {
-                mobileToggle.innerHTML = '☰';
-            }
-        });
-
-        // Close mobile dropdown when a link is clicked
-        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileToggle.setAttribute('aria-expanded', 'false');
-                mobileDropdown.classList.remove('active');
-                mobileToggle.classList.remove('is-open');
-                mobileToggle.innerHTML = '☰';
-            });
-        });
-
-        // Smart Failsafe: Smoothly hide mobile menu if window is resized to desktop width
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
-                mobileToggle.setAttribute('aria-expanded', 'false');
-                mobileDropdown.classList.remove('active');
-                mobileToggle.classList.remove('is-open');
-                
-                setTimeout(() => {
-                    mobileToggle.innerHTML = '☰';
-                }, 400);
-            }
-        });
-
-        // High-Performance Universal Hover Spotlight Effect Tracker
-        document.querySelectorAll('.hover-spotlight').forEach(element => {
-            let ticking = false;
-            element.addEventListener('mousemove', e => {
-                if (!ticking) {
-                    window.requestAnimationFrame(() => {
-                        const rect = element.getBoundingClientRect();
-                        const x = e.clientX - rect.left;
-                        const y = e.clientY - rect.top;
-                        element.style.setProperty('--mouse-x', `${x}px`);
-                        element.style.setProperty('--mouse-y', `${y}px`);
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
-        });
-
-        // High-Performance Smooth Scroll Reveal
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.15 
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("active");
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach((el) => {
-            observer.observe(el);
-        });
-
-        // Seamless AJAX Form Submission for Newsletter
-        const form = document.querySelector('.newsletter-form');
-        if (form) {
-            const emailInput = form.querySelector('input[type="email"]');
-            if (emailInput) {
-                emailInput.addEventListener('blur', () => {
-                    emailInput.classList.add('touched');
-                });
-            }
-
-            form.addEventListener('submit', async (e) => {
-                if (emailInput) {
-                    emailInput.classList.add('touched');
-                }
-                if (!form.checkValidity()) {
-                    e.preventDefault();
-                    form.reportValidity();
-                    return;
-                }
-
-                e.preventDefault(); 
-                const btn = form.querySelector('button');
-                const originalText = btn.innerHTML;
-                
-                btn.innerHTML = 'Sending...';
-                btn.disabled = true;
-                btn.style.opacity = '0.7';
-
-                try {
-                    const response = await fetch(form.action, {
-                        method: form.method,
-                        body: new FormData(form),
-                        headers: {
-                            'Accept': 'application/json'
-                        }
-                    });
-                    
-                    if (response.ok) {
-                        btn.innerHTML = 'Subscribed! ✓';
-                        btn.style.background = '#10b981'; 
-                        form.reset();
-                        console.log('Newsletter subscription successful');
-                    } else {
-                        const errorData = await response.json().catch(() => ({}));
-                        btn.innerHTML = errorData.message || 'Error submitting form';
-                        btn.style.background = '#ef4444';
-                        console.error('Subscription error:', errorData);
-                    }
-                } catch (error) {
-                    btn.innerHTML = 'Network error - please try again';
-                    btn.style.background = '#ef4444';
-                    console.error('Newsletter submission error:', error);
-                }
-
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    btn.style.background = ''; 
-                    btn.style.opacity = '1';
-                }, 3000);
-            });
-        }
-    </script>
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
