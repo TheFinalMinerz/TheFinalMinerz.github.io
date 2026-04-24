@@ -154,24 +154,6 @@ window.addEventListener('resize', () => {
     }
 });
 
-// High-Performance Universal Hover Spotlight Effect Tracker
-document.querySelectorAll('.hover-spotlight').forEach(element => {
-    let ticking = false;
-    element.addEventListener('mousemove', e => {
-        if (!ticking) {
-            window.requestAnimationFrame(() => {
-                const rect = element.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                element.style.setProperty('--mouse-x', `${x}px`);
-                element.style.setProperty('--mouse-y', `${y}px`);
-                ticking = false;
-            });
-            ticking = true;
-        }
-    });
-});
-
 // High-Performance Smooth Scroll Reveal
 const observerOptions = {
     root: null,
@@ -273,23 +255,65 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     });
 });
 
+// --- High-Performance Universal Spotlight Effect Tracker ---
+document.querySelectorAll('.hover-spotlight').forEach(element => {
+    let ticking = false;
+    const overlay = element.querySelector('.spotlight-overlay');
+    
+    const updateSpotlight = (clientX, clientY) => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const rect = element.getBoundingClientRect();
+                const x = clientX - rect.left;
+                const y = clientY - rect.top;
+                element.style.setProperty('--mouse-x', `${x}px`);
+                element.style.setProperty('--mouse-y', `${y}px`);
+                ticking = false;
+            });
+            ticking = true;
+        }
+    };
+
+    // Desktop Mouse Tracking
+    element.addEventListener('mousemove', e => updateSpotlight(e.clientX, e.clientY));
+    
+    // Mobile Touch Tracking (Fluid Spotlight dragging)
+    element.addEventListener('touchmove', e => updateSpotlight(e.touches[0].clientX, e.touches[0].clientY), {passive: true});
+    
+    // Make spotlight visible when finger touches the card
+    element.addEventListener('touchstart', (e) => {
+        if(overlay) overlay.style.opacity = '1';
+        updateSpotlight(e.touches[0].clientX, e.touches[0].clientY);
+    }, {passive: true});
+    
+    // Hide spotlight when finger lifts
+    element.addEventListener('touchend', () => { if(overlay) overlay.style.opacity = '0'; });
+    element.addEventListener('touchcancel', () => { if(overlay) overlay.style.opacity = '0'; });
+});
+
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
 let currentTouchedItem = null;
+
+const clearTouchItem = () => {
+    if (currentTouchedItem) {
+        currentTouchedItem.classList.remove('touch-active');
+        currentTouchedItem = null;
+    }
+};
 
 // Handle finger dragging across the screen
 document.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
-    // Find the exact DOM element under the current finger coordinates
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    
-    // Check if the finger is over a tech-item link
     const techItem = element ? element.closest('.tech-item') : null;
     
     // Swap the highlight instantly if the finger moves to a new item
     if (techItem !== currentTouchedItem) {
-        if (currentTouchedItem) currentTouchedItem.classList.remove('touch-active');
-        if (techItem) techItem.classList.add('touch-active');
-        currentTouchedItem = techItem;
+        clearTouchItem();
+        if (techItem) {
+            techItem.classList.add('touch-active');
+            currentTouchedItem = techItem;
+        }
     }
 }, { passive: true });
 
@@ -297,24 +321,20 @@ document.addEventListener('touchmove', (e) => {
 document.addEventListener('touchstart', (e) => {
     const techItem = e.target.closest('.tech-item');
     if (techItem) {
-        if (currentTouchedItem) currentTouchedItem.classList.remove('touch-active');
+        clearTouchItem();
         techItem.classList.add('touch-active');
         currentTouchedItem = techItem;
     }
 }, { passive: true });
 
-// Clean up and remove all highlights when the finger lifts off the screen
-document.addEventListener('touchend', () => {
-    if (currentTouchedItem) {
-        currentTouchedItem.classList.remove('touch-active');
-        currentTouchedItem = null;
-    }
-});
+// CRITICAL FIX: Clean up when finger lifts or browser cancels the swipe
+document.addEventListener('touchend', clearTouchItem);
+document.addEventListener('touchcancel', clearTouchItem); 
 
 // The Ultimate Failsafe: Force mobile browsers to drop the "Sticky Focus" after a tap
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
-        this.blur(); // Immediately removes the stuck focus state
+        this.blur(); 
         this.classList.remove('touch-active');
     });
 });
