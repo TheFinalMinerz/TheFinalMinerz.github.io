@@ -339,18 +339,22 @@ document.addEventListener('touchcancel', clearSpotlight);
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 let isDragging = false;
-let isNavigating = false; // The navigation lock
+let isNavigating = false; // Lock out interactions while browser opens new tab
 
+// CRITICAL FIX: Also clears the .is-paused lock from the marquees
 const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
+    });
+    document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
+        wrapper.classList.remove('is-paused');
     });
     currentTouchedItem = null;
 };
 
 // Handle fluid finger dragging with GPU requestAnimationFrame for 60fps performance
 document.addEventListener('touchmove', (e) => {
-    if (isDragging) return;
+    if (isDragging || isNavigating) return;
     isDragging = true;
     
     window.requestAnimationFrame(() => {
@@ -365,6 +369,11 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
+                    
+                    // Pause parent marquee during drag
+                    const wrapper = techItem.closest('.marquee-wrapper');
+                    if (wrapper) wrapper.classList.add('is-paused');
+                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -375,11 +384,17 @@ document.addEventListener('touchmove', (e) => {
 
 // Handle initial tap
 document.addEventListener('touchstart', (e) => {
+    if (isNavigating) return;
     const techItem = e.target.closest('.tech-item');
     clearAllTouches(); 
     
     if (techItem) {
         techItem.classList.add('touch-active');
+        
+        // Pause parent marquee instantly on touch
+        const wrapper = techItem.closest('.marquee-wrapper');
+        if (wrapper) wrapper.classList.add('is-paused');
+        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -388,7 +403,7 @@ document.addEventListener('touchstart', (e) => {
 document.addEventListener('touchend', () => {
     setTimeout(() => {
         if (!isNavigating) clearAllTouches();
-    }, 300); // Slight delay for a smoother visual lift-off
+    }, 300);
 });
 
 document.addEventListener('touchcancel', () => {
@@ -397,16 +412,21 @@ document.addEventListener('touchcancel', () => {
     }, 300);
 });
 
-// CRITICAL FIX: Lock the visual state open while the new tab processes to prevent visual bouncing
+// Failsafe: Hardkill native focus retention asynchronously to prevent layout thrashing
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
-        isNavigating = true; // Engage the navigation lock
+        isNavigating = true; 
+        
+        // Lock the marquee in paused state while tab opens
+        const wrapper = this.closest('.marquee-wrapper');
+        if (wrapper) wrapper.classList.add('is-paused');
+        this.classList.add('touch-active');
         
         // Wait a full second before visually stripping the focus state in the background
         setTimeout(() => {
             this.blur(); 
+            isNavigating = false; 
             clearAllTouches();
-            isNavigating = false; // Release the lock
         }, 1000); 
     });
 });

@@ -513,6 +513,11 @@ section {
     transform: translate3d(0,0,0);
 }
 
+/* CRITICAL FIX: Allows Javascript to safely pause the marquee on mobile */
+.marquee-wrapper.is-paused {
+    animation-play-state: paused !important;
+}
+
 .tech-list {
     display: flex;
     flex-wrap: nowrap;
@@ -535,10 +540,6 @@ section {
     transition: opacity 0.3s ease, transform 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
-    
-    /* CRITICAL FIX: GPU Hardware Acceleration Isolation */
-    will-change: transform, opacity;
-    transform: translateZ(0);
     
     /* Enterprise Touch Safeguards */
     -webkit-tap-highlight-color: transparent;
