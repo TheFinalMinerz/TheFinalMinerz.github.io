@@ -445,13 +445,16 @@ document.querySelectorAll('.tech-item').forEach(item => {
 // --- Theme Personalization Engine ---
 const themeBtn = document.querySelector('.theme-toggle-btn');
 const themePanel = document.querySelector('.theme-panel');
+const themeModeToggle = document.getElementById('themeMode');
 const color1Picker = document.getElementById('color1Picker');
 const color2Picker = document.getElementById('color2Picker');
+const animSpeedSlider = document.getElementById('animSpeed');
 const animToggle = document.getElementById('animToggle');
 const resetThemeBtn = document.getElementById('resetTheme');
 
 const defaultColor1 = '#3b82f6';
 const defaultColor2 = '#8b5cf6';
+const defaultSpeed = '20'; // Seconds
 
 // Toggle Panel Visibility
 if (themeBtn && themePanel) {
@@ -481,7 +484,29 @@ if (color1Picker && color2Picker) {
     color2Picker.addEventListener('input', (e) => updateColors(color1Picker.value, e.target.value));
 }
 
-// Background Animation Toggle
+// Light/Dark Mode
+if (themeModeToggle) {
+    themeModeToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.body.classList.add('light-mode');
+            localStorage.setItem('themeMode', 'light');
+        } else {
+            document.body.classList.remove('light-mode');
+            localStorage.setItem('themeMode', 'dark');
+        }
+    });
+}
+
+// Background Animation Speed
+if (animSpeedSlider) {
+    animSpeedSlider.addEventListener('input', (e) => {
+        const speedStr = e.target.value + 's';
+        document.documentElement.style.setProperty('--anim-duration', speedStr);
+        localStorage.setItem('animSpeed', e.target.value);
+    });
+}
+
+// Background Animation Enable/Disable
 if (animToggle) {
     animToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -501,9 +526,17 @@ if (resetThemeBtn) {
         color2Picker.value = defaultColor2;
         updateColors(defaultColor1, defaultColor2);
         
+        animSpeedSlider.value = defaultSpeed;
+        document.documentElement.style.setProperty('--anim-duration', defaultSpeed + 's');
+        localStorage.setItem('animSpeed', defaultSpeed);
+        
         animToggle.checked = true;
         document.body.classList.remove('disable-bg-animation');
         localStorage.setItem('bgAnimation', 'enabled');
+        
+        themeModeToggle.checked = false;
+        document.body.classList.remove('light-mode');
+        localStorage.setItem('themeMode', 'dark');
     });
 }
 
@@ -511,12 +544,25 @@ if (resetThemeBtn) {
 window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
+    const savedMode = localStorage.getItem('themeMode');
+    const savedSpeed = localStorage.getItem('animSpeed');
     const savedAnim = localStorage.getItem('bgAnimation');
 
     if (savedC1 && savedC2) {
         if(color1Picker) color1Picker.value = savedC1;
         if(color2Picker) color2Picker.value = savedC2;
         updateColors(savedC1, savedC2);
+    }
+    
+    // Default to Dark Mode if null
+    if (savedMode === 'light') {
+        if (themeModeToggle) themeModeToggle.checked = true;
+        document.body.classList.add('light-mode');
+    }
+
+    if (savedSpeed) {
+        if (animSpeedSlider) animSpeedSlider.value = savedSpeed;
+        document.documentElement.style.setProperty('--anim-duration', savedSpeed + 's');
     }
 
     if (savedAnim === 'disabled') {
