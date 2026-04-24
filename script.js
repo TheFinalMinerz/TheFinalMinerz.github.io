@@ -109,13 +109,34 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
 });
 
 // Keyboard navigation for mobile menu
+// Accessibility: Mobile Menu Focus Trap & Escape Key
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && mobileDropdown.classList.contains('active')) {
+    if (!mobileDropdown.classList.contains('active')) return;
+    
+    const focusableElements = mobileDropdown.querySelectorAll('a, button');
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    if (e.key === 'Escape') {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
         mobileToggle.innerHTML = '☰';
         mobileToggle.focus();
+    }
+
+    if (e.key === 'Tab') {
+        if (e.shiftKey) { // Shift + Tab
+            if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+            }
+        } else { // Tab
+            if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+            }
+        }
     }
 });
 
