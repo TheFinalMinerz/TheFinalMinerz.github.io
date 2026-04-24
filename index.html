@@ -25,8 +25,7 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.google.com">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <script type="application/ld+json">
     {
@@ -64,7 +63,7 @@
 
         html {
             scroll-behavior: smooth;
-            font-family: 'Outfit', Arial, sans-serif;
+            font-family: 'Inter', Arial, sans-serif;
         }
 
         * {
@@ -78,6 +77,17 @@
             color: var(--text-main);
             overflow-x: hidden;
             line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6,
+        .logo-text,
+        .nav-cta,
+        .mobile-cta,
+        .btn,
+        .card-icon,
+        .expert-info h4,
+        .footer-col h4 {
+            font-family: 'Sora', Arial, sans-serif;
         }
 
         /* Accessibility: Respect OS "Reduce Motion" settings */
@@ -735,7 +745,7 @@
         .newsletter-form input:focus { border-color: var(--accent-glow); }
         
         /* HTML5 Form Validation Feedback */
-        .newsletter-form input:invalid { border-color: #ef4444; }
+        .newsletter-form input.touched:invalid { border-color: #ef4444; }
 
         .newsletter-form button {
             padding: 0.8rem 1.5rem;
@@ -1435,7 +1445,17 @@
         // Seamless AJAX Form Submission for Newsletter
         const form = document.querySelector('.newsletter-form');
         if (form) {
+            const emailInput = form.querySelector('input[type="email"]');
+            if (emailInput) {
+                emailInput.addEventListener('blur', () => {
+                    emailInput.classList.add('touched');
+                });
+            }
+
             form.addEventListener('submit', async (e) => {
+                if (emailInput) {
+                    emailInput.classList.add('touched');
+                }
                 if (!form.checkValidity()) {
                     e.preventDefault();
                     form.reportValidity();
