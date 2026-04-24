@@ -339,6 +339,7 @@ document.addEventListener('touchcancel', clearSpotlight);
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 let isDragging = false;
+let isNavigating = false; // The navigation lock
 
 const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
@@ -383,17 +384,29 @@ document.addEventListener('touchstart', (e) => {
     }
 }, { passive: true });
 
-// Clean up when finger lifts
-document.addEventListener('touchend', () => setTimeout(clearAllTouches, 150));
-document.addEventListener('touchcancel', () => setTimeout(clearAllTouches, 150));
+// Clean up when finger lifts (but checks if a click was registered to prevent rebound)
+document.addEventListener('touchend', () => {
+    setTimeout(() => {
+        if (!isNavigating) clearAllTouches();
+    }, 300); // Slight delay for a smoother visual lift-off
+});
 
-// Failsafe: Hardkill native focus retention asynchronously to prevent layout thrashing
+document.addEventListener('touchcancel', () => {
+    setTimeout(() => {
+        if (!isNavigating) clearAllTouches();
+    }, 300);
+});
+
+// CRITICAL FIX: Lock the visual state open while the new tab processes to prevent visual bouncing
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
-        // Offload to the next frame to guarantee the marquee doesn't stutter on tap
+        isNavigating = true; // Engage the navigation lock
+        
+        // Wait a full second before visually stripping the focus state in the background
         setTimeout(() => {
             this.blur(); 
             clearAllTouches();
-        }, 150); 
+            isNavigating = false; // Release the lock
+        }, 1000); 
     });
 });
