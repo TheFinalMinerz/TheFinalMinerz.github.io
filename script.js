@@ -272,3 +272,49 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         this.scrollLeft = 0;
     });
 });
+
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
+let currentTouchedItem = null;
+
+// Handle finger dragging across the screen
+document.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    // Find the exact DOM element under the current finger coordinates
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    // Check if the finger is over a tech-item link
+    const techItem = element ? element.closest('.tech-item') : null;
+    
+    // Swap the highlight instantly if the finger moves to a new item
+    if (techItem !== currentTouchedItem) {
+        if (currentTouchedItem) currentTouchedItem.classList.remove('touch-active');
+        if (techItem) techItem.classList.add('touch-active');
+        currentTouchedItem = techItem;
+    }
+}, { passive: true });
+
+// Handle the initial tap
+document.addEventListener('touchstart', (e) => {
+    const techItem = e.target.closest('.tech-item');
+    if (techItem) {
+        if (currentTouchedItem) currentTouchedItem.classList.remove('touch-active');
+        techItem.classList.add('touch-active');
+        currentTouchedItem = techItem;
+    }
+}, { passive: true });
+
+// Clean up and remove all highlights when the finger lifts off the screen
+document.addEventListener('touchend', () => {
+    if (currentTouchedItem) {
+        currentTouchedItem.classList.remove('touch-active');
+        currentTouchedItem = null;
+    }
+});
+
+// The Ultimate Failsafe: Force mobile browsers to drop the "Sticky Focus" after a tap
+document.querySelectorAll('.tech-item').forEach(item => {
+    item.addEventListener('click', function() {
+        this.blur(); // Immediately removes the stuck focus state
+        this.classList.remove('touch-active');
+    });
+});
