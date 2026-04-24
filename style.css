@@ -454,7 +454,14 @@ section {
     body:not(.is-touch-device) .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
     body:not(.is-touch-device) .card:hover { transform: translateY(-5px) translateZ(0); }
     body:not(.is-touch-device) .card.no-lift:hover { transform: none; }
-    body:not(.is-touch-device) .tech-item:hover { opacity: 1; transform: scale(1.05); }
+    
+    /* Replaces the old tech-item scale effect with a beautiful lift and glow */
+    body:not(.is-touch-device) .tech-item.hover-spotlight:hover {
+        opacity: 1;
+        transform: translateY(-2px);
+        border-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+    }
     
     /* CRITICAL: Marquee ONLY pauses for mouse, never for touch */
     body:not(.is-touch-device) .marquee-wrapper:hover { animation-play-state: paused; }
@@ -502,27 +509,36 @@ section {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    gap: 4.5rem;
-    padding-right: 4.5rem;
+    gap: 2.5rem; /* Adjusted gap to account for new card padding */
+    padding-right: 2.5rem;
     flex-shrink: 0;
 }
 
+/* Marquee Item as a Miniature Card */
 .tech-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    opacity: 0.6;
-    transition: opacity 0.3s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
-    transform-origin: center center;
-    padding: 0 0.25rem;
     
     /* Enterprise Touch Safeguards */
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     user-select: none;
     -webkit-user-drag: none;
+}
+
+.tech-item .spotlight-content-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .tech-item img {
@@ -551,13 +567,6 @@ section {
     font-size: 1.1rem;
     letter-spacing: 1px;
     color: var(--text-main);
-}
-
-/* Fluid Mobile Highlight Class */
-.tech-item.touch-active {
-    opacity: 1 !important;
-    transform: scale(1.05) !important;
-    transition: transform 0.1s ease, opacity 0.1s ease !important;
 }
 
 @keyframes marquee {
