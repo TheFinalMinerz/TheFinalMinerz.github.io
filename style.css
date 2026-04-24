@@ -513,11 +513,6 @@ section {
     transform: translate3d(0,0,0);
 }
 
-/* CRITICAL FIX: Allows Javascript to safely pause the marquee on mobile */
-.marquee-wrapper.is-paused {
-    animation-play-state: paused !important;
-}
-
 .tech-list {
     display: flex;
     flex-wrap: nowrap;

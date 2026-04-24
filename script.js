@@ -341,13 +341,9 @@ let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; // Lock out interactions while browser opens new tab
 
-// CRITICAL FIX: Also clears the .is-paused lock from the marquees
 const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
-    });
-    document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
-        wrapper.classList.remove('is-paused');
     });
     currentTouchedItem = null;
 };
@@ -369,11 +365,6 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
-                    
-                    // Pause parent marquee during drag
-                    const wrapper = techItem.closest('.marquee-wrapper');
-                    if (wrapper) wrapper.classList.add('is-paused');
-                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -390,11 +381,6 @@ document.addEventListener('touchstart', (e) => {
     
     if (techItem) {
         techItem.classList.add('touch-active');
-        
-        // Pause parent marquee instantly on touch
-        const wrapper = techItem.closest('.marquee-wrapper');
-        if (wrapper) wrapper.classList.add('is-paused');
-        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -416,10 +402,6 @@ document.addEventListener('touchcancel', () => {
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
         isNavigating = true; 
-        
-        // Lock the marquee in paused state while tab opens
-        const wrapper = this.closest('.marquee-wrapper');
-        if (wrapper) wrapper.classList.add('is-paused');
         this.classList.add('touch-active');
         
         // Wait a full second before visually stripping the focus state in the background
