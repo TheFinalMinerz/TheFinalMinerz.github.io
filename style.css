@@ -791,12 +791,14 @@
         transform: translateY(20px);
         transition: opacity 0.5s ease, transform 0.5s ease, width 0.4s ease, bottom 0.4s ease, left 0.4s ease, right 0.4s ease;
         pointer-events: none;
+        visibility: hidden;
     }
 
     .cookie-banner.show {
         opacity: 1;
         transform: translateY(0);
         pointer-events: auto;
+        visibility: visible;
     }
 
     .cookie-banner p {
