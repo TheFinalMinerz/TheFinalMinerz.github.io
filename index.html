@@ -43,9 +43,11 @@
 
     <title>EguSystems LLC | Enterprise IT Infrastructure & Cybersecurity</title>
 
-    <!-- Fonts -->
+    <!-- Fonts and form -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://formspree.io">
+    <link rel="dns-prefetch" href="https://formspree.io">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- External Stylesheet -->
@@ -55,7 +57,7 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
+      "@type": "ProfessionalService",
       "name": "EguSystems LLC",
       "url": "https://egusystems.com",
       "logo": {
@@ -69,6 +71,8 @@
       "telephone": "+1-XXX-XXX-XXXX",
       "address": {
         "@type": "PostalAddress",
+        "addressLocality": "Miami",
+        "addressRegion": "FL",
         "addressCountry": "US"
       },
       "description": "Next-Generation IT Infrastructure and Full-Stack Cybersecurity solutions for modern businesses.",
@@ -201,7 +205,7 @@
                         </p>
                         
                         <div class="expert-profile">
-                            <img src="/favicon.svg" alt="Nicholas Egusquiza" class="expert-avatar">
+                            <img src="/favicon.svg" alt="Nicholas Egusquiza" class="expert-avatar" width="60" height="60">
                             <div class="expert-info">
                                 <h4>Nicholas Egusquiza</h4>
                                 <p>Lead Systems Architect</p>
@@ -406,7 +410,7 @@
             <div class="footer-grid reveal">
                 <div class="footer-col">
                     <div class="logo-container">
-                        <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon">
+                        <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
                         <span class="logo-text">EguSystems LLC</span>
                     </div>
                     <p>Your Safety, Everywhere You Go.<br>From global hubs to digital realms, EguSystems is always within reach.</p>
@@ -427,7 +431,7 @@
     <input type="text" id="honeypot" name="_gotcha" class="sr-only" tabindex="-1" autocomplete="off">
     
     <label for="newsletter-email" class="sr-only">Email address for newsletter</label>
-    <input type="email" id="newsletter-email" name="email" placeholder="Email address" aria-label="Email address" required>
+    <input type="email" id="newsletter-email" name="email" placeholder="Email address" aria-label="Email address" required inputmode="email" autocomplete="email">
     <button type="submit">Join</button>
 </form>
                 </div>

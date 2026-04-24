@@ -470,6 +470,9 @@
         overflow: hidden;
         position: relative;
         margin-bottom: 2rem;
+        -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+
     }
 
     .trust-banner p {
@@ -545,17 +548,6 @@
         letter-spacing: 1px;
         color: var(--text-main);
     }
-
-    .trust-banner::before, .trust-banner::after {
-        content: "";
-        position: absolute;
-        top: 0;
-        width: 15vw;
-        height: 100%;
-        z-index: 2;
-    }
-    .trust-banner::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
-    .trust-banner::after { right: 0; background: linear-gradient(to left, var(--bg-base), transparent); }
 
     @keyframes marquee {
         0% { transform: translateX(0); }
