@@ -507,7 +507,7 @@ section {
     flex-wrap: nowrap;
     align-items: center;
     justify-content: flex-start;
-    gap: 4.5rem; /* Restored natural gap */
+    gap: 4.5rem;
     padding-right: 4.5rem;
     flex-shrink: 0;
 }
@@ -517,9 +517,9 @@ section {
     position: relative;
     overflow: hidden;
     display: block;
-    background: transparent; /* Forces transparency so NO boxes show */
-    border: none; /* Forces transparency so NO boxes show */
-    border-radius: 50px; /* Pill shape for the inner clip */
+    background: transparent;
+    border: none;
+    border-radius: 50px;
     padding: 0.5rem 1rem;
     opacity: 0.6;
     transition: opacity 0.3s ease, transform 0.3s ease;
@@ -753,37 +753,6 @@ footer {
 }
 
 .newsletter-form button:hover { opacity: 0.9; }
-
-.compliance-badges {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    padding: 2rem 0;
-    margin: 0;
-    border-top: 1px solid var(--border-glass);
-}
-
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    background: rgba(255, 255, 255, 0.03);
-    padding: 0.4rem 0.8rem;
-    border-radius: 50px;
-    border: 1px solid var(--border-glass);
-    transition: all 0.2s ease;
-    cursor: default;
-}
-
-.badge:hover {
-    color: var(--text-main);
-    border-color: rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.08);
-}
 
 .footer-bottom {
     text-align: center;
