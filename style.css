@@ -38,6 +38,12 @@
     .footer-col h4 {
         font-family: 'Sora', Arial, sans-serif;
     }
+    .footer-col h5 {
+        font-family: 'Sora', Arial, sans-serif;
+    }
+    .footer-col h6 {
+        font-family: 'Sora', Arial, sans-serif;
+    }
 
     /* Accessibility: Respect OS "Reduce Motion" settings */
     @media (prefers-reduced-motion: reduce) {
@@ -679,6 +685,18 @@
     }
 
     .footer-col h4 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-main);
+    }
+
+    .footer-col h5 {
+        font-size: 1.2rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-main);
+    }
+
+    .footer-col h6 {
         font-size: 1.2rem;
         margin-bottom: 1.5rem;
         color: var(--text-main);
