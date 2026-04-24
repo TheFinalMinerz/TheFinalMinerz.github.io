@@ -72,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cookiesAccepted', 'true');
         cookieBanner.classList.remove('show');
     });
-
+}
     
 // Smooth Mobile Menu Toggle Logic
 const mobileToggle = document.getElementById('mobileToggle');
