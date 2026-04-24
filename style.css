@@ -253,6 +253,7 @@
         transform: rotate(0deg) scale(0.5);
         pointer-events: none;
         transition: opacity 0.4s ease, transform 0.4s ease;
+        visibility: hidden;
     }
 
     /* Mobile Dropdown Menu */
@@ -884,6 +885,7 @@
             opacity: 1;
             transform: rotate(0deg) scale(1);
             pointer-events: auto;
+            visibility: visible;
         }
         .mobile-toggle.is-open {
             transform: rotate(90deg) scale(1);
