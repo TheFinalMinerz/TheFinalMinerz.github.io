@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /privacy.html
+Disallow: /terms.html
+Disallow: /accessibility.html
+Sitemap: https://egusystems.com/sitemap.xml
