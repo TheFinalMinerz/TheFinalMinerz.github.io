@@ -3,23 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="theme-color" content="#0a0a0f"> <meta property="og:title" content="EguSystems LLC | IT Infrastructure & Cybersecurity">
+    <meta property="og:description" content="We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.">
+    <meta property="og:image" content="https://egusystems.com/og-image.jpg">
+    <meta property="og:url" content="https://egusystems.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="EguSystems" />
     <link rel="manifest" href="/site.webmanifest" />
-    <title>EguSystems LLC | Next-Gen IT Infrastructure</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>EguSystems LLC | IT Infrastructure & Cybersecurity</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.google.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ITUtility",
+      "name": "EguSystems LLC",
+      "image": "https://egusystems.com/favicon.svg",
+      "@id": "https://egusystems.com",
+      "url": "https://egusystems.com",
+      "telephone": "N/A",
+      "email": "contact@egusystems.com",
+      "description": "Next-Generation IT Infrastructure and Full-Stack Cybersecurity solutions for modern businesses.",
+      "sameAs": [
+        "https://egusystems.com"
+      ]
+    }
+    </script>
+
     <style>
         :root {
             --bg-base: #0a0a0f;
             --bg-surface: rgba(255, 255, 255, 0.03);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --accent-glow: #3b82f6; /* Electric Blue */
+            --accent-glow: #3b82f6; 
+            --accent-purple: #8b5cf6; 
             --accent-gradient: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
             --border-glass: rgba(255, 255, 255, 0.08);
+            --nav-height: 80px;
+        }
+
+        html { 
+            scroll-behavior: smooth; 
         }
 
         * {
@@ -36,15 +73,59 @@
             line-height: 1.6;
         }
 
-        /* Abstract Background Glows */
+        /* Accessibility: Respect OS "Reduce Motion" settings */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation: none !important;
+                transition: none !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        /* Top Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-gradient);
+            width: 0%;
+            z-index: 10001;
+            transition: width 0.1s ease-out;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+
+        /* Custom Brand Text Selection */
+        ::selection {
+            background: var(--accent-purple);
+            color: #ffffff;
+        }
+
+        /* Custom Dark Theme Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-base); }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
+
+        /* Keyboard Accessibility Focus States */
+        :focus-visible {
+            outline: 2px solid var(--accent-glow);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        /* Ambient Background */
         .bg-glow {
             position: fixed;
             width: 60vw;
             height: 60vw;
             border-radius: 50%;
             background: var(--accent-gradient);
-            filter: blur(100px);
-            opacity: 0.15;
+            filter: blur(120px);
+            opacity: 0.12;
             z-index: -1;
             animation: float 20s ease-in-out infinite alternate;
         }
@@ -56,77 +137,266 @@
             100% { transform: translate(5%, 10%) scale(1.1); }
         }
 
-        /* Layout & Typography */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 2rem;
         }
 
-        header {
-            padding: 2rem 0;
+        /* Navigation Base */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: var(--nav-height);
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-glass);
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            position: relative;
         }
 
-        .logo {
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            height: 32px;
+            width: auto;
+        }
+
+        .logo-text {
             font-weight: 800;
             font-size: 1.5rem;
             letter-spacing: 1px;
             background: var(--accent-gradient);
-            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            margin: 0;
         }
 
-        .status-badge {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #60a5fa;
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
+        /* Desktop Nav Links */
+        .desktop-nav {
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-        .status-badge::before {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: #60a5fa;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #60a5fa;
+            gap: 2.5rem;
+            list-style: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform-origin: right center;
+            opacity: 1;
+            transform: translateX(0) scale(1);
         }
 
-        /* Hero Section */
+        .desktop-nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .desktop-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .desktop-nav a:hover, .desktop-nav a.active-link { color: var(--accent-glow); }
+        .desktop-nav a:hover::after, .desktop-nav a.active-link::after { width: 100%; }
+
+        .nav-cta {
+            background: var(--accent-gradient);
+            color: white !important;
+            padding: 0.6rem 1.5rem !important;
+            border-radius: 6px;
+            font-weight: 600 !important;
+            transition: transform 0.2s, box-shadow 0.2s !important;
+        }
+        .nav-cta::after { display: none !important; } 
+
+        /* Mobile Toggle Icon */
+        .mobile-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 2rem;
+            background: none;
+            border: none;
+            color: var(--text-main);
+            font-size: 1.8rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: rotate(0deg) scale(0.5);
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        /* Mobile Dropdown Menu */
+        .mobile-dropdown {
+            position: absolute;
+            top: var(--nav-height);
+            left: 0;
+            width: 100%;
+            background: rgba(10, 10, 15, 0.98);
+            padding: 2.5rem 2rem;
+            border-bottom: 1px solid var(--border-glass);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(-20px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
+            z-index: 999;
+        }
+
+        .mobile-dropdown.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        @media (min-width: 901px) {
+            .mobile-dropdown { display: none !important; }
+        }
+
+        .mobile-nav-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: inline-block;
+            position: relative;
+            padding: 0.2rem 0;
+            transition: color 0.3s;
+        }
+
+        .mobile-nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background: var(--accent-gradient);
+            transition: width 0.3s ease;
+        }
+
+        .mobile-nav-links a:hover, .mobile-nav-links a.active-link { color: var(--accent-glow); }
+        .mobile-nav-links a:hover::after, .mobile-nav-links a.active-link::after { width: 100%; }
+
+        .mobile-cta {
+            background: var(--accent-gradient);
+            color: white !important;
+            padding: 1rem !important;
+            border-radius: 6px;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 1rem;
+            display: block !important;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s !important;
+        }
+        
+        .mobile-cta::after { display: none !important; }
+
+        /* --- LAYOUT SPACING --- */
+        section { 
+            padding: 5rem 0; 
+            scroll-margin-top: var(--nav-height); 
+        }
+
+        #about { padding-bottom: 2rem; }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Hero */
         .hero {
-            padding: 8rem 0 6rem;
+            padding: calc(var(--nav-height) + 6rem) 0 5rem;
             text-align: center;
         }
 
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .hero h1 {
-            font-size: clamp(3rem, 6vw, 5rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 1.5rem;
+            animation: fadeUp 0.8s ease forwards;
         }
 
         .hero p {
             font-size: 1.25rem;
             color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto 3rem;
+            max-width: 750px;
+            margin: 0 auto 2.5rem;
+            padding: 0 1rem;
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.2s forwards;
+        }
+
+        .hero .btn {
+            opacity: 0;
+            animation: fadeUp 0.8s ease 0.4s forwards;
         }
 
         .btn {
             display: inline-block;
             background: var(--accent-gradient);
             color: white;
-            padding: 1rem 2.5rem;
+            padding: 1.2rem 3rem;
             border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
@@ -136,48 +406,14 @@
             cursor: pointer;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Interactive Bento Grid (Services) */
-        .services {
-            padding: 4rem 0;
-        }
-        
-        .services-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            font-weight: 800;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* Glassmorphism Cards with Hover Spotlight */
-        .card {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-glass);
-            border-radius: 16px;
-            padding: 2.5rem;
+        /* Universal Spotlight Engine */
+        .hover-spotlight {
             position: relative;
             overflow: hidden;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        /* The dynamic interactive glow effect */
-        .card::before {
+        .spotlight-overlay {
             content: "";
             position: absolute;
             top: 0;
@@ -186,157 +422,960 @@
             height: 100%;
             background: radial-gradient(
                 800px circle at var(--mouse-x) var(--mouse-y), 
-                rgba(255, 255, 255, 0.06),
+                rgba(255, 255, 255, 0.08),
                 transparent 40%
             );
             z-index: 0;
             opacity: 0;
             transition: opacity 0.3s;
+            pointer-events: none; 
         }
 
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card-content {
+        .spotlight-content-wrapper {
             position: relative;
             z-index: 1;
+            transform: translateZ(0); 
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* Desktop Only Hover Effects */
+        @media (hover: hover) and (pointer: fine) {
+            .nav-cta:hover, .mobile-cta:hover, .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+            }
+
+            .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
+            .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
+            .card:hover { transform: translateY(-5px) translateZ(0); }
+            
+            .tech-item:hover { 
+                opacity: 1; 
+                transform: scale(1.05);
+            }
+        }
+
+        /* Infinite Scrolling Banners */
+        .trust-banner {
+            border-top: 1px solid var(--border-glass);
+            border-bottom: 1px solid var(--border-glass);
+            padding: 2rem 0; 
+            background: rgba(255, 255, 255, 0.01);
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .trust-banner p {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            width: max-content; 
+            animation: marquee 35s linear infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        .marquee-wrapper:hover { animation-play-state: paused; }
+
+        .tech-list {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 4rem; 
+            padding-right: 4rem; 
+            flex-shrink: 0;
+        }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0.6;
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            text-decoration: none;
+        }
+
+        .tech-item img {
+            height: 24px;
+            width: 24px;
+            object-fit: contain;
+            filter: grayscale(100%) brightness(1.5); 
+            border-radius: 4px;
+        }
+
+        .tech-item .placeholder-icon {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .tech-item span {
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            color: var(--text-main);
+        }
+
+        .trust-banner::before, .trust-banner::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+        }
+        .trust-banner::before { left: 0; background: linear-gradient(to right, var(--bg-base), transparent); }
+        .trust-banner::after { right: 0; background: linear-gradient(to left, var(--bg-base), transparent); }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Services Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 5rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 2.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: translateZ(0); 
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
         .card-icon {
             font-size: 2rem;
             margin-bottom: 1.5rem;
             display: inline-block;
-            background: var(--accent-gradient);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .card h3 {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             margin-bottom: 1rem;
         }
 
         .card p {
             color: var(--text-muted);
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
-        /* Footer */
+        /* Callout Sections (About/Trust) */
+        .callout-box {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 4rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .callout-box h2 {
+            font-size: clamp(1.8rem, 4vw, 2.2rem);
+            margin-bottom: 1.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Expert Profile Component */
+        .expert-profile {
+            display: inline-flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-top: 2.5rem;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem 2rem 1rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .expert-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--bg-base);
+            border-radius: 50%;
+            padding: 12px;
+            border: 2px solid var(--accent-glow);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .expert-info h4 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+        }
+
+        .expert-info p {
+            color: var(--accent-glow) !important;
+            font-weight: 600;
+            font-size: 0.9rem !important;
+            margin: 0 !important;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* Cookie Consent Banner */
+        .cookie-banner {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            padding: 1.5rem;
+            border-radius: 12px;
+            z-index: 9999;
+            max-width: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            pointer-events: none;
+        }
+
+        .cookie-banner.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .cookie-banner p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .cookie-banner a {
+            color: var(--accent-glow);
+            text-decoration: none;
+        }
+
+        .cookie-btn {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-glass);
+            color: white;
+            padding: 0.6rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .cookie-btn:hover { background: rgba(255, 255, 255, 0.1); }
+
+        /* Back To Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-glow);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Footer & Contact */
         footer {
             border-top: 1px solid var(--border-glass);
-            padding: 3rem 0;
-            text-align: center;
-            color: var(--text-muted);
-            margin-top: 4rem;
+            padding: 5rem 0 2rem;
+            background: rgba(0,0,0,0.3);
         }
 
-        /* Scroll Animation Classes */
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-col h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .footer-col p, .footer-col a, .footer-col span {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            display: block;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: var(--accent-glow); }
+
+        .newsletter-form {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            min-width: 150px;
+            padding: 0.8rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: 6px;
+            color: white;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .newsletter-form input:focus { border-color: var(--accent-glow); }
+        
+        /* HTML5 Form Validation Feedback */
+        .newsletter-form input:user-invalid { border-color: #ef4444; }
+
+        .newsletter-form button {
+            padding: 0.8rem 1.5rem;
+            background: var(--accent-gradient);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+
+        .newsletter-form button:hover { opacity: 0.9; }
+
+        .footer-bottom {
+            text-align: center;
+            border-top: 1px solid var(--border-glass);
+            padding-top: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .copyright-line {
+            color: var(--text-main); 
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+        }
+        
+        .legal-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        /* Scroll Animations (GPU Pre-allocation) */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
             transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+            will-change: opacity, transform;
         }
-
         .reveal.active {
             opacity: 1;
             transform: translateY(0);
         }
 
+        /* Responsive Breakpoints */
+        @media (max-width: 900px) {
+            .desktop-nav {
+                position: absolute;
+                right: 3rem;
+                opacity: 0;
+                transform: translateX(30px) scale(0.6);
+                pointer-events: none;
+            }
+            .mobile-toggle {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+                pointer-events: auto;
+            }
+            .mobile-toggle.is-open {
+                transform: rotate(90deg) scale(1);
+            }
+            .hero { padding: calc(var(--nav-height) + 4.5rem) 0 4rem; }
+            .callout-box { padding: 2.5rem 1.5rem; }
+            .trust-banner::before, .trust-banner::after { width: 40px; }
+            .back-to-top { bottom: 1.5rem; right: 1.5rem; }
+            
+            .cookie-banner {
+                bottom: 1rem;
+                left: 1rem;
+                right: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+        }
     </style>
 </head>
 <body>
 
+    <div class="scroll-progress" id="scrollProgress"></div>
+
     <div class="bg-glow top"></div>
     <div class="bg-glow bottom"></div>
 
-    <div class="container">
-        <header>
-            <div class="logo">EguSystems</div>
-            <div class="status-badge">Systems Online</div>
-        </header>
+    <nav>
+        <div class="nav-content">
+            <a href="#home" class="logo-container">
+                <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy">
+                <span class="logo-text">EguSystems LLC</span>
+            </a>
+            
+            <ul class="desktop-nav">
+                <li><a href="#about" class="nav-link">About Us</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#trust" class="nav-link">Our Customers</a></li>
+                <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
+            </ul>
 
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">☰</button>
+        </div>
+
+        <div class="mobile-dropdown" id="mobileDropdown">
+            <ul class="mobile-nav-links">
+                <li><a href="#about" class="nav-link">About Us</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#trust" class="nav-link">Our Customers</a></li>
+                <li><a href="#contact" class="mobile-cta">Get in Touch</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
         <main>
-            <section class="hero reveal">
+            <section class="hero" id="home">
                 <h1>Next-Generation<br>IT Infrastructure.</h1>
                 <p>We architect high-performance hardware, secure virtualized environments, and foolproof data systems for modern businesses.</p>
-                <a href="mailto:contact@egusystems.com" class="btn">Upgrade Your Systems</a>
+                <a href="#contact" class="btn">Upgrade Your Systems</a>
+            </section>
+        </main>
+    </div>
+
+    <div class="trust-banner hover-spotlight reveal">
+        <div class="spotlight-overlay"></div>
+        <div class="spotlight-content-wrapper">
+            <p>Architecting environments utilizing</p>
+            <div class="marquee-wrapper">
+                <div class="tech-list">
+                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy"><span>GEMINI</span></a>
+                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy"><span>PROXMOX</span></a>
+                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy"><span>CLOUDFLARE</span></a>
+                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy"><span>TAILSCALE</span></a>
+                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy"><span>HOME ASSISTANT</span></a>
+                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy"><span>ADGUARD</span></a>
+                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy"><span>SNIPE-IT</span></a>
+                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy"><span>WLED</span></a>
+                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy"><span>PORKBUN</span></a>
+                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy"><span>ZOHO</span></a>
+                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy"><span>ACTION1</span></a>
+                </div>
+                <div class="tech-list">
+                    <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=gemini.google.com" alt="Google Gemini" loading="lazy"><span>GEMINI</span></a>
+                    <a href="https://www.proxmox.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=proxmox.com" alt="Proxmox" loading="lazy"><span>PROXMOX</span></a>
+                    <a href="https://www.cloudflare.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=cloudflare.com" alt="Cloudflare" loading="lazy"><span>CLOUDFLARE</span></a>
+                    <a href="https://tailscale.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=tailscale.com" alt="Tailscale" loading="lazy"><span>TAILSCALE</span></a>
+                    <a href="https://www.home-assistant.io/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=home-assistant.io" alt="Home Assistant" loading="lazy"><span>HOME ASSISTANT</span></a>
+                    <a href="https://adguard.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=adguard.com" alt="AdGuard" loading="lazy"><span>ADGUARD</span></a>
+                    <a href="https://snipeitapp.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=snipeitapp.com" alt="SnipeIT" loading="lazy"><span>SNIPE-IT</span></a>
+                    <a href="https://kno.wled.ge/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=kno.wled.ge" alt="WLED" loading="lazy"><span>WLED</span></a>
+                    <a href="https://porkbun.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=porkbun.com" alt="Porkbun" loading="lazy"><span>PORKBUN</span></a>
+                    <a href="https://www.zoho.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=zoho.com" alt="Zoho" loading="lazy"><span>ZOHO</span></a>
+                    <a href="https://www.action1.com/" target="_blank" rel="noopener noreferrer" class="tech-item"><img src="https://www.google.com/s2/favicons?sz=64&domain=action1.com" alt="Action1" loading="lazy"><span>ACTION1</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <main>
+            <section id="about" class="reveal">
+                <div class="callout-box hover-spotlight">
+                    <div class="spotlight-overlay"></div>
+                    <div class="spotlight-content-wrapper">
+                        <h2>Meet Our EguSystems Experts</h2>
+                        <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+                            A Consulting Team That Builds Trust, Loyalty, and Confidence.<br><br>
+                            At EguSystems LLC, our professionals don't just secure your data—we build lasting confidence. With tailored protection, proactive monitoring, and unmatched support, we help businesses grow while staying resilient in today’s evolving digital world.
+                        </p>
+                        
+                        <div class="expert-profile">
+                            <img src="/favicon.svg" alt="Nicholas Egusquiza" class="expert-avatar">
+                            <div class="expert-info">
+                                <h4>Nicholas Egusquiza</h4>
+                                <p>Lead Systems Architect</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <section class="services">
-                <h2 class="services-title reveal">Core Capabilities</h2>
+            <section id="services" class="services">
+                
+                <div class="section-header reveal">
+                    <h2>Core Capabilities</h2>
+                    <p>From high-performance hardware to advanced automation, our foundational IT services are engineered for absolute reliability, speed, and scale. We build the infrastructure that powers your business.</p>
+                </div>
+                
                 <div class="grid">
-                    
-                    <div class="card reveal">
-                        <div class="card-content">
+                    <div class="card hover-spotlight reveal">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
                             <div class="card-icon">⚡</div>
                             <h3>Custom Workstations</h3>
                             <p>Purpose-built, thermally optimized physical infrastructure designed for specific high-compute workloads and intense productivity.</p>
                         </div>
                     </div>
 
-                    <div class="card reveal" style="transition-delay: 100ms;">
-                        <div class="card-content">
+                    <div class="card hover-spotlight reveal" style="transition-delay: 100ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
                             <div class="card-icon">🖧</div>
                             <h3>Proxmox Virtualization</h3>
                             <p>Consolidating disparate hardware into hyper-efficient virtualized environments. Maximize resource allocation and eliminate downtime.</p>
                         </div>
                     </div>
 
-                    <div class="card reveal" style="transition-delay: 200ms;">
-                        <div class="card-content">
+                    <div class="card hover-spotlight reveal" style="transition-delay: 200ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
                             <div class="card-icon">🛡️</div>
                             <h3>Data Integrity</h3>
                             <p>Bulletproof 3-2-1 backup protocols. Automated, encrypted, and isolated disaster recovery solutions ensuring zero data loss.</p>
                         </div>
                     </div>
 
-                    <div class="card reveal" style="transition-delay: 300ms;">
-                        <div class="card-content">
+                    <div class="card hover-spotlight reveal" style="transition-delay: 300ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
                             <div class="card-icon">📂</div>
                             <h3>Systems Documentation</h3>
                             <p>Transforming internal tribal knowledge into structured, accessible Standard Operating Procedures. Secure your operational assets.</p>
                         </div>
                     </div>
 
+                    <div class="card hover-spotlight reveal" style="transition-delay: 400ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">💡</div>
+                            <h3>Smart Home Automation</h3>
+                            <p>Professional deployment and integration across Google Home, Alexa, SmartThings, and Home Assistant. Creating a secure, unified, and locally-controlled ecosystem.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 500ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">✨</div>
+                            <h3>AI & Automation</h3>
+                            <p>Leveraging advanced models like Google Gemini to automate intensive workflows, optimize data analysis, and build intelligent business systems that scale effortlessly.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-header reveal" style="margin-top: 5rem;">
+                    <h2>Cybersecurity Suite</h2>
+                    <p>EguSystems doesn't just offer services—we deliver airtight digital protection that adapts, evolves, and defends. With top-tier technology and relentless precision, your trust is our highest firewall.</p>
+                </div>
+
+                <div class="grid" style="margin-bottom: 0;">
+                    <div class="card hover-spotlight reveal">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">🛡️</div>
+                            <h3>Full-Stack Security</h3>
+                            <p>Shield every layer of your digital presence with integrated, end-to-end defense strategies and real-time monitoring.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 100ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">📊</div>
+                            <h3>Risk Assessment</h3>
+                            <p>Identify vulnerabilities, evaluate threats, and take proactive steps to bulletproof your business before attacks happen.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 200ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">🎯</div>
+                            <h3>Penetration Testing</h3>
+                            <p>Simulate real-world attacks to expose weak spots and strengthen your defenses before hackers find them.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 300ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">🧠</div>
+                            <h3>Threat Intelligence</h3>
+                            <p>Stay ahead of attackers with real-time insights, predictive analytics, and global cyber threat tracking.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 400ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">🌐</div>
+                            <h3>Network Monitoring</h3>
+                            <p>Track and manage network activity in real time to detect and eliminate threats before escalation.</p>
+                        </div>
+                    </div>
+
+                    <div class="card hover-spotlight reveal" style="transition-delay: 500ms;">
+                        <div class="spotlight-overlay"></div>
+                        <div class="spotlight-content-wrapper card-content">
+                            <div class="card-icon">☁️</div>
+                            <h3>Cloud Protection</h3>
+                            <p>Fortify your cloud data and infrastructure with tailored safeguards and encrypted access across all environments.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="trust" class="reveal">
+                <div class="callout-box hover-spotlight">
+                    <div class="spotlight-overlay"></div>
+                    <div class="spotlight-content-wrapper">
+                        <h2>Real Clients. Real Protection.</h2>
+                        <p style="color: var(--text-muted); max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+                            Our loyal customers are the heartbeat of EguSystems. From small startups to global enterprises, they trust our shield to safeguard what matters. With every successful defense, we prove that cybersecurity isn’t just protection; it’s a promise fulfilled.
+                        </p>
+                    </div>
                 </div>
             </section>
         </main>
-
-        <footer>
-            <p>&copy; 2026 EguSystems LLC. Operating out of Miami, FL.</p>
-        </footer>
     </div>
 
+    <div class="trust-banner hover-spotlight reveal" style="border-top: none; margin-top: -2rem;">
+        <div class="spotlight-overlay"></div>
+        <div class="spotlight-content-wrapper marquee-wrapper">
+            <div class="tech-list">
+                <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
+                    <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                    <span>PREFERENCE CONSULTING</span>
+                </a>
+                
+                <a href="#contact" class="tech-item">
+                    <div class="placeholder-icon">+</div>
+                    <span>BECOME A PARTNER</span>
+                </a>
+                
+                <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
+                    <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                    <span>PREFERENCE CONSULTING</span>
+                </a>
+
+                <a href="#contact" class="tech-item">
+                    <div class="placeholder-icon">+</div>
+                    <span>BECOME A PARTNER</span>
+                </a>
+            </div>
+            <div class="tech-list">
+                <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
+                    <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                    <span>PREFERENCE CONSULTING</span>
+                </a>
+                
+                <a href="#contact" class="tech-item">
+                    <div class="placeholder-icon">+</div>
+                    <span>BECOME A PARTNER</span>
+                </a>
+                
+                <a href="https://preferenceconsulting.com/" target="_blank" rel="noopener noreferrer" class="tech-item">
+                    <img src="https://www.google.com/s2/favicons?sz=64&domain=preferenceconsulting.com" alt="Preference Consulting" loading="lazy">
+                    <span>PREFERENCE CONSULTING</span>
+                </a>
+
+                <a href="#contact" class="tech-item">
+                    <div class="placeholder-icon">+</div>
+                    <span>BECOME A PARTNER</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid reveal">
+                <div class="footer-col">
+                    <div class="logo-container" style="margin-bottom: 1.5rem;">
+                        <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy">
+                        <h4 class="logo-text">EguSystems LLC</h4>
+                    </div>
+                    <p>Your Safety, Everywhere You Go.<br>From global hubs to digital realms, EguSystems is always within reach.</p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Call Our Cyber Squad</h4>
+                    <p>Got questions or need urgent help? We're ready to talk, guide, and guard.</p>
+                    <span style="color: #fff; font-weight: 600; font-size: 1.2rem; display: block; margin-bottom: 0.8rem;">N/A</span>
+                    <a href="mailto:contact@egusystems.com">contact@egusystems.com</a>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Stay Updated</h4>
+                    <p>Get monthly insights, tips, and updates straight from EguSystems.</p>
+                    <form class="newsletter-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                        <input type="email" name="email" placeholder="Email address" aria-label="Email address" required>
+                        <button type="submit">Join</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="footer-bottom reveal">
+                <div class="copyright-line">&copy; 2026 EguSystems LLC. All rights reserved.</div>
+                
+                <div class="legal-links">
+                    <a href="/terms.html">Terms & Conditions</a>
+                    <a href="/privacy.html">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="cookie-banner" id="cookieBanner">
+        <p>We use cookies to secure your experience and analyze traffic. <a href="/privacy.html">Learn more</a>.</p>
+        <button class="cookie-btn" id="acceptCookies">Accept</button>
+    </div>
+
+    <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
     <script>
-        // 1. Hover Spotlight Effect for Cards
-        document.querySelectorAll('.card').forEach(card => {
-            card.addEventListener('mousemove', e => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                card.style.setProperty('--mouse-x', `${x}px`);
-                card.style.setProperty('--mouse-y', `${y}px`);
+        // Scroll Progress Bar & Back to Top Logic
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+
+            const backToTopBtn = document.getElementById('backToTop');
+            if (winScroll > 500) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // Scrollspy (Active Nav Link Tracker)
+        const sections = document.querySelectorAll("section");
+        const navLinks = document.querySelectorAll(".nav-link");
+
+        window.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach((section) => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 250) {
+                    current = section.getAttribute("id");
+                }
+            });
+
+            navLinks.forEach((link) => {
+                link.classList.remove("active-link");
+                if (link.getAttribute("href").includes(current)) {
+                    link.classList.add("active-link");
+                }
             });
         });
 
-        // 2. Smooth Scroll Reveal Animation
-        function reveal() {
-            var reveals = document.querySelectorAll(".reveal");
-            for (var i = 0; i < reveals.length; i++) {
-                var windowHeight = window.innerHeight;
-                var elementTop = reveals[i].getBoundingClientRect().top;
-                var elementVisible = 100;
-                
-                if (elementTop < windowHeight - elementVisible) {
-                    reveals[i].classList.add("active");
-                }
+        // Cookie Banner Logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const cookieBanner = document.getElementById('cookieBanner');
+            if (!localStorage.getItem('cookiesAccepted')) {
+                setTimeout(() => {
+                    cookieBanner.classList.add('show');
+                }, 2000); // Shows 2 seconds after page load
             }
+
+            document.getElementById('acceptCookies').addEventListener('click', () => {
+                localStorage.setItem('cookiesAccepted', 'true');
+                cookieBanner.classList.remove('show');
+            });
+        });
+
+        // Smooth Mobile Menu Toggle Logic w/ ARIA Support
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileDropdown = document.getElementById('mobileDropdown');
+
+        mobileToggle.addEventListener('click', () => {
+            const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
+            mobileToggle.setAttribute('aria-expanded', !isExpanded);
+            
+            mobileDropdown.classList.toggle('active');
+            mobileToggle.classList.toggle('is-open');
+            
+            if(mobileToggle.classList.contains('is-open')){
+                mobileToggle.innerHTML = '✕'; 
+            } else {
+                mobileToggle.innerHTML = '☰';
+            }
+        });
+
+        // Close mobile dropdown when a link is clicked
+        document.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileToggle.setAttribute('aria-expanded', 'false');
+                mobileDropdown.classList.remove('active');
+                mobileToggle.classList.remove('is-open');
+                mobileToggle.innerHTML = '☰';
+            });
+        });
+
+        // Smart Failsafe: Smoothly hide mobile menu if window is resized to desktop width
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
+                mobileToggle.setAttribute('aria-expanded', 'false');
+                mobileDropdown.classList.remove('active');
+                mobileToggle.classList.remove('is-open');
+                
+                setTimeout(() => {
+                    mobileToggle.innerHTML = '☰';
+                }, 400);
+            }
+        });
+
+        // High-Performance Universal Hover Spotlight Effect Tracker
+        document.querySelectorAll('.hover-spotlight').forEach(element => {
+            let ticking = false;
+            element.addEventListener('mousemove', e => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        const rect = element.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        element.style.setProperty('--mouse-x', `${x}px`);
+                        element.style.setProperty('--mouse-y', `${y}px`);
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        });
+
+        // High-Performance Smooth Scroll Reveal (Intersection Observer)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15 
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("active");
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Seamless AJAX Form Submission for Newsletter
+        const form = document.querySelector('.newsletter-form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault(); 
+                const btn = form.querySelector('button');
+                const originalText = btn.innerHTML;
+                
+                btn.innerHTML = 'Sending...';
+                btn.style.opacity = '0.7';
+
+                try {
+                    const response = await fetch(form.action, {
+                        method: form.method,
+                        body: new FormData(form),
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        btn.innerHTML = 'Subscribed! ✓';
+                        btn.style.background = '#10b981'; 
+                        form.reset();
+                    } else {
+                        btn.innerHTML = 'Error!';
+                    }
+                } catch (error) {
+                    btn.innerHTML = 'Error!';
+                }
+
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = ''; 
+                    btn.style.opacity = '1';
+                }, 3000);
+            });
         }
-        window.addEventListener("scroll", reveal);
-        // Trigger once on load
-        reveal();
     </script>
 </body>
 </html>
