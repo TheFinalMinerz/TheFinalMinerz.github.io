@@ -290,7 +290,9 @@
         }
 
         @media (min-width: 901px) {
-            .mobile-dropdown { display: none !important; }
+            /* Keep the mobile dropdown absolutely positioned and hidden via opacity/visibility
+               so it can smoothly fade out when resizing from mobile to desktop. */
+            .mobile-dropdown { position: absolute; }
         }
 
         .mobile-nav-links {
