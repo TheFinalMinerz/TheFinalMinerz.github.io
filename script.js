@@ -32,7 +32,7 @@ const handleScroll = throttle(() => {
     } else {
         backToTopBtn.classList.remove('visible');
     }
-}, 16); // ~60fps throttle
+}, 16);
 
 window.addEventListener('scroll', handleScroll);
 
@@ -249,8 +249,6 @@ if (form) {
 // Accessibility: Prevent marquee containers from auto-scrolling when tabbing quickly
 document.querySelectorAll('.trust-banner').forEach(banner => {
     banner.addEventListener('scroll', function() {
-        // Forces the container to stay locked at the far left edge
-        // letting the CSS transform handle all the visual movement safely.
         this.scrollLeft = 0;
     });
 });
@@ -294,22 +292,30 @@ document.querySelectorAll('.hover-spotlight').forEach(element => {
 // --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
 let currentTouchedItem = null;
 
-const clearTouchItem = () => {
-    if (currentTouchedItem) {
-        currentTouchedItem.classList.remove('touch-active');
-        currentTouchedItem = null;
-    }
+// Aggressively scrubs the entire document of stuck highlight classes
+const clearAllTouches = () => {
+    document.querySelectorAll('.tech-item.touch-active').forEach(item => {
+        item.classList.remove('touch-active');
+    });
+    currentTouchedItem = null;
 };
 
-// Handle finger dragging across the screen
+// Handle fluid finger dragging across the screen
 document.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const element = document.elementFromPoint(touch.clientX, touch.clientY);
-    const techItem = element ? element.closest('.tech-item') : null;
+    
+    // If finger slides off the content or window, clear everything
+    if (!element) {
+        clearAllTouches();
+        return;
+    }
+
+    const techItem = element.closest('.tech-item');
     
     // Swap the highlight instantly if the finger moves to a new item
     if (techItem !== currentTouchedItem) {
-        clearTouchItem();
+        clearAllTouches();
         if (techItem) {
             techItem.classList.add('touch-active');
             currentTouchedItem = techItem;
@@ -317,24 +323,25 @@ document.addEventListener('touchmove', (e) => {
     }
 }, { passive: true });
 
-// Handle the initial tap
+// Handle initial tap
 document.addEventListener('touchstart', (e) => {
     const techItem = e.target.closest('.tech-item');
+    clearAllTouches(); // Always start fresh
+    
     if (techItem) {
-        clearTouchItem();
         techItem.classList.add('touch-active');
         currentTouchedItem = techItem;
     }
 }, { passive: true });
 
-// CRITICAL FIX: Clean up when finger lifts or browser cancels the swipe
-document.addEventListener('touchend', clearTouchItem);
-document.addEventListener('touchcancel', clearTouchItem); 
+// CRITICAL FIX: Delay the cleanup slightly so it fires AFTER Apple's simulated click
+document.addEventListener('touchend', () => setTimeout(clearAllTouches, 150));
+document.addEventListener('touchcancel', () => setTimeout(clearAllTouches, 150));
 
-// The Ultimate Failsafe: Force mobile browsers to drop the "Sticky Focus" after a tap
+// The Ultimate Failsafe: Hardkill the browser's native click-focus retention
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function() {
-        this.blur(); 
-        this.classList.remove('touch-active');
+        this.blur(); // Strips native focus
+        setTimeout(clearAllTouches, 150); // Defeats the iOS sticky-hover bug
     });
 });
