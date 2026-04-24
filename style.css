@@ -453,6 +453,7 @@
         .hover-spotlight:hover { border-color: rgba(255, 255, 255, 0.2); }
         .hover-spotlight:hover .spotlight-overlay { opacity: 1; }
         .card:hover { transform: translateY(-5px) translateZ(0); }
+        .card.no-lift:hover { transform: none; }
         
         .tech-item:hover { 
             opacity: 1; 
