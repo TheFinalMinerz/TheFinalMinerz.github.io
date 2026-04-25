@@ -53,16 +53,23 @@
 
     <nav>
         <div class="nav-content">
-            <a href="index.html#home" class="logo-container">
-                <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
-                <span class="logo-text">EguSystems LLC</span>
-            </a>
-
+            <div style="display: flex; align-items: center;">
+                <a href="#home" class="logo-container">
+                    <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
+                    <span class="logo-text">EguSystems LLC</span>
+                </a>
+                
+                <div class="system-status" title="All Systems Operational">
+                    <span class="status-dot"></span>
+                    <span class="status-text">System Online</span>
+                </div>
+            </div>
+            
             <ul class="desktop-nav">
-                <li><a href="index.html#about" class="nav-link">About Us</a></li>
-                <li><a href="index.html#services" class="nav-link">Services</a></li>
-                <li><a href="index.html#trust" class="nav-link">Our Customers</a></li>
-                <li><a href="index.html#contact" class="nav-cta">Get in Touch</a></li>
+                <li><a href="#about" class="nav-link">About Us</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#trust" class="nav-link">Our Customers</a></li>
+                <li><a href="#contact" class="nav-cta">Get in Touch</a></li>
             </ul>
 
             <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileDropdown">☰</button>
