@@ -297,7 +297,13 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 
 .logo-text {
     font-weight: 800;
-    font-size: 1.5rem;
+    
+    /* CRITICAL FIX: Fluid typography. 
+       Minimum size: 1.1rem (for tiny phones)
+       Scaling factor: 4.5vw (shrinks/grows with the screen)
+       Maximum size: 1.5rem (for desktop) */
+    font-size: clamp(1.1rem, 4.5vw, 1.5rem);
+    
     letter-spacing: 1px;
     background: var(--accent-gradient);
     -webkit-background-clip: text;
@@ -307,7 +313,6 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     display: block;
     padding-bottom: 0.05em;
     white-space: nowrap;
-    transition: font-size 0.4s ease;
 }
 
 /* --- SYSTEM STATUS INDICATOR --- */
@@ -1350,9 +1355,6 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
         padding: 0 1.5rem;
     }
     
-    .logo-text {
-        font-size: 1.25rem;
-    }
 
     .desktop-nav {
         position: absolute;
