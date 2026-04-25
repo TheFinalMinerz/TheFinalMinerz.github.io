@@ -22,18 +22,9 @@ function throttle(func, delay) {
     };
 }
 
-// Utility: Debounce function for resize events
-function debounce(func, delay) {
-    let timeoutId;
-    return function(...args) {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func(...args), delay);
-    };
-}
-
-// Scroll Progress Bar & Back to Top Logic (Throttled)
+// Scroll Progress Bar & Back to Top Logic (Throttled for ultra-smooth 60fps)
 const handleScroll = throttle(() => {
-    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const winScroll = window.scrollY;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrolled = (winScroll / height) * 100;
     document.getElementById('scrollProgress').style.width = scrolled + '%';
@@ -46,9 +37,9 @@ const handleScroll = throttle(() => {
     }
 }, 16);
 
-window.addEventListener('scroll', handleScroll);
+window.addEventListener('scroll', handleScroll, { passive: true });
 
-// Scrollspy (Active Nav Link Tracker - Throttled)
+// Scrollspy (Active Nav Link Tracker)
 const sections = document.querySelectorAll("section");
 const navLinks = document.querySelectorAll(".nav-link");
 
@@ -56,7 +47,7 @@ const handleScrollspy = throttle(() => {
     let current = "";
     sections.forEach((section) => {
         const sectionTop = section.offsetTop;
-        if (pageYOffset >= sectionTop - 250) {
+        if (window.scrollY >= sectionTop - 250) {
             current = section.getAttribute("id");
         }
     });
@@ -69,7 +60,7 @@ const handleScrollspy = throttle(() => {
     });
 }, 16);
 
-window.addEventListener("scroll", handleScrollspy);
+window.addEventListener("scroll", handleScrollspy, { passive: true });
 
 // Cookie Banner Logic
 window.addEventListener('DOMContentLoaded', () => {
@@ -113,7 +104,7 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
         mobileToggle.innerHTML = '☰';
-        mobileToggle.focus();
+        // Note: Intentionally not forcing focus back to the toggle on link click to prevent mobile keyboard jumps
     });
 });
 
@@ -158,7 +149,7 @@ window.addEventListener('resize', () => {
             mobileToggle.innerHTML = '☰';
         }, 400);
     }
-});
+}, { passive: true });
 
 // High-Performance Smooth Scroll Reveal
 const observerOptions = {
@@ -229,17 +220,14 @@ if (form) {
                 btn.innerHTML = 'Subscribed! ✓';
                 btn.style.background = '#10b981'; 
                 form.reset();
-                console.log('Newsletter subscription successful');
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 btn.innerHTML = errorData.message || 'Error submitting form';
                 btn.style.background = '#ef4444';
-                console.error('Subscription error:', errorData);
             }
         } catch (error) {
             btn.innerHTML = 'Network error - please try again';
             btn.style.background = '#ef4444';
-            console.error('Newsletter submission error:', error);
         }
 
         setTimeout(() => {
@@ -330,7 +318,7 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; 
