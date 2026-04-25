@@ -13,7 +13,7 @@ const isHomePage = currentPath.endsWith('/') || currentPath.endsWith('index.html
 if (!isHomePage) {
     document.querySelectorAll('a[href^="#"]').forEach(link => {
         const hash = link.getAttribute('href');
-        // Transforms href="#contact" into href="index.html#contact" seamlessly preventing dead local links
+        // Transforms href="#contact" into href="index.html#contact" seamlessly
         if (hash.length > 1) { 
             link.href = 'index.html' + hash; 
         } else {
