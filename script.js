@@ -6,13 +6,15 @@ window.addEventListener('load', () => {
     }, 100);
 });
 
-// --- CRITICAL FIX: Subpage Anchor Routing ---
+// --- CRITICAL FIX: Subpage Anchor Routing & Skip Link Exclusion ---
 const currentPath = window.location.pathname;
 const isHomePage = currentPath.endsWith('/') || currentPath.endsWith('index.html');
 
 if (!isHomePage) {
-    // IMPORTANT: Excludes the skip-link so it correctly skips down the current subpage
-    document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach(link => {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        // Explicitly prevents the hidden accessibility 'Skip to Main Content' link from redirecting users away from privacy/terms pages
+        if (link.classList.contains('skip-link')) return; 
+
         const hash = link.getAttribute('href');
         if (hash.length > 1) { 
             link.href = 'index.html' + hash; 
@@ -363,23 +365,28 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         let velocity = 1.5; 
         const baseSpeed = 1.5; 
         let lastX = 0;
+        
+        // CRITICAL FIX: The Singleton Lock prevents duplicate physics loops from stacking and creating hyperspeed leaks
+        let physicsFrameId = null;
 
         wrapper.scrollLeft = listWidth * 2;
 
-        // CRITICAL FIX: Performance optimization. Only run the physics loop if the banner is actually visible!
-        let isVisible = true;
+        let isVisible = false;
         const visibilityObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 isVisible = entry.isIntersecting;
-                if (isVisible && !isDown) {
-                    requestAnimationFrame(playMarquee);
+                if (isVisible && !physicsFrameId) {
+                    playMarquee();
                 }
             });
         }, { rootMargin: "100px" });
         visibilityObserver.observe(banner);
 
         const playMarquee = () => {
-            if (!isVisible) return; // Halts the CPU loop completely when banner is off-screen
+            if (!isVisible) {
+                physicsFrameId = null; // Safely release the lock when off-screen
+                return; 
+            }
             
             const singleWidth = originalList.offsetWidth;
             
@@ -387,19 +394,18 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
                 if (!isDown) {
                     const targetSpeed = isHovered ? 0 : baseSpeed;
                     velocity += (targetSpeed - velocity) * 0.05; 
+                    wrapper.scrollLeft += velocity; 
                 }
                 
-                wrapper.scrollLeft += velocity;
-
+                // Infinite Loop Boundaries
                 if (wrapper.scrollLeft <= 0) {
                     wrapper.scrollLeft += singleWidth;
                 } else if (wrapper.scrollLeft >= singleWidth * 3) {
                     wrapper.scrollLeft -= singleWidth;
                 }
             }
-            requestAnimationFrame(playMarquee);
+            physicsFrameId = requestAnimationFrame(playMarquee);
         };
-        requestAnimationFrame(playMarquee);
 
         const getPageX = (e) => e.pageX || (e.touches && e.touches[0].pageX);
 
@@ -407,7 +413,6 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             isDown = true;
             window.isMarqueeDragging = true;
             wrapper.classList.add('active-drag');
-            
             document.body.classList.add('is-dragging'); 
             
             startX = getPageX(e);
@@ -426,8 +431,11 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             const currentX = getPageX(e);
             const deltaX = lastX - currentX; 
             
-            wrapper.scrollLeft += deltaX;
-            velocity = deltaX; 
+            wrapper.scrollLeft += deltaX; // Allows user's mouse/finger to control positioning completely
+            
+            // CRITICAL FIX: Caps the throw speed at 40 pixels per frame to prevent extreme velocity warping
+            velocity = Math.max(-40, Math.min(40, deltaX)); 
+            
             dragWalk += Math.abs(deltaX);
             lastX = currentX;
         };
@@ -436,12 +444,11 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             if (!isDown) return;
             isDown = false;
             wrapper.classList.remove('active-drag');
-            
             document.body.classList.remove('is-dragging'); 
             
             setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
             
-            if (isVisible) requestAnimationFrame(playMarquee);
+            // Removed the old buggy requestAnimationFrame logic that stacked physics frames
             
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);
