@@ -259,7 +259,7 @@ document.querySelectorAll('.hover-spotlight').forEach(element => {
 });
 
 document.addEventListener('touchmove', (e) => {
-    if (window.isMarqueeDragging) return; // Prevent card glowing while violently dragging
+    if (window.isMarqueeDragging) return;
 
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -313,7 +313,7 @@ document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
 
-// --- DRAGGABLE INFINITE MARQUEE ENGINE ---
+// --- THE ULTIMATE PHYSICS-BASED INFINITE MARQUEE ENGINE ---
 window.isMarqueeDragging = false; 
 
 document.querySelectorAll('.trust-banner').forEach(banner => {
@@ -322,133 +322,143 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     
     const originalList = wrapper.querySelector('.tech-list');
 
-    // 1. Clone items dynamically to support extreme 25% browser zoom outs
-    for (let i = 0; i < 4; i++) {
-        const clone = originalList.cloneNode(true);
-        clone.setAttribute('aria-hidden', 'true');
-        wrapper.appendChild(clone);
-    }
-
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let isHovered = false;
-    let dragWalk = 0;
-    
-    let velocity = 1.5; // Base scroll speed
-    const baseSpeed = 1.5;
-    let lastX = 0;
-
-    // Force scroll position to the middle to allow dragging backwards immediately
+    // Wait a brief moment to ensure the browser has painted the elements so offsetWidth isn't 0
     setTimeout(() => {
-        wrapper.scrollLeft = originalList.offsetWidth;
-    }, 100);
-
-    // 2. Hardware-Accelerated Physics Loop
-    const playMarquee = () => {
-        const singleWidth = originalList.offsetWidth;
+        const listWidth = originalList.offsetWidth || 600; 
         
-        if (singleWidth > 0) {
-            // Apply friction/momentum when finger is released
-            if (!isDown) {
-                // If user is hovering over with a mouse, smoothly stop it. Otherwise lerp to normal speed.
-                const targetSpeed = isHovered ? 0 : baseSpeed;
-                velocity += (targetSpeed - velocity) * 0.05; 
-            }
-            
-            wrapper.scrollLeft += velocity;
+        // Dynamic mega-cloning: Ensures at least 16,000 pixels of content for extreme 25% zoom outs
+        const clonesNeeded = Math.ceil(16000 / listWidth); 
 
-            // Seamless looping math
-            if (wrapper.scrollLeft <= 0) {
-                wrapper.scrollLeft += singleWidth;
-            } else if (wrapper.scrollLeft >= singleWidth * 2) {
-                wrapper.scrollLeft -= singleWidth;
-            }
+        for (let i = 0; i < clonesNeeded; i++) {
+            const clone = originalList.cloneNode(true);
+            clone.setAttribute('aria-hidden', 'true');
+            wrapper.appendChild(clone);
         }
-        requestAnimationFrame(playMarquee);
-    };
-    requestAnimationFrame(playMarquee);
 
-    const getPageX = (e) => e.pageX || (e.touches && e.touches[0].pageX);
-
-    // 3. Universal Dragging Logic (Desktop & Mobile)
-    const handleDown = (e) => {
-        isDown = true;
-        window.isMarqueeDragging = true;
-        wrapper.classList.add('active-drag');
-        startX = getPageX(e);
-        lastX = startX;
-        velocity = 0;
-        dragWalk = 0;
-    };
-
-    const handleMove = (e) => {
-        if (!isDown) return;
-        const currentX = getPageX(e);
-        const deltaX = lastX - currentX; // Positive if moving left
+        let isDown = false;
+        let startX;
+        let isHovered = false;
+        let dragWalk = 0;
         
-        wrapper.scrollLeft += deltaX;
-        
-        // Capture exact gesture momentum for a smooth release 
-        velocity = deltaX; 
-        dragWalk += Math.abs(deltaX);
-        lastX = currentX;
-    };
+        let velocity = 1.5; // Current moving speed
+        const baseSpeed = 1.5; // Default cruising speed
+        let lastX = 0;
 
-    const handleUp = () => {
-        if (!isDown) return;
-        isDown = false;
-        wrapper.classList.remove('active-drag');
-        setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
-    };
+        // Instantly force scroll to the center of the massive cloned block so users can drag left immediately
+        wrapper.scrollLeft = listWidth * 2;
 
-    wrapper.addEventListener('mousedown', handleDown);
-    wrapper.addEventListener('touchstart', handleDown, { passive: true });
-
-    wrapper.addEventListener('mousemove', handleMove);
-    wrapper.addEventListener('touchmove', handleMove, { passive: true });
-
-    wrapper.addEventListener('mouseup', handleUp);
-    wrapper.addEventListener('mouseleave', handleUp);
-    wrapper.addEventListener('touchend', handleUp);
-    wrapper.addEventListener('touchcancel', handleUp);
-    
-    // Mouse-Only Hover pausing
-    wrapper.addEventListener('mouseenter', () => { isHovered = true; });
-    wrapper.addEventListener('mouseleave', () => { isHovered = false; });
-
-    // 4. Intelligent Click Routing (Blocks clicks if user is dragging)
-    wrapper.querySelectorAll('.tech-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            e.preventDefault(); 
+        // Hardware-Accelerated Momentum Physics Loop
+        const playMarquee = () => {
+            const singleWidth = originalList.offsetWidth;
             
-            // If user dragged more than 5 pixels, treat it as a swipe, NOT a click
-            if (Math.abs(dragWalk) > 5) {
-                dragWalk = 0;
-                return; 
-            }
-            
-            // Execute standard routing
-            this.classList.add('touch-active');
-            const href = this.getAttribute('href');
-            const target = this.getAttribute('target');
-            
-            setTimeout(() => {
-                if (href && href.startsWith('#')) {
-                    window.location.href = href;
-                } else if (href) {
-                    window.open(href, target || '_self', 'noopener,noreferrer');
+            if (singleWidth > 0) {
+                // If user is NOT touching the screen, apply Linear Interpolation (Lerp)
+                if (!isDown) {
+                    const targetSpeed = isHovered ? 0 : baseSpeed;
+                    // This mathematically glides the momentum perfectly back to the target speed
+                    velocity += (targetSpeed - velocity) * 0.05; 
                 }
                 
-                setTimeout(() => {
-                    this.classList.remove('touch-active');
-                }, 1000); 
-                
-            }, 50);
-        });
-    });
-});
+                wrapper.scrollLeft += velocity;
 
+                // Seamless Infinite Looping Math
+                if (wrapper.scrollLeft <= 0) {
+                    wrapper.scrollLeft += singleWidth;
+                } else if (wrapper.scrollLeft >= singleWidth * 3) {
+                    wrapper.scrollLeft -= singleWidth;
+                }
+            }
+            requestAnimationFrame(playMarquee);
+        };
+        requestAnimationFrame(playMarquee);
+
+        // Input normalizer
+        const getPageX = (e) => e.pageX || (e.touches && e.touches[0].pageX);
+
+        // Global Event Handlers
+        const handleDown = (e) => {
+            isDown = true;
+            window.isMarqueeDragging = true;
+            wrapper.classList.add('active-drag');
+            startX = getPageX(e);
+            lastX = startX;
+            velocity = 0; // Instantly halt momentum on grab
+            dragWalk = 0;
+            
+            // CRITICAL FIX: Transfer drag tracking to the window so fast swiping doesn't escape the container
+            window.addEventListener('mousemove', handleMove, { passive: false });
+            window.addEventListener('mouseup', handleUp);
+            window.addEventListener('touchmove', handleMove, { passive: false });
+            window.addEventListener('touchend', handleUp);
+        };
+
+        const handleMove = (e) => {
+            if (!isDown) return;
+            const currentX = getPageX(e);
+            
+            // Calculate pixel movement difference
+            const deltaX = lastX - currentX; 
+            
+            wrapper.scrollLeft += deltaX;
+            
+            // Capture precise release momentum
+            velocity = deltaX; 
+            dragWalk += Math.abs(deltaX);
+            lastX = currentX;
+        };
+
+        const handleUp = () => {
+            if (!isDown) return;
+            isDown = false;
+            wrapper.classList.remove('active-drag');
+            setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
+            
+            // Clear global listeners to preserve RAM
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleUp);
+            window.removeEventListener('touchmove', handleMove);
+            window.removeEventListener('touchend', handleUp);
+        };
+
+        // Attach initial grab listeners to the wrapper
+        wrapper.addEventListener('mousedown', handleDown);
+        wrapper.addEventListener('touchstart', handleDown, { passive: true });
+        
+        // Mouse-Only Hover pausing
+        wrapper.addEventListener('mouseenter', () => { isHovered = true; });
+        wrapper.addEventListener('mouseleave', () => { isHovered = false; });
+
+        // Intelligent Click Routing (Blocks fake clicks if user was actively dragging)
+        wrapper.querySelectorAll('.tech-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault(); 
+                
+                // If user dragged more than 5 pixels, it was a swipe, not a click
+                if (Math.abs(dragWalk) > 5) {
+                    dragWalk = 0;
+                    return; 
+                }
+                
+                this.classList.add('touch-active');
+                const href = this.getAttribute('href');
+                const target = this.getAttribute('target');
+                
+                setTimeout(() => {
+                    if (href && href.startsWith('#')) {
+                        window.location.href = href;
+                    } else if (href) {
+                        window.open(href, target || '_self', 'noopener,noreferrer');
+                    }
+                    
+                    setTimeout(() => {
+                        this.classList.remove('touch-active');
+                    }, 1000); 
+                    
+                }, 50);
+            });
+        });
+    }, 150); // Wait 150ms for CSS to render layout
+});
 
 // --- Theme Personalization Engine & Accessibility Tracker ---
 const themeBtn = document.getElementById('themeToggleBtn');
