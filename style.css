@@ -15,7 +15,7 @@
 @property --color-1 { syntax: '<color>'; inherits: true; initial-value: #3b82f6; }
 @property --color-2 { syntax: '<color>'; inherits: true; initial-value: #8b5cf6; }
 
-/* CRITICAL FIX: FOUC Preload Lock now blocks keyframes on load */
+/* FOUC Preload Lock now blocks keyframes on load */
 .preload, .preload *, .preload ::before, .preload ::after {
     transition: none !important;
     animation: none !important;
@@ -535,6 +535,7 @@ section {
 }
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
 
+
 .spotlight-content-wrapper {
     position: relative;
     z-index: 1;
@@ -564,24 +565,28 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
         opacity: 1;
         transform: scale(1.05);
     }
-    
-    body:not(.is-touch-device) .marquee-wrapper:hover { animation-play-state: paused !important; }
 }
 
-/* --- INFINITE SCROLLING MARQUEE --- */
+/* --- JS-DRIVEN INFINITE MARQUEE --- */
 .trust-banner {
     border-top: 1px solid var(--border-glass);
     border-bottom: 1px solid var(--border-glass);
     padding: 2rem 0;
     background: rgba(255, 255, 255, 0.01);
     text-align: center;
-    overflow: hidden;
-    overflow: clip; 
     position: relative;
     margin-bottom: 2rem;
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    touch-action: pan-y;
+    
+    /* CRITICAL FIX: Enabled native dragging and dynamic scroll tracking */
+    overflow: hidden; 
+    cursor: grab;
+    touch-action: pan-y; /* Allows vertical page scroll, but hands horizontal swiping to JS */
+}
+
+.trust-banner.active-drag {
+    cursor: grabbing;
 }
 
 .trust-banner p {
@@ -599,15 +604,10 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     display: flex;
     flex-wrap: nowrap;
     width: max-content;
-    animation: marquee 35s linear infinite;
     position: relative;
     z-index: 1;
-    will-change: transform;
+    /* CSS Animation deleted to allow JS physics control */
     transform: translate3d(0,0,0);
-}
-
-.marquee-wrapper.is-paused {
-    animation-play-state: paused !important;
 }
 
 .tech-list {
@@ -620,7 +620,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     flex-shrink: 0;
 }
 
-/* Marquee Item - Clean Floating Text */
 .tech-item {
     display: flex;
     align-items: center;
@@ -677,10 +676,6 @@ body.light-mode .tech-item .placeholder-icon { border-color: rgba(0,0,0,0.3); co
     z-index: 10;
 }
 
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
 
 /* --- GRID CARDS & CALLOUTS --- */
 .grid {

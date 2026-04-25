@@ -239,14 +239,6 @@ if (form) {
     });
 }
 
-document.querySelectorAll('.trust-banner').forEach(banner => {
-    banner.addEventListener('scroll', function() {
-        if (this.scrollLeft !== 0) {
-            this.scrollLeft = 0;
-        }
-    }, { passive: true });
-});
-
 // --- High-Performance Universal Spotlight Effect Tracker ---
 let currentSpotlightCard = null;
 
@@ -266,7 +258,13 @@ document.querySelectorAll('.hover-spotlight').forEach(element => {
     });
 });
 
+// Mobile Spotlight Tracking
+window.isMarqueeDragging = false; 
+
 document.addEventListener('touchmove', (e) => {
+    // If user is actively swiping the marquee, disable card glowing to prevent chaos
+    if (window.isMarqueeDragging) return;
+
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
     
@@ -318,101 +316,137 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
-let currentTouchedItem = null;
-let isDragging = false;
-let isNavigating = false; 
 
-const clearAllTouches = () => {
-    document.querySelectorAll('.tech-item.touch-active').forEach(item => {
-        item.classList.remove('touch-active');
-    });
-    document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
-        wrapper.classList.remove('is-paused');
-    });
-    currentTouchedItem = null;
-};
-
-document.addEventListener('touchmove', (e) => {
-    if (isDragging || isNavigating) return;
-    isDragging = true;
+// --- DRAGGABLE INFINITE MARQUEE ENGINE ---
+document.querySelectorAll('.trust-banner').forEach(banner => {
+    const wrapper = banner.querySelector('.marquee-wrapper');
+    if (!wrapper) return;
     
-    window.requestAnimationFrame(() => {
-        const touch = e.touches[0];
-        const element = document.elementFromPoint(touch.clientX, touch.clientY);
-        
-        if (!element) {
-            clearAllTouches();
-        } else {
-            const techItem = element.closest('.tech-item');
-            if (techItem !== currentTouchedItem) {
-                clearAllTouches();
-                if (techItem) {
-                    techItem.classList.add('touch-active');
-                    const wrapper = techItem.closest('.marquee-wrapper');
-                    if (wrapper) wrapper.classList.add('is-paused');
-                    currentTouchedItem = techItem;
-                }
-            }
-        }
-        isDragging = false;
-    });
-}, { passive: true });
+    const originalList = wrapper.querySelector('.tech-list');
 
-document.addEventListener('touchstart', (e) => {
-    if (isNavigating) return;
-    const techItem = e.target.closest('.tech-item');
-    clearAllTouches(); 
-    
-    if (techItem) {
-        techItem.classList.add('touch-active');
-        const wrapper = techItem.closest('.marquee-wrapper');
-        if (wrapper) wrapper.classList.add('is-paused');
-        currentTouchedItem = techItem;
+    // 1. Clone items dynamically to support extreme 25% browser zoom outs
+    for (let i = 0; i < 4; i++) {
+        const clone = originalList.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        wrapper.appendChild(clone);
     }
-}, { passive: true });
 
-document.addEventListener('touchend', () => {
-    setTimeout(() => {
-        if (!isNavigating) clearAllTouches();
-    }, 300);
-});
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let isHovered = false;
+    let dragWalk = 0;
+    let autoScrollSpeed = 1; 
 
-document.addEventListener('touchcancel', () => {
-    setTimeout(() => {
-        if (!isNavigating) clearAllTouches();
-    }, 300);
-});
+    // 2. Hardware-Accelerated Auto-Scroll Loop
+    const playMarquee = () => {
+        if (!isHovered && !isDown) {
+            banner.scrollLeft += autoScrollSpeed;
+        }
 
-document.querySelectorAll('.tech-item').forEach(item => {
-    item.addEventListener('click', function(e) {
-        e.preventDefault(); 
+        const singleWidth = originalList.offsetWidth;
         
-        if (isNavigating) return;
-        isNavigating = true; 
-        
-        this.classList.add('touch-active');
-        const wrapper = this.closest('.marquee-wrapper');
-        if (wrapper) wrapper.classList.add('is-paused');
-        
-        const href = this.getAttribute('href');
-        const target = this.getAttribute('target');
-        
-        setTimeout(() => {
-            if (href && href.startsWith('#')) {
-                window.location.href = href;
-            } else if (href) {
-                window.open(href, target || '_self', 'noopener,noreferrer');
-            }
-            
-            setTimeout(() => {
-                isNavigating = false; 
-                clearAllTouches();
-            }, 1000); 
-            
+        // Seamless looping math
+        if (banner.scrollLeft >= singleWidth) {
+            banner.scrollLeft -= singleWidth;
+        } else if (banner.scrollLeft <= 0 && isDown) {
+            // If dragging backwards past 0, jump forward invisibly
+            banner.scrollLeft += singleWidth;
+        }
+
+        requestAnimationFrame(playMarquee);
+    };
+    requestAnimationFrame(playMarquee);
+
+    // 3. Desktop Mouse Dragging Events
+    banner.addEventListener('mousedown', (e) => {
+        isDown = true;
+        window.isMarqueeDragging = true;
+        banner.classList.add('active-drag');
+        startX = e.pageX;
+        scrollLeft = banner.scrollLeft;
+        dragWalk = 0;
+    });
+
+    banner.addEventListener('mouseleave', () => {
+        isDown = false;
+        window.isMarqueeDragging = false;
+        banner.classList.remove('active-drag');
+        isHovered = false;
+    });
+
+    banner.addEventListener('mouseup', () => {
+        isDown = false;
+        banner.classList.remove('active-drag');
+        setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
+    });
+
+    banner.addEventListener('mousemove', (e) => {
+        isHovered = true; // Auto-pause on hover
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX;
+        dragWalk = (x - startX) * 1.5; // Drag Multiplier
+        banner.scrollLeft = scrollLeft - dragWalk;
+    });
+
+    // 4. Mobile Touch Dragging Events
+    banner.addEventListener('touchstart', (e) => {
+        isDown = true;
+        isHovered = true;
+        window.isMarqueeDragging = true;
+        startX = e.touches[0].pageX;
+        scrollLeft = banner.scrollLeft;
+        dragWalk = 0;
+    }, { passive: true });
+
+    banner.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX;
+        dragWalk = (x - startX) * 1.5;
+        banner.scrollLeft = scrollLeft - dragWalk;
+    }, { passive: true });
+
+    banner.addEventListener('touchend', () => {
+        isDown = false;
+        setTimeout(() => { 
+            isHovered = false;
+            window.isMarqueeDragging = false;
         }, 50);
     });
+
+    // 5. Intelligent Click Routing (Blocks clicks if user is dragging)
+    banner.querySelectorAll('.tech-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault(); 
+            
+            // If user dragged more than 5 pixels, treat it as a swipe, NOT a click
+            if (Math.abs(dragWalk) > 5) {
+                dragWalk = 0;
+                return; 
+            }
+            
+            // Execute standard routing
+            this.classList.add('touch-active');
+            const href = this.getAttribute('href');
+            const target = this.getAttribute('target');
+            
+            setTimeout(() => {
+                if (href && href.startsWith('#')) {
+                    window.location.href = href;
+                } else if (href) {
+                    window.open(href, target || '_self', 'noopener,noreferrer');
+                }
+                
+                setTimeout(() => {
+                    this.classList.remove('touch-active');
+                }, 1000); 
+                
+            }, 50);
+        });
+    });
 });
+
 
 // --- Theme Personalization Engine & Accessibility Tracker ---
 const themeBtn = document.getElementById('themeToggleBtn');
