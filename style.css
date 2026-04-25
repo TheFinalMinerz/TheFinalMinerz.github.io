@@ -144,7 +144,7 @@ a, button {
     border: 2px solid var(--accent-glow);
     background: var(--bg-base);
     color: var(--text-main);
-    z-index: 10000;
+    z-index: 10006; /* Kept at highest absolute z-index */
 }
 
 ::selection {
@@ -174,7 +174,7 @@ a, button {
     height: 3px;
     background: var(--accent-gradient);
     width: 0%;
-    z-index: 10001;
+    z-index: 10005; /* Under screen reader skip link, above Nav */
     transition: width 0.1s ease-out;
     box-shadow: 0 0 10px var(--accent-glow);
 }
@@ -229,7 +229,7 @@ nav {
     top: 0;
     width: 100%;
     height: var(--nav-height);
-    z-index: 1000;
+    z-index: 10004; /* Firmly over the mobile dropdown and theme panel */
     background: rgba(10, 10, 15, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -359,10 +359,11 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     pointer-events: none;
     transform: translateY(-20px);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease, background-color 0.6s ease-in-out;
-    z-index: 999;
-    will-change: opacity, transform;
     
-    /* CRITICAL FIX: Safe height bounds for landscape mobile and short windows */
+    /* CRITICAL FIX: Menu securely covers Theme Button */
+    z-index: 10003; 
+    
+    will-change: opacity, transform;
     max-height: calc(100dvh - var(--nav-height));
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -528,6 +529,7 @@ section {
     pointer-events: none;
 }
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
+
 
 .spotlight-content-wrapper {
     position: relative;
@@ -932,8 +934,10 @@ body.light-mode .newsletter-form input { background: rgba(0,0,0,0.05); }
 /* --- THEME SETTINGS UI --- */
 .theme-settings-wrapper {
     position: fixed;
-    top: 15%; 
+    /* CRITICAL FIX: Mathematically locks settings exactly 24px below the nav header */
+    top: calc(var(--nav-height) + 1.5rem); 
     left: 0;
+    /* CRITICAL FIX: Placed carefully under the Mobile Nav overlay but above the page content */
     z-index: 10002; 
     display: flex;
     align-items: flex-start;
@@ -979,7 +983,8 @@ body.light-mode .theme-toggle-btn { background: rgba(248, 250, 252, 0.8); }
     transform: translateX(-20px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    max-height: 80vh;
+    /* CRITICAL FIX: Prevents settings panel from clipping off short landscape screens */
+    max-height: calc(100vh - var(--nav-height) - 3rem);
     overflow-y: auto;
 }
 body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
@@ -1031,6 +1036,7 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     color: var(--text-muted);
 }
 
+/* Custom CSS Inputs for Theme Panel */
 input[type="color"] {
     -webkit-appearance: none;
     border: none;
@@ -1045,6 +1051,7 @@ input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; transition: border-color 0.2s; }
 input[type="color"]::-moz-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; }
 
+/* Accessibility Focus Ring */
 input:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; border-radius: 4px; }
 input[type="color"]:focus-visible { outline-radius: 50%; }
 
@@ -1062,6 +1069,7 @@ input[type="color"]:focus-visible { outline-radius: 50%; }
 body.light-mode .theme-select { background: rgba(0, 0, 0, 0.05); color: var(--text-main); }
 .theme-select option { background: var(--bg-base); color: var(--text-main); }
 
+/* Range Slider Styling */
 input[type=range] {
     -webkit-appearance: none;
     background: transparent;
@@ -1083,6 +1091,7 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 2px;
 }
 
+/* Switch Styling */
 .switch {
     position: relative;
     display: inline-block;
@@ -1091,6 +1100,7 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 .switch input { opacity: 0; width: 0; height: 0; }
 
+/* AA Compliant Focus Ring for Switches */
 .switch input:focus-visible + .slider {
     outline: 2px solid var(--accent-glow);
     outline-offset: 2px;
@@ -1192,7 +1202,7 @@ body.light-mode .cookie-banner { background: rgba(248, 250, 252, 0.95); }
     justify-content: center;
     font-size: 1.2rem;
     cursor: pointer;
-    z-index: 999;
+    z-index: 9998;
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
