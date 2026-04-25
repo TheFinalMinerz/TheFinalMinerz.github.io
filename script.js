@@ -654,7 +654,7 @@ if (resetThemeBtn) {
     });
 }
 
-// Boot Sequencer
+// DOM Setup: Syncs the UI Panel toggles/sliders with the data loaded by the HTML inline bootloader
 window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
@@ -664,38 +664,28 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedAnim = localStorage.getItem('bgAnimation');
     const savedInteractive = localStorage.getItem('interactiveBg');
 
-    // Default cursor to center of screen before mouse moves
-    document.documentElement.style.setProperty('--cursor-x', `${window.innerWidth / 2}px`);
-    document.documentElement.style.setProperty('--cursor-y', `${window.innerHeight / 2}px`);
-
     if (savedC1 && savedC2) {
         if(color1Picker) color1Picker.value = savedC1;
         if(color2Picker) color2Picker.value = savedC2;
-        updateColors(savedC1, savedC2);
     }
     
     if (savedMode === 'light') {
         if (themeModeToggle) themeModeToggle.checked = true;
-        document.body.classList.add('light-mode');
     }
 
     if (animTypeSelect) animTypeSelect.value = savedAnimType;
-    document.body.classList.add(savedAnimType);
 
     if (savedSpeed) {
         if (animSpeedSlider) animSpeedSlider.value = savedSpeed;
-        updateSpeed(savedSpeed);
     } else {
-        updateSpeed(defaultSpeedVal);
+        if (animSpeedSlider) animSpeedSlider.value = defaultSpeedVal;
     }
 
     if (savedAnim === 'disabled') {
         if(animToggle) animToggle.checked = false;
-        document.body.classList.add('disable-bg-animation');
     }
     
     if (savedInteractive === 'enabled') {
         if(interactiveBgToggle) interactiveBgToggle.checked = true;
-        document.body.classList.add('interactive-bg');
     }
 });

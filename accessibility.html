@@ -18,6 +18,35 @@
     <script src="script.js" defer></script>
 </head>
 <body>
+    <script>
+        (function() {
+            const c1 = localStorage.getItem('themeColor1');
+            const c2 = localStorage.getItem('themeColor2');
+            const mode = localStorage.getItem('themeMode');
+            const animType = localStorage.getItem('animType') || 'effect-float';
+            const speed = localStorage.getItem('animSpeed');
+            const animState = localStorage.getItem('bgAnimation');
+            const interactiveState = localStorage.getItem('interactiveBg');
+
+            if (c1 && c2) {
+                document.documentElement.style.setProperty('--color-1', c1);
+                document.documentElement.style.setProperty('--color-2', c2);
+            }
+            if (mode === 'light') document.body.classList.add('light-mode');
+            document.body.classList.add(animType);
+            
+            if (speed) {
+                const speedSecs = 40 - ((speed - 1) * (35 / 99));
+                document.documentElement.style.setProperty('--anim-duration', speedSecs + 's');
+            }
+            if (animState === 'disabled') document.body.classList.add('disable-bg-animation');
+            if (interactiveState === 'enabled') document.body.classList.add('interactive-bg');
+            
+            // Pre-center the interactive cursor math
+            document.documentElement.style.setProperty('--cursor-x', `${window.innerWidth / 2}px`);
+            document.documentElement.style.setProperty('--cursor-y', `${window.innerHeight / 2}px`);
+        })();
+    </script>
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-glow focus:text-white focus:rounded">Skip to main content</a>
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="bg-glow top"></div>
