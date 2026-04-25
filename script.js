@@ -55,7 +55,6 @@ const handleScrollspy = throttle(() => {
 
     navLinks.forEach((link) => {
         link.classList.remove("active-link");
-        // CRITICAL FIX: Checks if current exists before matching to prevent empty string bug from flashing all links
         if (current && link.getAttribute("href").includes(current)) {
             link.classList.add("active-link");
         }
@@ -95,7 +94,10 @@ mobileToggle.addEventListener('click', () => {
         const firstMenuItem = mobileDropdown.querySelector('a');
         if (firstMenuItem) firstMenuItem.focus();
     } else {
-        mobileToggle.innerHTML = '☰';
+        // CRITICAL FIX: Wait for the 400ms CSS rotation to finish before snapping back to the hamburger icon
+        setTimeout(() => {
+            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
+        }, 400);
         mobileToggle.focus();
     }
 });
@@ -105,7 +107,11 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
-        mobileToggle.innerHTML = '☰';
+        
+        // CRITICAL FIX
+        setTimeout(() => {
+            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
+        }, 400);
     });
 });
 
@@ -140,6 +146,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// CRITICAL FIX: Smoothly close and reset the menu if desktop width is reached via window resize
 window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -147,7 +154,7 @@ window.addEventListener('resize', () => {
         mobileToggle.classList.remove('is-open');
         
         setTimeout(() => {
-            mobileToggle.innerHTML = '☰';
+            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
         }, 400);
     }
 }, { passive: true });
@@ -321,18 +328,10 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     const wrapper = banner.querySelector('.marquee-wrapper');
     if (!wrapper) return;
     
-    wrapper.querySelectorAll('.tech-list').forEach((list, index) => {
-        if (index > 0) {
-            list.setAttribute('aria-hidden', 'true');
-            list.querySelectorAll('a, button').forEach(el => el.setAttribute('tabindex', '-1'));
-        }
-    });
-    
     const originalList = wrapper.querySelector('.tech-list');
 
     setTimeout(() => {
         const listWidth = originalList.offsetWidth || 600; 
-        
         const clonesNeeded = Math.ceil(16000 / listWidth); 
 
         for (let i = 0; i < clonesNeeded; i++) {
@@ -677,7 +676,6 @@ if (resetThemeBtn) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    // CRITICAL FIX: Set accurate initial Scrollspy state before preloader lifts
     handleScrollspy();
 
     const savedC1 = localStorage.getItem('themeColor1');
@@ -737,7 +735,11 @@ if (window.visualViewport) {
                 mobileToggle.setAttribute('aria-expanded', 'false');
                 mobileDropdown.classList.remove('active');
                 mobileToggle.classList.remove('is-open');
-                mobileToggle.innerHTML = '☰';
+                
+                // CRITICAL FIX: Make sure smart-zoom closes also wait 400ms to spin back cleanly
+                setTimeout(() => {
+                    if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
+                }, 400);
             }
             
         } else if (currentScale <= 1.05 && isZoomedIn) {
