@@ -6,6 +6,20 @@ window.addEventListener('load', () => {
     }, 100);
 });
 
+// --- CRITICAL FIX: Subpage Anchor Routing ---
+// Automatically routes #anchor links back to the main index.html if user is on a subpage
+const currentPath = window.location.pathname;
+const isHomePage = currentPath === '/' || currentPath.endsWith('index.html');
+
+if (!isHomePage) {
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        const hash = link.getAttribute('href');
+        if (hash.length > 1) { // Ignore empty '#' 
+            link.href = '/index.html' + hash;
+        }
+    });
+}
+
 // Detect touch devices on the first tap to permanently disable conflicting desktop CSS hover effects
 document.addEventListener('touchstart', function() {
     document.body.classList.add('is-touch-device');
@@ -78,11 +92,10 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
     
-// --- CRITICAL FIX: DUAL-LAYER MORPHING MENU TOGGLE ---
+// Smooth Mobile Menu Toggle Logic
 const mobileToggle = document.getElementById('mobileToggle');
 const mobileDropdown = document.getElementById('mobileDropdown');
 
-// Automatically inject the two crossfading spans without needing HTML edits
 if (mobileToggle) {
     mobileToggle.innerHTML = `
         <span class="icon-bars">☰</span>
@@ -95,7 +108,6 @@ mobileToggle.addEventListener('click', () => {
     mobileToggle.setAttribute('aria-expanded', !isExpanded);
     
     mobileDropdown.classList.toggle('active');
-    // Just toggle the class! The CSS handles the buttery smooth crossfade and rotation. No timeouts needed.
     mobileToggle.classList.toggle('is-open');
     
     if(mobileToggle.classList.contains('is-open')){
