@@ -229,14 +229,15 @@ nav {
     top: 0;
     width: 100%;
     height: var(--nav-height);
-    z-index: 10004; /* Firmly over the mobile dropdown and theme panel */
+    z-index: 10004; 
     background: rgba(10, 10, 15, 0.85);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-glass);
     display: flex;
     align-items: center;
-    transition: background-color 0.6s ease-in-out;
+    /* CRITICAL FIX: Added transform and opacity to the transition */
+    transition: background-color 0.6s ease-in-out, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
 }
 body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 
@@ -934,13 +935,13 @@ body.light-mode .newsletter-form input { background: rgba(0,0,0,0.05); }
 /* --- THEME SETTINGS UI --- */
 .theme-settings-wrapper {
     position: fixed;
-    /* CRITICAL FIX: Mathematically locks settings exactly 24px below the nav header */
     top: calc(var(--nav-height) + 1.5rem); 
     left: 0;
-    /* CRITICAL FIX: Placed carefully under the Mobile Nav overlay but above the page content */
     z-index: 10002; 
     display: flex;
     align-items: flex-start;
+    /* CRITICAL FIX: Added smooth transition for auto-hide */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
 }
 
 .theme-toggle-btn {
@@ -1265,4 +1266,23 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
         width: calc(100% - 2rem);
         max-width: 350px;
     }
+}
+
+/* --- VISUAL VIEWPORT SMART ZOOM ENGINE --- */
+body.is-zoomed nav {
+    transform: translateY(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.is-zoomed .theme-settings-wrapper {
+    transform: translateX(-150%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.is-zoomed .back-to-top {
+    transform: translateY(150%);
+    opacity: 0;
+    pointer-events: none;
 }

@@ -669,3 +669,46 @@ window.addEventListener('DOMContentLoaded', () => {
         if(interactiveBgToggle) interactiveBgToggle.checked = true;
     }
 });
+
+// --- Visual Viewport Smart Zoom Engine ---
+// Safely glides fixed UI out of the way when the user pinches to zoom so they can read easily
+if (window.visualViewport) {
+    let isZoomedIn = false;
+    
+    const handleZoom = () => {
+        const currentScale = window.visualViewport.scale;
+        
+        // If user zooms in past 5% magnification
+        if (currentScale > 1.05 && !isZoomedIn) {
+            isZoomedIn = true;
+            document.body.classList.add('is-zoomed');
+            
+            // Auto-close the Theme Panel if it's open so it doesn't block the screen
+            const themePanel = document.getElementById('themePanel');
+            const closeThemeBtn = document.getElementById('closeTheme');
+            if (themePanel && themePanel.classList.contains('active') && closeThemeBtn) {
+                closeThemeBtn.click();
+            }
+            
+            // Auto-close the Mobile Nav Dropdown if it's open
+            const mobileDropdown = document.getElementById('mobileDropdown');
+            const mobileToggle = document.getElementById('mobileToggle');
+            if (mobileDropdown && mobileDropdown.classList.contains('active')) {
+                mobileToggle.setAttribute('aria-expanded', 'false');
+                mobileDropdown.classList.remove('active');
+                mobileToggle.classList.remove('is-open');
+                mobileToggle.innerHTML = '☰';
+            }
+            
+        } 
+        // When user double-taps or pinches back out to 1.0x scale
+        else if (currentScale <= 1.05 && isZoomedIn) {
+            isZoomedIn = false;
+            document.body.classList.remove('is-zoomed');
+        }
+    };
+
+    // Natively track the pinch-zoom gesture at 60fps
+    window.visualViewport.addEventListener('resize', handleZoom, { passive: true });
+    window.visualViewport.addEventListener('scroll', handleZoom, { passive: true });
+}
