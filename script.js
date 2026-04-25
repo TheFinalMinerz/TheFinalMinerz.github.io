@@ -258,12 +258,8 @@ document.querySelectorAll('.hover-spotlight').forEach(element => {
     });
 });
 
-// Mobile Spotlight Tracking
-window.isMarqueeDragging = false; 
-
 document.addEventListener('touchmove', (e) => {
-    // If user is actively swiping the marquee, disable card glowing to prevent chaos
-    if (window.isMarqueeDragging) return;
+    if (window.isMarqueeDragging) return; // Prevent card glowing while violently dragging
 
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -318,6 +314,8 @@ document.addEventListener('touchcancel', clearSpotlight);
 
 
 // --- DRAGGABLE INFINITE MARQUEE ENGINE ---
+window.isMarqueeDragging = false; 
+
 document.querySelectorAll('.trust-banner').forEach(banner => {
     const wrapper = banner.querySelector('.marquee-wrapper');
     if (!wrapper) return;
@@ -336,87 +334,91 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     let scrollLeft;
     let isHovered = false;
     let dragWalk = 0;
-    let autoScrollSpeed = 1; 
+    
+    let velocity = 1.5; // Base scroll speed
+    const baseSpeed = 1.5;
+    let lastX = 0;
 
-    // 2. Hardware-Accelerated Auto-Scroll Loop
+    // Force scroll position to the middle to allow dragging backwards immediately
+    setTimeout(() => {
+        wrapper.scrollLeft = originalList.offsetWidth;
+    }, 100);
+
+    // 2. Hardware-Accelerated Physics Loop
     const playMarquee = () => {
-        if (!isHovered && !isDown) {
-            banner.scrollLeft += autoScrollSpeed;
-        }
-
         const singleWidth = originalList.offsetWidth;
         
-        // Seamless looping math
-        if (banner.scrollLeft >= singleWidth) {
-            banner.scrollLeft -= singleWidth;
-        } else if (banner.scrollLeft <= 0 && isDown) {
-            // If dragging backwards past 0, jump forward invisibly
-            banner.scrollLeft += singleWidth;
-        }
+        if (singleWidth > 0) {
+            // Apply friction/momentum when finger is released
+            if (!isDown) {
+                // If user is hovering over with a mouse, smoothly stop it. Otherwise lerp to normal speed.
+                const targetSpeed = isHovered ? 0 : baseSpeed;
+                velocity += (targetSpeed - velocity) * 0.05; 
+            }
+            
+            wrapper.scrollLeft += velocity;
 
+            // Seamless looping math
+            if (wrapper.scrollLeft <= 0) {
+                wrapper.scrollLeft += singleWidth;
+            } else if (wrapper.scrollLeft >= singleWidth * 2) {
+                wrapper.scrollLeft -= singleWidth;
+            }
+        }
         requestAnimationFrame(playMarquee);
     };
     requestAnimationFrame(playMarquee);
 
-    // 3. Desktop Mouse Dragging Events
-    banner.addEventListener('mousedown', (e) => {
+    const getPageX = (e) => e.pageX || (e.touches && e.touches[0].pageX);
+
+    // 3. Universal Dragging Logic (Desktop & Mobile)
+    const handleDown = (e) => {
         isDown = true;
         window.isMarqueeDragging = true;
-        banner.classList.add('active-drag');
-        startX = e.pageX;
-        scrollLeft = banner.scrollLeft;
+        wrapper.classList.add('active-drag');
+        startX = getPageX(e);
+        lastX = startX;
+        velocity = 0;
         dragWalk = 0;
-    });
+    };
 
-    banner.addEventListener('mouseleave', () => {
-        isDown = false;
-        window.isMarqueeDragging = false;
-        banner.classList.remove('active-drag');
-        isHovered = false;
-    });
+    const handleMove = (e) => {
+        if (!isDown) return;
+        const currentX = getPageX(e);
+        const deltaX = lastX - currentX; // Positive if moving left
+        
+        wrapper.scrollLeft += deltaX;
+        
+        // Capture exact gesture momentum for a smooth release 
+        velocity = deltaX; 
+        dragWalk += Math.abs(deltaX);
+        lastX = currentX;
+    };
 
-    banner.addEventListener('mouseup', () => {
+    const handleUp = () => {
+        if (!isDown) return;
         isDown = false;
-        banner.classList.remove('active-drag');
+        wrapper.classList.remove('active-drag');
         setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
-    });
+    };
 
-    banner.addEventListener('mousemove', (e) => {
-        isHovered = true; // Auto-pause on hover
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX;
-        dragWalk = (x - startX) * 1.5; // Drag Multiplier
-        banner.scrollLeft = scrollLeft - dragWalk;
-    });
+    wrapper.addEventListener('mousedown', handleDown);
+    wrapper.addEventListener('touchstart', handleDown, { passive: true });
 
-    // 4. Mobile Touch Dragging Events
-    banner.addEventListener('touchstart', (e) => {
-        isDown = true;
-        isHovered = true;
-        window.isMarqueeDragging = true;
-        startX = e.touches[0].pageX;
-        scrollLeft = banner.scrollLeft;
-        dragWalk = 0;
-    }, { passive: true });
+    wrapper.addEventListener('mousemove', handleMove);
+    wrapper.addEventListener('touchmove', handleMove, { passive: true });
 
-    banner.addEventListener('touchmove', (e) => {
-        if (!isDown) return;
-        const x = e.touches[0].pageX;
-        dragWalk = (x - startX) * 1.5;
-        banner.scrollLeft = scrollLeft - dragWalk;
-    }, { passive: true });
+    wrapper.addEventListener('mouseup', handleUp);
+    wrapper.addEventListener('mouseleave', handleUp);
+    wrapper.addEventListener('touchend', handleUp);
+    wrapper.addEventListener('touchcancel', handleUp);
+    
+    // Mouse-Only Hover pausing
+    wrapper.addEventListener('mouseenter', () => { isHovered = true; });
+    wrapper.addEventListener('mouseleave', () => { isHovered = false; });
 
-    banner.addEventListener('touchend', () => {
-        isDown = false;
-        setTimeout(() => { 
-            isHovered = false;
-            window.isMarqueeDragging = false;
-        }, 50);
-    });
-
-    // 5. Intelligent Click Routing (Blocks clicks if user is dragging)
-    banner.querySelectorAll('.tech-item').forEach(item => {
+    // 4. Intelligent Click Routing (Blocks clicks if user is dragging)
+    wrapper.querySelectorAll('.tech-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault(); 
             

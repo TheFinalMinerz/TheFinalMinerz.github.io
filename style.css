@@ -375,7 +375,6 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 }
 body.light-mode .mobile-dropdown { background: rgba(248, 250, 252, 0.98); }
 
-/* Custom Menu Scrollbar */
 .mobile-dropdown::-webkit-scrollbar { width: 6px; }
 .mobile-dropdown::-webkit-scrollbar-track { background: transparent; }
 .mobile-dropdown::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 10px; }
@@ -567,7 +566,7 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     }
 }
 
-/* --- JS-DRIVEN INFINITE MARQUEE --- */
+/* --- JS-DRIVEN PHYSICS MARQUEE --- */
 .trust-banner {
     border-top: 1px solid var(--border-glass);
     border-bottom: 1px solid var(--border-glass);
@@ -578,15 +577,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     margin-bottom: 2rem;
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    
-    /* CRITICAL FIX: Enabled native dragging and dynamic scroll tracking */
-    overflow: hidden; 
-    cursor: grab;
-    touch-action: pan-y; /* Allows vertical page scroll, but hands horizontal swiping to JS */
-}
-
-.trust-banner.active-drag {
-    cursor: grabbing;
 }
 
 .trust-banner p {
@@ -603,11 +593,18 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
 .marquee-wrapper {
     display: flex;
     flex-wrap: nowrap;
-    width: max-content;
+    width: 100%;
     position: relative;
     z-index: 1;
-    /* CSS Animation deleted to allow JS physics control */
-    transform: translate3d(0,0,0);
+    
+    /* CRITICAL FIX: The inner container now isolates the scroll bounds while letting the header text float perfectly still */
+    overflow: hidden; 
+    cursor: grab;
+    touch-action: pan-y;
+}
+
+.marquee-wrapper.active-drag {
+    cursor: grabbing;
 }
 
 .tech-list {
@@ -620,6 +617,7 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     flex-shrink: 0;
 }
 
+/* Marquee Item - Clean Floating Text */
 .tech-item {
     display: flex;
     align-items: center;
@@ -675,7 +673,6 @@ body.light-mode .tech-item .placeholder-icon { border-color: rgba(0,0,0,0.3); co
     transition: opacity 0.1s ease, transform 0.1s ease !important;
     z-index: 10;
 }
-
 
 /* --- GRID CARDS & CALLOUTS --- */
 .grid {
