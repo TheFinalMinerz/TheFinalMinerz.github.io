@@ -448,6 +448,7 @@ const themePanel = document.querySelector('.theme-panel');
 const themeModeToggle = document.getElementById('themeMode');
 const color1Picker = document.getElementById('color1Picker');
 const color2Picker = document.getElementById('color2Picker');
+const animTypeSelect = document.getElementById('animType');
 const animSpeedSlider = document.getElementById('animSpeed');
 const animToggle = document.getElementById('animToggle');
 const resetThemeBtn = document.getElementById('resetTheme');
@@ -455,6 +456,7 @@ const resetThemeBtn = document.getElementById('resetTheme');
 const defaultColor1 = '#3b82f6';
 const defaultColor2 = '#8b5cf6';
 const defaultSpeed = '20'; // Seconds
+const defaultAnimType = 'effect-float';
 
 // Toggle Panel Visibility
 if (themeBtn && themePanel) {
@@ -497,6 +499,15 @@ if (themeModeToggle) {
     });
 }
 
+// Background Animation Type
+if (animTypeSelect) {
+    animTypeSelect.addEventListener('change', (e) => {
+        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit');
+        document.body.classList.add(e.target.value);
+        localStorage.setItem('animType', e.target.value);
+    });
+}
+
 // Background Animation Speed
 if (animSpeedSlider) {
     animSpeedSlider.addEventListener('input', (e) => {
@@ -526,6 +537,11 @@ if (resetThemeBtn) {
         color2Picker.value = defaultColor2;
         updateColors(defaultColor1, defaultColor2);
         
+        if (animTypeSelect) animTypeSelect.value = defaultAnimType;
+        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit');
+        document.body.classList.add(defaultAnimType);
+        localStorage.setItem('animType', defaultAnimType);
+        
         animSpeedSlider.value = defaultSpeed;
         document.documentElement.style.setProperty('--anim-duration', defaultSpeed + 's');
         localStorage.setItem('animSpeed', defaultSpeed);
@@ -545,6 +561,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
     const savedMode = localStorage.getItem('themeMode');
+    const savedAnimType = localStorage.getItem('animType') || defaultAnimType;
     const savedSpeed = localStorage.getItem('animSpeed');
     const savedAnim = localStorage.getItem('bgAnimation');
 
@@ -554,11 +571,13 @@ window.addEventListener('DOMContentLoaded', () => {
         updateColors(savedC1, savedC2);
     }
     
-    // Default to Dark Mode if null
     if (savedMode === 'light') {
         if (themeModeToggle) themeModeToggle.checked = true;
         document.body.classList.add('light-mode');
     }
+
+    if (animTypeSelect) animTypeSelect.value = savedAnimType;
+    document.body.classList.add(savedAnimType);
 
     if (savedSpeed) {
         if (animSpeedSlider) animSpeedSlider.value = savedSpeed;
