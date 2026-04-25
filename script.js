@@ -320,7 +320,6 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     const wrapper = banner.querySelector('.marquee-wrapper');
     if (!wrapper) return;
     
-    // CRITICAL FIX: If there are old hardcoded HTML clones with aria-hidden="true", strip their tabindexes globally so they trap perfectly.
     wrapper.querySelectorAll('.tech-list').forEach((list, index) => {
         if (index > 0) {
             list.setAttribute('aria-hidden', 'true');
@@ -335,11 +334,9 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         
         const clonesNeeded = Math.ceil(16000 / listWidth); 
 
-        // 1. Clone items dynamically and immediately strip focus capabilities
         for (let i = 0; i < clonesNeeded; i++) {
             const clone = originalList.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
-            // CRITICAL FIX: Locks keyboard tabbing to the original list ONLY
             clone.querySelectorAll('a, button').forEach(el => el.setAttribute('tabindex', '-1'));
             wrapper.appendChild(clone);
         }
@@ -382,6 +379,10 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             isDown = true;
             window.isMarqueeDragging = true;
             wrapper.classList.add('active-drag');
+            
+            // CRITICAL FIX: Add a global lock so mouse dragging doesn't highlight generic page text
+            document.body.classList.add('is-dragging'); 
+            
             startX = getPageX(e);
             lastX = startX;
             velocity = 0; 
@@ -408,6 +409,10 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             if (!isDown) return;
             isDown = false;
             wrapper.classList.remove('active-drag');
+            
+            // Remove global highlighting lock
+            document.body.classList.remove('is-dragging'); 
+            
             setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
             
             window.removeEventListener('mousemove', handleMove);
