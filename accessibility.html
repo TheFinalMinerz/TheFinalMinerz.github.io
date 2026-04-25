@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
 </head>
-<body>
+<body class="preload">
     <script>
         (function() {
             const c1 = localStorage.getItem('themeColor1');
@@ -42,7 +42,6 @@
             if (animState === 'disabled') document.body.classList.add('disable-bg-animation');
             if (interactiveState === 'enabled') document.body.classList.add('interactive-bg');
             
-            // Pre-center the interactive cursor math
             document.documentElement.style.setProperty('--cursor-x', `${window.innerWidth / 2}px`);
             document.documentElement.style.setProperty('--cursor-y', `${window.innerHeight / 2}px`);
         })();

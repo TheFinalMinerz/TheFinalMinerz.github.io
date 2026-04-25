@@ -1,3 +1,10 @@
+// Remove FOUC class natively on startup
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.body.classList.remove('preload');
+    }, 100);
+});
+
 // Detect touch devices on the first tap to permanently disable conflicting desktop CSS hover effects
 document.addEventListener('touchstart', function() {
     document.body.classList.add('is-touch-device');
@@ -92,17 +99,14 @@ mobileToggle.addEventListener('click', () => {
     
     if(mobileToggle.classList.contains('is-open')){
         mobileToggle.innerHTML = '✕'; 
-        // Focus management: move focus to first menu item when opened
         const firstMenuItem = mobileDropdown.querySelector('a');
         if (firstMenuItem) firstMenuItem.focus();
     } else {
         mobileToggle.innerHTML = '☰';
-        // Return focus to toggle button when closed
         mobileToggle.focus();
     }
 });
 
-// Close mobile dropdown when a link is clicked
 document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -113,7 +117,6 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     });
 });
 
-// Keyboard navigation for mobile menu
 document.addEventListener('keydown', (e) => {
     if (!mobileDropdown.classList.contains('active')) return;
     
@@ -131,12 +134,12 @@ document.addEventListener('keydown', (e) => {
     }
 
     if (e.key === 'Tab') {
-        if (e.shiftKey) { // Shift + Tab
+        if (e.shiftKey) { 
             if (document.activeElement === firstElement) {
                 e.preventDefault();
                 lastElement.focus();
             }
-        } else { // Tab
+        } else { 
             if (document.activeElement === lastElement) {
                 e.preventDefault();
                 firstElement.focus();
@@ -145,7 +148,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Smart Failsafe: Smoothly hide mobile menu if window is resized to desktop width
 window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -247,7 +249,6 @@ if (form) {
             btn.style.opacity = '1';
         }, 3000);
     });
-    
 }
 
 document.querySelectorAll('.trust-banner').forEach(banner => {
@@ -329,7 +330,7 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
 let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; 
@@ -360,10 +361,8 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
-                    
                     const wrapper = techItem.closest('.marquee-wrapper');
                     if (wrapper) wrapper.classList.add('is-paused');
-                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -379,10 +378,8 @@ document.addEventListener('touchstart', (e) => {
     
     if (techItem) {
         techItem.classList.add('touch-active');
-        
         const wrapper = techItem.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
-        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -447,7 +444,6 @@ const defaultColor2 = '#8b5cf6';
 const defaultSpeedVal = 50; 
 const defaultAnimType = 'effect-float';
 
-// Makes the Enter key naturally toggle custom switch checkboxes
 document.querySelectorAll('.theme-panel .switch input[type="checkbox"]').forEach(cb => {
     cb.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
@@ -458,7 +454,6 @@ document.querySelectorAll('.theme-panel .switch input[type="checkbox"]').forEach
     });
 });
 
-// Theme Panel Focus Management
 if (themeBtn && themePanel) {
     const focusableElementsString = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     let focusableElements = [];
@@ -527,7 +522,6 @@ if (themeBtn && themePanel) {
     });
 }
 
-// Global Cursor Background Tracker (Desktop and Mobile)
 let interactiveCursorTicking = false;
 const updateInteractiveCursor = (x, y) => {
     if (!document.body.classList.contains('interactive-bg')) return;
@@ -590,7 +584,6 @@ if (animTypeSelect) {
     });
 }
 
-// Maps Slider (1-100) -> Speed (40s -> 5s)
 const updateSpeed = (val) => {
     const speedSecs = 40 - ((val - 1) * (35 / 99));
     document.documentElement.style.setProperty('--anim-duration', speedSecs + 's');
@@ -625,7 +618,6 @@ if (interactiveBgToggle) {
     });
 }
 
-// Smooth Factory Reset
 if (resetThemeBtn) {
     resetThemeBtn.addEventListener('click', () => {
         if(color1Picker) color1Picker.value = defaultColor1;
@@ -654,7 +646,7 @@ if (resetThemeBtn) {
     });
 }
 
-// DOM Setup: Syncs the UI Panel toggles/sliders with the data loaded by the HTML inline bootloader
+// DOM Setup
 window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
