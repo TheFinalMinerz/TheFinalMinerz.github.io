@@ -55,7 +55,8 @@ const handleScrollspy = throttle(() => {
 
     navLinks.forEach((link) => {
         link.classList.remove("active-link");
-        if (link.getAttribute("href").includes(current)) {
+        // CRITICAL FIX: Checks if current exists before matching to prevent empty string bug from flashing all links
+        if (current && link.getAttribute("href").includes(current)) {
             link.classList.add("active-link");
         }
     });
@@ -380,7 +381,6 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             window.isMarqueeDragging = true;
             wrapper.classList.add('active-drag');
             
-            // CRITICAL FIX: Add a global lock so mouse dragging doesn't highlight generic page text
             document.body.classList.add('is-dragging'); 
             
             startX = getPageX(e);
@@ -410,7 +410,6 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             isDown = false;
             wrapper.classList.remove('active-drag');
             
-            // Remove global highlighting lock
             document.body.classList.remove('is-dragging'); 
             
             setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
@@ -678,6 +677,9 @@ if (resetThemeBtn) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+    // CRITICAL FIX: Set accurate initial Scrollspy state before preloader lifts
+    handleScrollspy();
+
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
     const savedMode = localStorage.getItem('themeMode');
