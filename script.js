@@ -1,7 +1,8 @@
 // Remove FOUC class natively on startup
 window.addEventListener('load', () => {
     setTimeout(() => {
-        document.body.classList.remove('preload');
+        document.documentElement.classList.remove('preload');
+        document.body.classList.remove('preload'); 
     }, 100);
 });
 
@@ -22,7 +23,7 @@ function throttle(func, delay) {
     };
 }
 
-// Scroll Progress Bar & Back to Top Logic (Throttled for ultra-smooth 60fps)
+// Scroll Progress Bar & Back to Top Logic
 const handleScroll = throttle(() => {
     const winScroll = window.scrollY;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -104,7 +105,6 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
         mobileToggle.innerHTML = '☰';
-        // Note: Intentionally not forcing focus back to the toggle on link click to prevent mobile keyboard jumps
     });
 });
 
@@ -318,7 +318,7 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
 let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; 
@@ -634,7 +634,6 @@ if (resetThemeBtn) {
     });
 }
 
-// DOM Setup
 window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
@@ -671,26 +670,22 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // --- Visual Viewport Smart Zoom Engine ---
-// Safely glides fixed UI out of the way when the user pinches to zoom so they can read easily
 if (window.visualViewport) {
     let isZoomedIn = false;
     
     const handleZoom = () => {
         const currentScale = window.visualViewport.scale;
         
-        // If user zooms in past 5% magnification
         if (currentScale > 1.05 && !isZoomedIn) {
             isZoomedIn = true;
             document.body.classList.add('is-zoomed');
             
-            // Auto-close the Theme Panel if it's open so it doesn't block the screen
             const themePanel = document.getElementById('themePanel');
             const closeThemeBtn = document.getElementById('closeTheme');
             if (themePanel && themePanel.classList.contains('active') && closeThemeBtn) {
                 closeThemeBtn.click();
             }
             
-            // Auto-close the Mobile Nav Dropdown if it's open
             const mobileDropdown = document.getElementById('mobileDropdown');
             const mobileToggle = document.getElementById('mobileToggle');
             if (mobileDropdown && mobileDropdown.classList.contains('active')) {
@@ -700,15 +695,12 @@ if (window.visualViewport) {
                 mobileToggle.innerHTML = '☰';
             }
             
-        } 
-        // When user double-taps or pinches back out to 1.0x scale
-        else if (currentScale <= 1.05 && isZoomedIn) {
+        } else if (currentScale <= 1.05 && isZoomedIn) {
             isZoomedIn = false;
             document.body.classList.remove('is-zoomed');
         }
     };
 
-    // Natively track the pinch-zoom gesture at 60fps
     window.visualViewport.addEventListener('resize', handleZoom, { passive: true });
     window.visualViewport.addEventListener('scroll', handleZoom, { passive: true });
 }

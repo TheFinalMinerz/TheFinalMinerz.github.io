@@ -15,9 +15,10 @@
 @property --color-1 { syntax: '<color>'; inherits: true; initial-value: #3b82f6; }
 @property --color-2 { syntax: '<color>'; inherits: true; initial-value: #8b5cf6; }
 
-/* CRITICAL FIX: FOUC Preload Lock */
+/* CRITICAL FIX: FOUC Preload Lock now blocks keyframes on load */
 .preload, .preload *, .preload ::before, .preload ::after {
     transition: none !important;
+    animation: none !important;
 }
 
 /* --- VARIABLES & RESET --- */
@@ -91,6 +92,11 @@ body.interactive-bg .bg-glow.top {
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Visual Viewport Smart Zoom Engine */
+body.is-zoomed nav { transform: translateY(-100%); opacity: 0; pointer-events: none; }
+body.is-zoomed .theme-settings-wrapper { transform: translateX(-150%); opacity: 0; pointer-events: none; }
+body.is-zoomed .back-to-top { transform: translateY(150%); opacity: 0; pointer-events: none; }
+
 h1, h2, h3, h4, h5, h6, .logo-text, .nav-cta, .mobile-cta, .btn, .card-icon, .expert-info h4, .footer-col h4 {
     font-family: 'Sora', Arial, sans-serif;
 }
@@ -144,7 +150,7 @@ a, button {
     border: 2px solid var(--accent-glow);
     background: var(--bg-base);
     color: var(--text-main);
-    z-index: 10006; /* Kept at highest absolute z-index */
+    z-index: 10006;
 }
 
 ::selection {
@@ -174,7 +180,7 @@ a, button {
     height: 3px;
     background: var(--accent-gradient);
     width: 0%;
-    z-index: 10005; /* Under screen reader skip link, above Nav */
+    z-index: 10005; 
     transition: width 0.1s ease-out;
     box-shadow: 0 0 10px var(--accent-glow);
 }
@@ -236,7 +242,6 @@ nav {
     border-bottom: 1px solid var(--border-glass);
     display: flex;
     align-items: center;
-    /* CRITICAL FIX: Added transform and opacity to the transition */
     transition: background-color 0.6s ease-in-out, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
 }
 body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
@@ -361,7 +366,6 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     transform: translateY(-20px);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease, background-color 0.6s ease-in-out;
     
-    /* CRITICAL FIX: Menu securely covers Theme Button */
     z-index: 10003; 
     
     will-change: opacity, transform;
@@ -530,7 +534,6 @@ section {
     pointer-events: none;
 }
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
-
 
 .spotlight-content-wrapper {
     position: relative;
@@ -940,7 +943,6 @@ body.light-mode .newsletter-form input { background: rgba(0,0,0,0.05); }
     z-index: 10002; 
     display: flex;
     align-items: flex-start;
-    /* CRITICAL FIX: Added smooth transition for auto-hide */
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease;
 }
 
@@ -984,7 +986,6 @@ body.light-mode .theme-toggle-btn { background: rgba(248, 250, 252, 0.8); }
     transform: translateX(-20px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
-    /* CRITICAL FIX: Prevents settings panel from clipping off short landscape screens */
     max-height: calc(100vh - var(--nav-height) - 3rem);
     overflow-y: auto;
 }
@@ -1037,7 +1038,6 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     color: var(--text-muted);
 }
 
-/* Custom CSS Inputs for Theme Panel */
 input[type="color"] {
     -webkit-appearance: none;
     border: none;
@@ -1052,7 +1052,6 @@ input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
 input[type="color"]::-webkit-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; transition: border-color 0.2s; }
 input[type="color"]::-moz-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; }
 
-/* Accessibility Focus Ring */
 input:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; border-radius: 4px; }
 input[type="color"]:focus-visible { outline-radius: 50%; }
 
@@ -1070,7 +1069,6 @@ input[type="color"]:focus-visible { outline-radius: 50%; }
 body.light-mode .theme-select { background: rgba(0, 0, 0, 0.05); color: var(--text-main); }
 .theme-select option { background: var(--bg-base); color: var(--text-main); }
 
-/* Range Slider Styling */
 input[type=range] {
     -webkit-appearance: none;
     background: transparent;
@@ -1092,7 +1090,6 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 2px;
 }
 
-/* Switch Styling */
 .switch {
     position: relative;
     display: inline-block;
@@ -1101,7 +1098,6 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 .switch input { opacity: 0; width: 0; height: 0; }
 
-/* AA Compliant Focus Ring for Switches */
 .switch input:focus-visible + .slider {
     outline: 2px solid var(--accent-glow);
     outline-offset: 2px;
@@ -1207,7 +1203,7 @@ body.light-mode .cookie-banner { background: rgba(248, 250, 252, 0.95); }
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
-    transition: all 0.3s ease;
+    transition: all 0.3s ease, transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     text-decoration: none;
 }
 body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
@@ -1266,23 +1262,4 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
         width: calc(100% - 2rem);
         max-width: 350px;
     }
-}
-
-/* --- VISUAL VIEWPORT SMART ZOOM ENGINE --- */
-body.is-zoomed nav {
-    transform: translateY(-100%);
-    opacity: 0;
-    pointer-events: none;
-}
-
-body.is-zoomed .theme-settings-wrapper {
-    transform: translateX(-150%);
-    opacity: 0;
-    pointer-events: none;
-}
-
-body.is-zoomed .back-to-top {
-    transform: translateY(150%);
-    opacity: 0;
-    pointer-events: none;
 }
