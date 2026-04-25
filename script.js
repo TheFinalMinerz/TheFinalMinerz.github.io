@@ -320,18 +320,27 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     const wrapper = banner.querySelector('.marquee-wrapper');
     if (!wrapper) return;
     
+    // CRITICAL FIX: If there are old hardcoded HTML clones with aria-hidden="true", strip their tabindexes globally so they trap perfectly.
+    wrapper.querySelectorAll('.tech-list').forEach((list, index) => {
+        if (index > 0) {
+            list.setAttribute('aria-hidden', 'true');
+            list.querySelectorAll('a, button').forEach(el => el.setAttribute('tabindex', '-1'));
+        }
+    });
+    
     const originalList = wrapper.querySelector('.tech-list');
 
-    // Wait a brief moment to ensure the browser has painted the elements so offsetWidth isn't 0
     setTimeout(() => {
         const listWidth = originalList.offsetWidth || 600; 
         
-        // Dynamic mega-cloning: Ensures at least 16,000 pixels of content for extreme 25% zoom outs
         const clonesNeeded = Math.ceil(16000 / listWidth); 
 
+        // 1. Clone items dynamically and immediately strip focus capabilities
         for (let i = 0; i < clonesNeeded; i++) {
             const clone = originalList.cloneNode(true);
             clone.setAttribute('aria-hidden', 'true');
+            // CRITICAL FIX: Locks keyboard tabbing to the original list ONLY
+            clone.querySelectorAll('a, button').forEach(el => el.setAttribute('tabindex', '-1'));
             wrapper.appendChild(clone);
         }
 
@@ -340,28 +349,23 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         let isHovered = false;
         let dragWalk = 0;
         
-        let velocity = 1.5; // Current moving speed
-        const baseSpeed = 1.5; // Default cruising speed
+        let velocity = 1.5; 
+        const baseSpeed = 1.5; 
         let lastX = 0;
 
-        // Instantly force scroll to the center of the massive cloned block so users can drag left immediately
         wrapper.scrollLeft = listWidth * 2;
 
-        // Hardware-Accelerated Momentum Physics Loop
         const playMarquee = () => {
             const singleWidth = originalList.offsetWidth;
             
             if (singleWidth > 0) {
-                // If user is NOT touching the screen, apply Linear Interpolation (Lerp)
                 if (!isDown) {
                     const targetSpeed = isHovered ? 0 : baseSpeed;
-                    // This mathematically glides the momentum perfectly back to the target speed
                     velocity += (targetSpeed - velocity) * 0.05; 
                 }
                 
                 wrapper.scrollLeft += velocity;
 
-                // Seamless Infinite Looping Math
                 if (wrapper.scrollLeft <= 0) {
                     wrapper.scrollLeft += singleWidth;
                 } else if (wrapper.scrollLeft >= singleWidth * 3) {
@@ -372,20 +376,17 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         };
         requestAnimationFrame(playMarquee);
 
-        // Input normalizer
         const getPageX = (e) => e.pageX || (e.touches && e.touches[0].pageX);
 
-        // Global Event Handlers
         const handleDown = (e) => {
             isDown = true;
             window.isMarqueeDragging = true;
             wrapper.classList.add('active-drag');
             startX = getPageX(e);
             lastX = startX;
-            velocity = 0; // Instantly halt momentum on grab
+            velocity = 0; 
             dragWalk = 0;
             
-            // CRITICAL FIX: Transfer drag tracking to the window so fast swiping doesn't escape the container
             window.addEventListener('mousemove', handleMove, { passive: false });
             window.addEventListener('mouseup', handleUp);
             window.addEventListener('touchmove', handleMove, { passive: false });
@@ -395,13 +396,9 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
         const handleMove = (e) => {
             if (!isDown) return;
             const currentX = getPageX(e);
-            
-            // Calculate pixel movement difference
             const deltaX = lastX - currentX; 
             
             wrapper.scrollLeft += deltaX;
-            
-            // Capture precise release momentum
             velocity = deltaX; 
             dragWalk += Math.abs(deltaX);
             lastX = currentX;
@@ -413,27 +410,22 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             wrapper.classList.remove('active-drag');
             setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
             
-            // Clear global listeners to preserve RAM
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);
             window.removeEventListener('touchmove', handleMove);
             window.removeEventListener('touchend', handleUp);
         };
 
-        // Attach initial grab listeners to the wrapper
         wrapper.addEventListener('mousedown', handleDown);
         wrapper.addEventListener('touchstart', handleDown, { passive: true });
         
-        // Mouse-Only Hover pausing
         wrapper.addEventListener('mouseenter', () => { isHovered = true; });
         wrapper.addEventListener('mouseleave', () => { isHovered = false; });
 
-        // Intelligent Click Routing (Blocks fake clicks if user was actively dragging)
         wrapper.querySelectorAll('.tech-item').forEach(item => {
             item.addEventListener('click', function(e) {
                 e.preventDefault(); 
                 
-                // If user dragged more than 5 pixels, it was a swipe, not a click
                 if (Math.abs(dragWalk) > 5) {
                     dragWalk = 0;
                     return; 
@@ -457,7 +449,7 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
                 }, 50);
             });
         });
-    }, 150); // Wait 150ms for CSS to render layout
+    }, 150); 
 });
 
 // --- Theme Personalization Engine & Accessibility Tracker ---

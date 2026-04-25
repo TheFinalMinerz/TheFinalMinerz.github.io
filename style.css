@@ -596,11 +596,11 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     width: 100%;
     position: relative;
     z-index: 1;
-    
-    /* CRITICAL FIX: The inner container now isolates the scroll bounds while letting the header text float perfectly still */
     overflow: hidden; 
     cursor: grab;
     touch-action: pan-y;
+    /* CRITICAL FIX: Vertical clearance prevents focus rings from getting cut off */
+    padding: 12px 0;
 }
 
 .marquee-wrapper.active-drag {
@@ -629,6 +629,9 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     transition: opacity 0.3s ease, transform 0.3s ease;
     text-decoration: none;
     white-space: nowrap;
+    
+    /* CRITICAL FIX: Border radius ensures the focus ring perfectly hugs the button shape */
+    border-radius: 8px;
     
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
@@ -673,6 +676,7 @@ body.light-mode .tech-item .placeholder-icon { border-color: rgba(0,0,0,0.3); co
     transition: opacity 0.1s ease, transform 0.1s ease !important;
     z-index: 10;
 }
+
 
 /* --- GRID CARDS & CALLOUTS --- */
 .grid {
