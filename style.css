@@ -80,7 +80,7 @@ body.effect-spin .bg-glow.bottom { animation-name: spin-glow; animation-directio
 body.interactive-bg .bg-glow.top {
     animation: none !important;
     top: 0; left: 0;
-    margin-top: -30vw; margin-left: -30vw; /* Centers orb on the coordinates */
+    margin-top: -30vw; margin-left: -30vw; 
     transform: translate3d(var(--cursor-x, 50vw), var(--cursor-y, 50vh), 0);
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -511,7 +511,6 @@ section {
 }
 /* Stronger spotlight overlay for light mode */
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
-
 
 .spotlight-content-wrapper {
     position: relative;
@@ -981,9 +980,20 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     padding-bottom: 0.5rem;
 }
 
-#closeTheme:hover, #closeTheme:focus-visible {
+/* CRITICAL FIX: Proper explicit focus rings for accessibility overrides */
+#closeTheme:hover {
     color: var(--accent-glow);
-    outline: none;
+}
+#closeTheme:focus-visible {
+    color: var(--accent-glow);
+    outline: 2px solid var(--accent-glow);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+.theme-select:focus-visible {
+    outline: 2px solid var(--accent-glow);
+    outline-offset: 2px;
 }
 
 .theme-control {
@@ -998,7 +1008,7 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     color: var(--text-muted);
 }
 
-/* Custom CSS Inputs */
+/* Custom CSS Inputs for Theme Panel */
 input[type="color"] {
     -webkit-appearance: none;
     border: none;
@@ -1031,6 +1041,7 @@ input[type="color"]:focus-visible { outline-radius: 50%; }
 body.light-mode .theme-select { background: rgba(0, 0, 0, 0.05); color: var(--text-main); }
 .theme-select option { background: var(--bg-base); color: var(--text-main); }
 
+/* Range Slider Styling */
 input[type=range] {
     -webkit-appearance: none;
     background: transparent;
@@ -1052,6 +1063,7 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 2px;
 }
 
+/* Switch Styling */
 .switch {
     position: relative;
     display: inline-block;
