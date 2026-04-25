@@ -972,6 +972,11 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     padding-bottom: 0.5rem;
 }
 
+#closeTheme:hover, #closeTheme:focus-visible {
+    color: var(--accent-glow);
+    outline: none;
+}
+
 .theme-control {
     display: flex;
     justify-content: space-between;

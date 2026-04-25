@@ -426,9 +426,10 @@ document.querySelectorAll('.tech-item').forEach(item => {
     });
 });
 
-// --- Theme Personalization Engine ---
-const themeBtn = document.querySelector('.theme-toggle-btn');
-const themePanel = document.querySelector('.theme-panel');
+// --- Theme Personalization Engine & Accessibility Tracker ---
+const themeBtn = document.getElementById('themeToggleBtn');
+const themePanel = document.getElementById('themePanel');
+const closeThemeBtn = document.getElementById('closeTheme');
 const themeModeToggle = document.getElementById('themeMode');
 const color1Picker = document.getElementById('color1Picker');
 const color2Picker = document.getElementById('color2Picker');
@@ -442,19 +443,81 @@ const defaultColor2 = '#8b5cf6';
 const defaultSpeedVal = 50; 
 const defaultAnimType = 'effect-float';
 
+// Theme Panel Accessibility & Focus Management
 if (themeBtn && themePanel) {
+    // Grab all focusable elements inside the panel for the Focus Trap
+    const focusableElementsString = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    let focusableElements = [];
+    let firstFocusableElement;
+    let lastFocusableElement;
+
+    const updateFocusableElements = () => {
+        focusableElements = Array.from(themePanel.querySelectorAll(focusableElementsString));
+        firstFocusableElement = focusableElements[0];
+        lastFocusableElement = focusableElements[focusableElements.length - 1];
+    };
+
+    const closeThemePanel = () => {
+        themePanel.classList.remove('active');
+        themeBtn.setAttribute('aria-expanded', 'false');
+        // Return focus to the toggle button so keyboard users don't lose their place
+        themeBtn.focus();
+    };
+
+    const openThemePanel = () => {
+        themePanel.classList.add('active');
+        themeBtn.setAttribute('aria-expanded', 'true');
+        updateFocusableElements();
+        // Wait for CSS transform to finish, then focus the first element inside
+        setTimeout(() => { if (firstFocusableElement) firstFocusableElement.focus(); }, 100);
+    };
+
     themeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        themePanel.classList.toggle('active');
+        const isOpen = themePanel.classList.contains('active');
+        if (isOpen) {
+            closeThemePanel();
+        } else {
+            openThemePanel();
+        }
     });
 
+    if (closeThemeBtn) {
+        closeThemeBtn.addEventListener('click', closeThemePanel);
+    }
+
+    // Close when clicking outside
     document.addEventListener('click', (e) => {
-        if (!themePanel.contains(e.target) && !themeBtn.contains(e.target)) {
-            themePanel.classList.remove('active');
+        if (themePanel.classList.contains('active') && !themePanel.contains(e.target) && !themeBtn.contains(e.target)) {
+            closeThemePanel();
+        }
+    });
+
+    // Keyboard Navigation: Escape Key & Focus Trap
+    themePanel.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeThemePanel();
+            return;
+        }
+
+        if (e.key === 'Tab') {
+            updateFocusableElements();
+            if (e.shiftKey) { // Shift + Tab (going backwards)
+                if (document.activeElement === firstFocusableElement) {
+                    e.preventDefault();
+                    lastFocusableElement.focus();
+                }
+            } else { // Tab (going forwards)
+                if (document.activeElement === lastFocusableElement) {
+                    e.preventDefault();
+                    firstFocusableElement.focus();
+                }
+            }
         }
     });
 }
 
+// Global Color Application
 const updateColors = (c1, c2) => {
     document.documentElement.style.setProperty('--color-1', c1);
     document.documentElement.style.setProperty('--color-2', c2);
@@ -468,6 +531,7 @@ if (color1Picker && color2Picker) {
     color2Picker.addEventListener('input', (e) => updateColors(color1Picker.value, e.target.value));
 }
 
+// Light/Dark Mode
 if (themeModeToggle) {
     themeModeToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -480,6 +544,7 @@ if (themeModeToggle) {
     });
 }
 
+// Background Animation Type
 if (animTypeSelect) {
     animTypeSelect.addEventListener('change', (e) => {
         document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit', 'effect-wave', 'effect-spin');
@@ -499,6 +564,7 @@ if (animSpeedSlider) {
     animSpeedSlider.addEventListener('input', (e) => updateSpeed(e.target.value));
 }
 
+// Background Animation Enable/Disable
 if (animToggle) {
     animToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
