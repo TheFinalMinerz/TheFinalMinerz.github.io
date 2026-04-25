@@ -76,6 +76,15 @@ body.effect-orbit .bg-glow.bottom { animation-name: orbit-glow-2; animation-timi
 body.effect-spin .bg-glow.top { animation-name: spin-glow; }
 body.effect-spin .bg-glow.bottom { animation-name: spin-glow; animation-direction: reverse; }
 
+/* Interactive Cursor Mode */
+body.interactive-bg .bg-glow.top {
+    animation: none !important;
+    top: 0; left: 0;
+    margin-top: -30vw; margin-left: -30vw; /* Centers orb on the coordinates */
+    transform: translate3d(var(--cursor-x, 50vw), var(--cursor-y, 50vh), 0);
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
 h1, h2, h3, h4, h5, h6, .logo-text, .nav-cta, .mobile-cta, .btn, .card-icon, .expert-info h4, .footer-col h4 {
     font-family: 'Sora', Arial, sans-serif;
 }
@@ -173,6 +182,7 @@ a, button {
     filter: blur(120px);
     opacity: 0.12;
     z-index: -1;
+    pointer-events: none;
     animation: var(--anim-name) var(--anim-duration) ease-in-out infinite alternate;
 }
 body.light-mode .bg-glow { opacity: 0.15; }
@@ -533,7 +543,7 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
         transform: scale(1.05);
     }
     
-    /* Hover-stop logic properly restored for desktop */
+    /* Marquee ONLY pauses for mouse, never for touch */
     body:not(.is-touch-device) .marquee-wrapper:hover { animation-play-state: paused !important; }
 }
 
@@ -575,7 +585,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     transform: translate3d(0,0,0);
 }
 
-/* Forces marquee to pause globally when tapped/dragged on mobile */
 .marquee-wrapper.is-paused {
     animation-play-state: paused !important;
 }
@@ -908,7 +917,7 @@ body.light-mode .newsletter-form input { background: rgba(0,0,0,0.05); }
 /* --- THEME SETTINGS UI --- */
 .theme-settings-wrapper {
     position: fixed;
-    top: 15%; /* Lifted significantly higher to avoid banner overlaps */
+    top: 15%; 
     left: 0;
     z-index: 10002; 
     display: flex;
@@ -989,7 +998,7 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     color: var(--text-muted);
 }
 
-/* Custom CSS Inputs for Theme Panel */
+/* Custom CSS Inputs */
 input[type="color"] {
     -webkit-appearance: none;
     border: none;
@@ -1001,10 +1010,13 @@ input[type="color"] {
     background: none;
 }
 input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
-input[type="color"]::-webkit-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; }
+input[type="color"]::-webkit-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; transition: border-color 0.2s; }
 input[type="color"]::-moz-color-swatch { border: 1px solid var(--border-glass); border-radius: 50%; }
 
-/* Select Dropdown */
+/* Accessibility Focus Ring */
+input:focus-visible { outline: 2px solid var(--accent-glow); outline-offset: 2px; border-radius: 4px; }
+input[type="color"]:focus-visible { outline-radius: 50%; }
+
 .theme-select {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text-main);
@@ -1019,7 +1031,6 @@ input[type="color"]::-moz-color-swatch { border: 1px solid var(--border-glass); 
 body.light-mode .theme-select { background: rgba(0, 0, 0, 0.05); color: var(--text-main); }
 .theme-select option { background: var(--bg-base); color: var(--text-main); }
 
-/* Range Slider Styling */
 input[type=range] {
     -webkit-appearance: none;
     background: transparent;
@@ -1041,7 +1052,6 @@ input[type=range]::-webkit-slider-runnable-track {
     border-radius: 2px;
 }
 
-/* Switch Styling */
 .switch {
     position: relative;
     display: inline-block;
@@ -1049,6 +1059,13 @@ input[type=range]::-webkit-slider-runnable-track {
     height: 22px;
 }
 .switch input { opacity: 0; width: 0; height: 0; }
+
+/* AA Compliant Focus Ring for Switches */
+.switch input:focus-visible + .slider {
+    outline: 2px solid var(--accent-glow);
+    outline-offset: 2px;
+}
+
 .slider {
     position: absolute;
     cursor: pointer;

@@ -92,17 +92,14 @@ mobileToggle.addEventListener('click', () => {
     
     if(mobileToggle.classList.contains('is-open')){
         mobileToggle.innerHTML = '✕'; 
-        // Focus management: move focus to first menu item when opened
         const firstMenuItem = mobileDropdown.querySelector('a');
         if (firstMenuItem) firstMenuItem.focus();
     } else {
         mobileToggle.innerHTML = '☰';
-        // Return focus to toggle button when closed
         mobileToggle.focus();
     }
 });
 
-// Close mobile dropdown when a link is clicked
 document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -113,7 +110,6 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     });
 });
 
-// Keyboard navigation for mobile menu
 document.addEventListener('keydown', (e) => {
     if (!mobileDropdown.classList.contains('active')) return;
     
@@ -131,12 +127,12 @@ document.addEventListener('keydown', (e) => {
     }
 
     if (e.key === 'Tab') {
-        if (e.shiftKey) { // Shift + Tab
+        if (e.shiftKey) { 
             if (document.activeElement === firstElement) {
                 e.preventDefault();
                 lastElement.focus();
             }
-        } else { // Tab
+        } else { 
             if (document.activeElement === lastElement) {
                 e.preventDefault();
                 firstElement.focus();
@@ -145,7 +141,6 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Smart Failsafe: Smoothly hide mobile menu if window is resized to desktop width
 window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -249,6 +244,14 @@ if (form) {
     });
 }
 
+document.querySelectorAll('.trust-banner').forEach(banner => {
+    banner.addEventListener('scroll', function() {
+        if (this.scrollLeft !== 0) {
+            this.scrollLeft = 0;
+        }
+    }, { passive: true });
+});
+
 // --- High-Performance Universal Spotlight Effect Tracker ---
 let currentSpotlightCard = null;
 
@@ -262,14 +265,12 @@ const updateSpotlightPosition = (card, clientX, clientY) => {
     });
 };
 
-// Desktop Mouse Tracking (Standard)
 document.querySelectorAll('.hover-spotlight').forEach(element => {
     element.addEventListener('mousemove', e => {
         updateSpotlightPosition(element, e.clientX, e.clientY);
     });
 });
 
-// Mobile Touch Tracking
 document.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -331,7 +332,6 @@ const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
     });
-    // Restore the pause lock clearing on lift-off
     document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
         wrapper.classList.remove('is-paused');
     });
@@ -354,11 +354,8 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
-                    
-                    // Pause parent marquee during drag
                     const wrapper = techItem.closest('.marquee-wrapper');
                     if (wrapper) wrapper.classList.add('is-paused');
-                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -374,11 +371,8 @@ document.addEventListener('touchstart', (e) => {
     
     if (techItem) {
         techItem.classList.add('touch-active');
-        
-        // Pause parent marquee instantly on touch
         const wrapper = techItem.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
-        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -395,7 +389,6 @@ document.addEventListener('touchcancel', () => {
     }, 300);
 });
 
-// Defeating Mobile Focus-Snap natively
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault(); 
@@ -426,6 +419,7 @@ document.querySelectorAll('.tech-item').forEach(item => {
     });
 });
 
+
 // --- Theme Personalization Engine & Accessibility Tracker ---
 const themeBtn = document.getElementById('themeToggleBtn');
 const themePanel = document.getElementById('themePanel');
@@ -436,6 +430,7 @@ const color2Picker = document.getElementById('color2Picker');
 const animTypeSelect = document.getElementById('animType');
 const animSpeedSlider = document.getElementById('animSpeed');
 const animToggle = document.getElementById('animToggle');
+const interactiveBgToggle = document.getElementById('interactiveBgToggle');
 const resetThemeBtn = document.getElementById('resetTheme');
 
 const defaultColor1 = '#3b82f6';
@@ -443,9 +438,19 @@ const defaultColor2 = '#8b5cf6';
 const defaultSpeedVal = 50; 
 const defaultAnimType = 'effect-float';
 
-// Theme Panel Accessibility & Focus Management
+// Makes the Enter key naturally toggle custom switch checkboxes
+document.querySelectorAll('.theme-panel .switch input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            cb.checked = !cb.checked;
+            cb.dispatchEvent(new Event('change'));
+        }
+    });
+});
+
+// Theme Panel Focus Management
 if (themeBtn && themePanel) {
-    // Grab all focusable elements inside the panel for the Focus Trap
     const focusableElementsString = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
     let focusableElements = [];
     let firstFocusableElement;
@@ -460,7 +465,6 @@ if (themeBtn && themePanel) {
     const closeThemePanel = () => {
         themePanel.classList.remove('active');
         themeBtn.setAttribute('aria-expanded', 'false');
-        // Return focus to the toggle button so keyboard users don't lose their place
         themeBtn.focus();
     };
 
@@ -468,7 +472,6 @@ if (themeBtn && themePanel) {
         themePanel.classList.add('active');
         themeBtn.setAttribute('aria-expanded', 'true');
         updateFocusableElements();
-        // Wait for CSS transform to finish, then focus the first element inside
         setTimeout(() => { if (firstFocusableElement) firstFocusableElement.focus(); }, 100);
     };
 
@@ -486,14 +489,12 @@ if (themeBtn && themePanel) {
         closeThemeBtn.addEventListener('click', closeThemePanel);
     }
 
-    // Close when clicking outside
     document.addEventListener('click', (e) => {
         if (themePanel.classList.contains('active') && !themePanel.contains(e.target) && !themeBtn.contains(e.target)) {
             closeThemePanel();
         }
     });
 
-    // Keyboard Navigation: Escape Key & Focus Trap
     themePanel.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeThemePanel();
@@ -502,12 +503,12 @@ if (themeBtn && themePanel) {
 
         if (e.key === 'Tab') {
             updateFocusableElements();
-            if (e.shiftKey) { // Shift + Tab (going backwards)
+            if (e.shiftKey) {
                 if (document.activeElement === firstFocusableElement) {
                     e.preventDefault();
                     lastFocusableElement.focus();
                 }
-            } else { // Tab (going forwards)
+            } else {
                 if (document.activeElement === lastFocusableElement) {
                     e.preventDefault();
                     firstFocusableElement.focus();
@@ -517,7 +518,15 @@ if (themeBtn && themePanel) {
     });
 }
 
-// Global Color Application
+// Global Cursor Background Tracker
+document.addEventListener('mousemove', (e) => {
+    if (document.body.classList.contains('interactive-bg')) {
+        document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
+        document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+    }
+}, { passive: true });
+
+
 const updateColors = (c1, c2) => {
     document.documentElement.style.setProperty('--color-1', c1);
     document.documentElement.style.setProperty('--color-2', c2);
@@ -531,7 +540,6 @@ if (color1Picker && color2Picker) {
     color2Picker.addEventListener('input', (e) => updateColors(color1Picker.value, e.target.value));
 }
 
-// Light/Dark Mode
 if (themeModeToggle) {
     themeModeToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -544,7 +552,6 @@ if (themeModeToggle) {
     });
 }
 
-// Background Animation Type
 if (animTypeSelect) {
     animTypeSelect.addEventListener('change', (e) => {
         document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit', 'effect-wave', 'effect-spin');
@@ -553,7 +560,7 @@ if (animTypeSelect) {
     });
 }
 
-// Maps Slider (1-100) -> Speed (40s -> 5s). Slow is on the Left, Fast is on the Right.
+// Slider mapped so 1 is slow (40s), 100 is fast (5s)
 const updateSpeed = (val) => {
     const speedSecs = 40 - ((val - 1) * (35 / 99));
     document.documentElement.style.setProperty('--anim-duration', speedSecs + 's');
@@ -564,7 +571,6 @@ if (animSpeedSlider) {
     animSpeedSlider.addEventListener('input', (e) => updateSpeed(e.target.value));
 }
 
-// Background Animation Enable/Disable
 if (animToggle) {
     animToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -577,7 +583,19 @@ if (animToggle) {
     });
 }
 
-// Factory Reset
+if (interactiveBgToggle) {
+    interactiveBgToggle.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            document.body.classList.add('interactive-bg');
+            localStorage.setItem('interactiveBg', 'enabled');
+        } else {
+            document.body.classList.remove('interactive-bg');
+            localStorage.setItem('interactiveBg', 'disabled');
+        }
+    });
+}
+
+// Smooth Factory Reset
 if (resetThemeBtn) {
     resetThemeBtn.addEventListener('click', () => {
         if(color1Picker) color1Picker.value = defaultColor1;
@@ -596,13 +614,17 @@ if (resetThemeBtn) {
         document.body.classList.remove('disable-bg-animation');
         localStorage.setItem('bgAnimation', 'enabled');
         
+        if(interactiveBgToggle) interactiveBgToggle.checked = false;
+        document.body.classList.remove('interactive-bg');
+        localStorage.setItem('interactiveBg', 'disabled');
+        
         if(themeModeToggle) themeModeToggle.checked = false;
         document.body.classList.remove('light-mode');
         localStorage.setItem('themeMode', 'dark');
     });
 }
 
-// Boot Sequencer (Load User Preferences)
+// Boot Sequencer
 window.addEventListener('DOMContentLoaded', () => {
     const savedC1 = localStorage.getItem('themeColor1');
     const savedC2 = localStorage.getItem('themeColor2');
@@ -610,6 +632,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedAnimType = localStorage.getItem('animType') || defaultAnimType;
     const savedSpeed = localStorage.getItem('animSpeed');
     const savedAnim = localStorage.getItem('bgAnimation');
+    const savedInteractive = localStorage.getItem('interactiveBg');
 
     if (savedC1 && savedC2) {
         if(color1Picker) color1Picker.value = savedC1;
@@ -635,5 +658,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if (savedAnim === 'disabled') {
         if(animToggle) animToggle.checked = false;
         document.body.classList.add('disable-bg-animation');
+    }
+    
+    if (savedInteractive === 'enabled') {
+        if(interactiveBgToggle) interactiveBgToggle.checked = true;
+        document.body.classList.add('interactive-bg');
     }
 });
