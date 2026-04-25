@@ -7,15 +7,17 @@ window.addEventListener('load', () => {
 });
 
 // --- CRITICAL FIX: Subpage Anchor Routing ---
-// Automatically routes #anchor links back to the main index.html if user is on a subpage
 const currentPath = window.location.pathname;
-const isHomePage = currentPath === '/' || currentPath.endsWith('index.html');
+const isHomePage = currentPath.endsWith('/') || currentPath.endsWith('index.html');
 
 if (!isHomePage) {
     document.querySelectorAll('a[href^="#"]').forEach(link => {
         const hash = link.getAttribute('href');
-        if (hash.length > 1) { // Ignore empty '#' 
-            link.href = '/index.html' + hash;
+        // Transforms href="#contact" into href="index.html#contact" seamlessly preventing dead local links
+        if (hash.length > 1) { 
+            link.href = 'index.html' + hash; 
+        } else {
+            link.href = 'index.html'; 
         }
     });
 }
@@ -157,7 +159,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 window.addEventListener('resize', () => {
-    if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
+    if (window.innerWidth > 1024 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');

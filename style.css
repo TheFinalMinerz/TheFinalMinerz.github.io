@@ -261,11 +261,9 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     margin: 0 auto;
     padding: 0 2rem;
     position: relative;
-    /* CRITICAL FIX: Mathematically forbids the header items from wrapping to a second row */
     flex-wrap: nowrap; 
 }
 
-/* CRITICAL FIX: Ensure Logo and Status badge stay locked together without shrinking improperly */
 .nav-content > div:first-child {
     display: flex;
     align-items: center;
@@ -304,13 +302,19 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 
 /* --- SYSTEM STATUS INDICATOR --- */
 .system-status {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    
+    /* CRITICAL FIX: Fixed height prevents jumping. Width is constrained for smooth shrink */
+    height: 32px;
+    max-width: 160px;
+    
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.2);
-    padding: 4px 12px;
-    border-radius: 20px;
+    padding: 0 12px;
+    border-radius: 16px;
     font-size: 0.7rem;
     font-weight: 700;
     color: #10b981;
@@ -319,10 +323,14 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     margin-left: 1.5rem;
     font-family: 'Inter', sans-serif;
     cursor: default;
+    
     user-select: none;
     -webkit-user-select: none;
-    /* Transitions to handle smooth responsive collapsing */
-    transition: padding 0.4s ease, gap 0.4s ease, border-radius 0.4s ease, margin-left 0.4s ease;
+    
+    /* CRITICAL FIX: Animation precisely synced to the hamburger menu toggle */
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 body.light-mode .system-status {
@@ -353,36 +361,15 @@ body.light-mode .system-status {
     animation: statusPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* New transition wrapper for the text itself */
 .status-text {
-    white-space: nowrap;
-    overflow: hidden;
-    display: inline-block;
-    max-width: 200px;
     opacity: 1;
-    transition: max-width 0.4s ease, opacity 0.3s ease;
+    max-width: 120px;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes statusPulse {
     0% { transform: scale(0.5); opacity: 0.8; }
     100% { transform: scale(1.8); opacity: 0; }
-}
-
-/* CRITICAL FIX: Smoothly squeezes the badge into a single dot on mid-sized screens to prevent layout breaking */
-@media (max-width: 1150px) {
-    .desktop-nav {
-        gap: 1.5rem;
-    }
-    .system-status {
-        margin-left: 1rem;
-        padding: 6px;
-        border-radius: 50%;
-        gap: 0;
-    }
-    .status-text {
-        max-width: 0;
-        opacity: 0;
-    }
 }
 
 .desktop-nav {
@@ -664,7 +651,6 @@ section {
     pointer-events: none;
 }
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
-
 
 .spotlight-content-wrapper {
     position: relative;
@@ -1360,8 +1346,9 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
     transform: translateY(0);
 }
 
-/* --- MOBILE RESPONSIVENESS --- */
-@media (max-width: 900px) {
+/* --- CRITICAL FIX: MOBILE RESPONSIVENESS (1024px) --- */
+/* Changed breakpoint from 900px to 1024px to prevent Flexbox collisions before collapsing */
+@media (max-width: 1024px) {
     .desktop-nav {
         position: absolute;
         right: 3rem;
@@ -1369,6 +1356,19 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
         transform: translateX(30px) scale(0.6);
         pointer-events: none;
         visibility: hidden;
+    }
+    
+    .system-status {
+        margin-left: 12px;
+        padding: 0;
+        width: 32px;
+        max-width: 32px;
+        gap: 0;
+    }
+    
+    .status-text {
+        max-width: 0;
+        opacity: 0;
     }
     
     .mobile-toggle {
