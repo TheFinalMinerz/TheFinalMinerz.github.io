@@ -11,14 +11,17 @@
 @font-face { font-family: 'Sora'; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/sora-v17-latin-700.woff2') format('woff2'); }
 @font-face { font-family: 'Sora'; font-style: normal; font-weight: 800; font-display: swap; src: url('./fonts/sora-v17-latin-800.woff2') format('woff2'); }
 
+/* Smooth Gradient Animation Support */
 @property --color-1 { syntax: '<color>'; inherits: true; initial-value: #3b82f6; }
 @property --color-2 { syntax: '<color>'; inherits: true; initial-value: #8b5cf6; }
 
+/* FOUC Preload Lock now blocks keyframes on load */
 .preload, .preload *, .preload ::before, .preload ::after {
     transition: none !important;
     animation: none !important;
 }
 
+/* Globally disables text highlighting while aggressively swiping */
 body.is-dragging {
     user-select: none !important;
     -webkit-user-select: none !important;
@@ -42,9 +45,12 @@ body.is-dragging {
     --accent-gradient: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
     
     --nav-height: 80px;
+    
+    /* Engine transitions for beautiful smooth resets */
     transition: --color-1 0.6s ease-in-out, --color-2 0.6s ease-in-out;
 }
 
+/* Light Theme Overrides */
 body.light-mode {
     --bg-base: #f8fafc;
     --bg-surface: rgba(0, 0, 0, 0.03);
@@ -72,6 +78,7 @@ body {
     transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out;
 }
 
+/* User Settings Overrides */
 body.disable-bg-animation .bg-glow { animation: none !important; }
 body.effect-float { --anim-name: float; }
 body.effect-pulse { --anim-name: pulse-glow; }
@@ -81,6 +88,7 @@ body.effect-orbit .bg-glow.bottom { animation-name: orbit-glow-2; animation-timi
 body.effect-spin .bg-glow.top { animation-name: spin-glow; }
 body.effect-spin .bg-glow.bottom { animation-name: spin-glow; animation-direction: reverse; }
 
+/* Interactive Cursor Mode */
 body.interactive-bg .bg-glow.top {
     animation: none !important;
     top: 0; left: 0;
@@ -90,6 +98,7 @@ body.interactive-bg .bg-glow.top {
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
+/* Visual Viewport Smart Zoom Engine */
 body.is-zoomed nav { transform: translateY(-100%); opacity: 0; pointer-events: none; }
 body.is-zoomed .theme-settings-wrapper { transform: translateX(-150%); opacity: 0; pointer-events: none; }
 body.is-zoomed .back-to-top { transform: translateY(150%); opacity: 0; pointer-events: none; }
@@ -135,7 +144,6 @@ a, button {
     border: 0;
 }
 
-/* CRITICAL FIX: The Skip Link gracefully appears on screen when tabbed into via keyboard */
 .skip-link:focus, .skip-link:focus-visible {
     position: fixed;
     top: 1.5rem;
@@ -168,10 +176,18 @@ body.light-mode .skip-link:focus { background: rgba(248, 250, 252, 0.95); }
 
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border-radius: 10px;
+}
 ::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.5); }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+/* --- UTILITIES --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
 
 .scroll-progress {
     position: fixed;
@@ -291,6 +307,7 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     display: block;
     padding-bottom: 0.05em;
     white-space: nowrap;
+    transition: font-size 0.4s ease;
 }
 
 /* --- SYSTEM STATUS INDICATOR --- */
@@ -677,8 +694,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     margin-bottom: 2rem;
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    user-select: none;
-    -webkit-user-select: none;
 }
 
 .trust-banner p {
@@ -1323,8 +1338,22 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
     transform: translateY(0);
 }
 
-/* --- CRITICAL FIX: MOBILE RESPONSIVENESS (1024px) --- */
+/* --- CRITICAL FIX: MOBILE RESPONSIVENESS --- */
 @media (max-width: 1024px) {
+    .nav-content {
+        padding: 0 1.5rem;
+        /* CRITICAL FIX: The gap ensures the mobile toggle and the green circle will NEVER touch */
+        gap: 1rem; 
+    }
+    
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 1.25rem;
+    }
+
     .desktop-nav {
         position: absolute;
         right: 3rem;
@@ -1335,7 +1364,7 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
     }
     
     .system-status {
-        margin-left: 12px; 
+        margin-left: 10px; 
         max-width: 32px; 
         padding: 0 11px; 
         gap: 0;
@@ -1347,6 +1376,12 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
     }
     
     .mobile-toggle {
+        /* CRITICAL FIX: Brings the toggle back into normal flow so it naturally responds to screen sizes */
+        position: relative;
+        right: auto;
+        margin-left: auto;
+        flex-shrink: 0;
+        
         opacity: 1;
         transform: scale(1); 
         pointer-events: auto;
