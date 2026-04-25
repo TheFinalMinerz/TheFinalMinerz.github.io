@@ -114,7 +114,6 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
 });
 
 // Keyboard navigation for mobile menu
-// Accessibility: Mobile Menu Focus Trap & Escape Key
 document.addEventListener('keydown', (e) => {
     if (!mobileDropdown.classList.contains('active')) return;
     
@@ -248,17 +247,7 @@ if (form) {
             btn.style.opacity = '1';
         }, 3000);
     });
-    
 }
-
-// Accessibility: Prevent marquee containers from auto-scrolling when tabbing quickly
-document.querySelectorAll('.trust-banner').forEach(banner => {
-    banner.addEventListener('scroll', function() {
-        if (this.scrollLeft !== 0) {
-            this.scrollLeft = 0;
-        }
-    }, { passive: true });
-});
 
 // --- High-Performance Universal Spotlight Effect Tracker ---
 let currentSpotlightCard = null;
@@ -273,14 +262,14 @@ const updateSpotlightPosition = (card, clientX, clientY) => {
     });
 };
 
-// 1. Desktop Mouse Tracking (Standard)
+// Desktop Mouse Tracking (Standard)
 document.querySelectorAll('.hover-spotlight').forEach(element => {
     element.addEventListener('mousemove', e => {
         updateSpotlightPosition(element, e.clientX, e.clientY);
     });
 });
 
-// 2. Mobile Touch Tracking (Fluid cross-element dragging)
+// Mobile Touch Tracking
 document.addEventListener('touchmove', (e) => {
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -289,20 +278,17 @@ document.addEventListener('touchmove', (e) => {
 
     const card = elementUnderFinger.closest('.hover-spotlight');
 
-    // Fade out old card if we dragged onto a new one
     if (currentSpotlightCard && currentSpotlightCard !== card) {
         const oldOverlay = currentSpotlightCard.querySelector('.spotlight-overlay');
         if (oldOverlay) oldOverlay.style.opacity = '0';
     }
 
-    // Update new card
     if (card) {
         const overlay = card.querySelector('.spotlight-overlay');
         if (overlay) overlay.style.opacity = '1';
         updateSpotlightPosition(card, touch.clientX, touch.clientY);
         currentSpotlightCard = card;
     } else {
-        // If finger slides off all cards, clear the current one
         if(currentSpotlightCard) {
             const oldOverlay = currentSpotlightCard.querySelector('.spotlight-overlay');
             if (oldOverlay) oldOverlay.style.opacity = '0';
@@ -311,7 +297,6 @@ document.addEventListener('touchmove', (e) => {
     }
 }, { passive: true });
 
-// Show glow on initial tap
 document.addEventListener('touchstart', (e) => {
     const touch = e.touches[0];
     const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
@@ -326,7 +311,6 @@ document.addEventListener('touchstart', (e) => {
     }
 }, { passive: true });
 
-// Clear glow when finger lifts
 const clearSpotlight = () => {
     if (currentSpotlightCard) {
         const overlay = currentSpotlightCard.querySelector('.spotlight-overlay');
@@ -338,7 +322,7 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
 let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; 
@@ -347,13 +331,13 @@ const clearAllTouches = () => {
     document.querySelectorAll('.tech-item.touch-active').forEach(item => {
         item.classList.remove('touch-active');
     });
+    // Restore the pause lock clearing on lift-off
     document.querySelectorAll('.marquee-wrapper.is-paused').forEach(wrapper => {
         wrapper.classList.remove('is-paused');
     });
     currentTouchedItem = null;
 };
 
-// Handle fluid finger dragging with GPU requestAnimationFrame for 60fps performance
 document.addEventListener('touchmove', (e) => {
     if (isDragging || isNavigating) return;
     isDragging = true;
@@ -371,6 +355,7 @@ document.addEventListener('touchmove', (e) => {
                 if (techItem) {
                     techItem.classList.add('touch-active');
                     
+                    // Pause parent marquee during drag
                     const wrapper = techItem.closest('.marquee-wrapper');
                     if (wrapper) wrapper.classList.add('is-paused');
                     
@@ -382,7 +367,6 @@ document.addEventListener('touchmove', (e) => {
     });
 }, { passive: true });
 
-// Handle initial tap
 document.addEventListener('touchstart', (e) => {
     if (isNavigating) return;
     const techItem = e.target.closest('.tech-item');
@@ -391,6 +375,7 @@ document.addEventListener('touchstart', (e) => {
     if (techItem) {
         techItem.classList.add('touch-active');
         
+        // Pause parent marquee instantly on touch
         const wrapper = techItem.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
         
@@ -398,7 +383,6 @@ document.addEventListener('touchstart', (e) => {
     }
 }, { passive: true });
 
-// Clean up when finger lifts 
 document.addEventListener('touchend', () => {
     setTimeout(() => {
         if (!isNavigating) clearAllTouches();
@@ -411,7 +395,7 @@ document.addEventListener('touchcancel', () => {
     }, 300);
 });
 
-// THE HOLY GRAIL: Defeating Mobile Focus-Snap natively
+// Defeating Mobile Focus-Snap natively
 document.querySelectorAll('.tech-item').forEach(item => {
     item.addEventListener('click', function(e) {
         e.preventDefault(); 
@@ -455,10 +439,9 @@ const resetThemeBtn = document.getElementById('resetTheme');
 
 const defaultColor1 = '#3b82f6';
 const defaultColor2 = '#8b5cf6';
-const defaultSpeed = '20'; // Seconds
+const defaultSpeedVal = 50; 
 const defaultAnimType = 'effect-float';
 
-// Toggle Panel Visibility
 if (themeBtn && themePanel) {
     themeBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -472,7 +455,6 @@ if (themeBtn && themePanel) {
     });
 }
 
-// Global Color Application
 const updateColors = (c1, c2) => {
     document.documentElement.style.setProperty('--color-1', c1);
     document.documentElement.style.setProperty('--color-2', c2);
@@ -486,7 +468,6 @@ if (color1Picker && color2Picker) {
     color2Picker.addEventListener('input', (e) => updateColors(color1Picker.value, e.target.value));
 }
 
-// Light/Dark Mode
 if (themeModeToggle) {
     themeModeToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -499,25 +480,25 @@ if (themeModeToggle) {
     });
 }
 
-// Background Animation Type
 if (animTypeSelect) {
     animTypeSelect.addEventListener('change', (e) => {
-        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit');
+        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit', 'effect-wave', 'effect-spin');
         document.body.classList.add(e.target.value);
         localStorage.setItem('animType', e.target.value);
     });
 }
 
-// Background Animation Speed
-if (animSpeedSlider) {
-    animSpeedSlider.addEventListener('input', (e) => {
-        const speedStr = e.target.value + 's';
-        document.documentElement.style.setProperty('--anim-duration', speedStr);
-        localStorage.setItem('animSpeed', e.target.value);
-    });
+// Maps Slider (1-100) -> Speed (40s -> 5s). Slow is on the Left, Fast is on the Right.
+const updateSpeed = (val) => {
+    const speedSecs = 40 - ((val - 1) * (35 / 99));
+    document.documentElement.style.setProperty('--anim-duration', speedSecs + 's');
+    localStorage.setItem('animSpeed', val);
 }
 
-// Background Animation Enable/Disable
+if (animSpeedSlider) {
+    animSpeedSlider.addEventListener('input', (e) => updateSpeed(e.target.value));
+}
+
 if (animToggle) {
     animToggle.addEventListener('change', (e) => {
         if (e.target.checked) {
@@ -533,24 +514,23 @@ if (animToggle) {
 // Factory Reset
 if (resetThemeBtn) {
     resetThemeBtn.addEventListener('click', () => {
-        color1Picker.value = defaultColor1;
-        color2Picker.value = defaultColor2;
+        if(color1Picker) color1Picker.value = defaultColor1;
+        if(color2Picker) color2Picker.value = defaultColor2;
         updateColors(defaultColor1, defaultColor2);
         
         if (animTypeSelect) animTypeSelect.value = defaultAnimType;
-        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit');
+        document.body.classList.remove('effect-float', 'effect-pulse', 'effect-orbit', 'effect-wave', 'effect-spin');
         document.body.classList.add(defaultAnimType);
         localStorage.setItem('animType', defaultAnimType);
         
-        animSpeedSlider.value = defaultSpeed;
-        document.documentElement.style.setProperty('--anim-duration', defaultSpeed + 's');
-        localStorage.setItem('animSpeed', defaultSpeed);
+        if (animSpeedSlider) animSpeedSlider.value = defaultSpeedVal;
+        updateSpeed(defaultSpeedVal);
         
-        animToggle.checked = true;
+        if(animToggle) animToggle.checked = true;
         document.body.classList.remove('disable-bg-animation');
         localStorage.setItem('bgAnimation', 'enabled');
         
-        themeModeToggle.checked = false;
+        if(themeModeToggle) themeModeToggle.checked = false;
         document.body.classList.remove('light-mode');
         localStorage.setItem('themeMode', 'dark');
     });
@@ -581,7 +561,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (savedSpeed) {
         if (animSpeedSlider) animSpeedSlider.value = savedSpeed;
-        document.documentElement.style.setProperty('--anim-duration', savedSpeed + 's');
+        updateSpeed(savedSpeed);
+    } else {
+        updateSpeed(defaultSpeedVal);
     }
 
     if (savedAnim === 'disabled') {

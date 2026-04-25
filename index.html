@@ -453,7 +453,7 @@
                 <div class="footer-col">
                     <h3>Cyber Squad</h3>
                     <p>Ready to talk, guide, and guard.</p>
-                    <span style="color: #fff; font-weight: 600; font-size: 1.2rem; display: block; margin-bottom: 0.8rem;">N/A</span>
+                    <span style="color: var(--text-main); font-weight: 600; font-size: 1.2rem; display: block; margin-bottom: 0.8rem;">N/A</span>
                     <a href="mailto:contact@egusystems.com">contact@egusystems.com</a>
                 </div>
 
@@ -546,7 +546,9 @@
                 <select id="animType" aria-label="Select Animation Type" class="theme-select">
                     <option value="effect-float">Float</option>
                     <option value="effect-pulse">Pulse</option>
+                    <option value="effect-wave">Wave</option>
                     <option value="effect-orbit">Orbit</option>
+                    <option value="effect-spin">Spin</option>
                 </select>
             </div>
             
@@ -559,8 +561,8 @@
             </div>
 
             <div class="theme-control">
-                <label for="animSpeed">Speed (Fast -> Slow)</label>
-                <input type="range" id="animSpeed" min="5" max="40" value="20" aria-label="Adjust Animation Speed" style="width: 80px;">
+                <label for="animSpeed">Speed (Slow ➞ Fast)</label>
+                <input type="range" id="animSpeed" min="1" max="100" value="50" aria-label="Adjust Animation Speed" style="width: 80px;">
             </div>
             
             <button id="resetTheme" class="cookie-btn" style="width: 100%; margin-top: 1.5rem; color: var(--text-main);">Reset Defaults</button>
