@@ -338,7 +338,7 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 }
 .nav-cta::after { display: none !important; }
 
-/* Mobile Menu Elements */
+/* --- CRITICAL FIX: DUAL-LAYER MORPHING MENU TOGGLE --- */
 .mobile-toggle {
     display: flex;
     align-items: center;
@@ -350,14 +350,49 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     color: var(--text-main);
     font-size: 1.8rem;
     cursor: pointer;
+    
+    /* Fixed width/height provides a stable box for the absolute elements to perfectly center in */
+    width: 44px;
+    height: 44px;
+    
+    /* Kept invisible natively on desktop */
     opacity: 0;
-    transform: rotate(0deg) scale(0.5);
+    transform: scale(0.5);
     pointer-events: none;
-    /* CRITICAL FIX: Ensure 'visibility' holds its state through the 0.4s fade out so rotation works on window resize */
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease;
     visibility: hidden;
 }
 
+/* The newly injected spans that do the actual animating */
+.mobile-toggle .icon-bars, 
+.mobile-toggle .icon-close {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Default States */
+.mobile-toggle .icon-close {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5); /* Close icon is hidden and spun backwards initially */
+}
+
+/* Active (Open) States */
+.mobile-toggle.is-open .icon-bars {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5); /* Hamburger spins forward and shrinks away */
+}
+
+.mobile-toggle.is-open .icon-close {
+    opacity: 1;
+    transform: rotate(0deg) scale(1); /* Close icon spins to 0 and scales up beautifully */
+}
+
+/* Mobile Menu Elements */
 .mobile-dropdown {
     position: absolute;
     top: var(--nav-height);
@@ -633,6 +668,7 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     flex-shrink: 0;
 }
 
+/* Marquee Item - Clean Floating Text */
 .tech-item {
     display: flex;
     align-items: center;
@@ -1250,17 +1286,13 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
         visibility: hidden;
     }
     
-    /* CRITICAL FIX: The mobile toggle was immediately losing its 'visibility: visible' on desktop resize. 
-       This transition ensures it slowly fades away, allowing the reverse 'X' rotation to execute beautifully. */
     .mobile-toggle {
         opacity: 1;
-        transform: rotate(0deg) scale(1);
+        transform: scale(1); /* No rotation on the container */
         pointer-events: auto;
         visibility: visible;
     }
-    .mobile-toggle.is-open {
-        transform: rotate(90deg) scale(1);
-    }
+    
     .hero { padding: calc(var(--nav-height) + 6rem) 0 5rem; }
     .callout-box { padding: 4rem 1.5rem; }
     .back-to-top { bottom: 1.5rem; right: 1.5rem; }

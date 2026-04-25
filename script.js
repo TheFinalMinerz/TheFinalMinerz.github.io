@@ -78,26 +78,30 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
     
-// Smooth Mobile Menu Toggle Logic
+// --- CRITICAL FIX: DUAL-LAYER MORPHING MENU TOGGLE ---
 const mobileToggle = document.getElementById('mobileToggle');
 const mobileDropdown = document.getElementById('mobileDropdown');
+
+// Automatically inject the two crossfading spans without needing HTML edits
+if (mobileToggle) {
+    mobileToggle.innerHTML = `
+        <span class="icon-bars">☰</span>
+        <span class="icon-close">✕</span>
+    `;
+}
 
 mobileToggle.addEventListener('click', () => {
     const isExpanded = mobileToggle.getAttribute('aria-expanded') === 'true';
     mobileToggle.setAttribute('aria-expanded', !isExpanded);
     
     mobileDropdown.classList.toggle('active');
+    // Just toggle the class! The CSS handles the buttery smooth crossfade and rotation. No timeouts needed.
     mobileToggle.classList.toggle('is-open');
     
     if(mobileToggle.classList.contains('is-open')){
-        mobileToggle.innerHTML = '✕'; 
         const firstMenuItem = mobileDropdown.querySelector('a');
         if (firstMenuItem) firstMenuItem.focus();
     } else {
-        // CRITICAL FIX: Wait for the 400ms CSS rotation to finish before snapping back to the hamburger icon
-        setTimeout(() => {
-            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
-        }, 400);
         mobileToggle.focus();
     }
 });
@@ -107,11 +111,6 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
-        
-        // CRITICAL FIX
-        setTimeout(() => {
-            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
-        }, 400);
     });
 });
 
@@ -127,7 +126,6 @@ document.addEventListener('keydown', (e) => {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
-        setTimeout(() => { if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰'; }, 400);
         mobileToggle.focus();
     }
 
@@ -146,16 +144,11 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// CRITICAL FIX: Smoothly close and reset the menu if desktop width is reached via window resize
 window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
         mobileDropdown.classList.remove('active');
         mobileToggle.classList.remove('is-open');
-        
-        setTimeout(() => {
-            if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
-        }, 400);
     }
 }, { passive: true });
 
@@ -328,10 +321,18 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
     const wrapper = banner.querySelector('.marquee-wrapper');
     if (!wrapper) return;
     
+    wrapper.querySelectorAll('.tech-list').forEach((list, index) => {
+        if (index > 0) {
+            list.setAttribute('aria-hidden', 'true');
+            list.querySelectorAll('a, button').forEach(el => el.setAttribute('tabindex', '-1'));
+        }
+    });
+    
     const originalList = wrapper.querySelector('.tech-list');
 
     setTimeout(() => {
         const listWidth = originalList.offsetWidth || 600; 
+        
         const clonesNeeded = Math.ceil(16000 / listWidth); 
 
         for (let i = 0; i < clonesNeeded; i++) {
@@ -735,11 +736,6 @@ if (window.visualViewport) {
                 mobileToggle.setAttribute('aria-expanded', 'false');
                 mobileDropdown.classList.remove('active');
                 mobileToggle.classList.remove('is-open');
-                
-                // CRITICAL FIX: Make sure smart-zoom closes also wait 400ms to spin back cleanly
-                setTimeout(() => {
-                    if (!mobileToggle.classList.contains('is-open')) mobileToggle.innerHTML = '☰';
-                }, 400);
             }
             
         } else if (currentScale <= 1.05 && isZoomedIn) {
