@@ -11,9 +11,9 @@ const currentPath = window.location.pathname;
 const isHomePage = currentPath.endsWith('/') || currentPath.endsWith('index.html');
 
 if (!isHomePage) {
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
+    // IMPORTANT: Excludes the skip-link so it correctly skips down the current subpage
+    document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach(link => {
         const hash = link.getAttribute('href');
-        // Transforms href="#contact" into href="index.html#contact" seamlessly
         if (hash.length > 1) { 
             link.href = 'index.html' + hash; 
         } else {
@@ -346,7 +346,6 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
 
     setTimeout(() => {
         const listWidth = originalList.offsetWidth || 600; 
-        
         const clonesNeeded = Math.ceil(16000 / listWidth); 
 
         for (let i = 0; i < clonesNeeded; i++) {
@@ -367,7 +366,21 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
 
         wrapper.scrollLeft = listWidth * 2;
 
+        // CRITICAL FIX: Performance optimization. Only run the physics loop if the banner is actually visible!
+        let isVisible = true;
+        const visibilityObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                isVisible = entry.isIntersecting;
+                if (isVisible && !isDown) {
+                    requestAnimationFrame(playMarquee);
+                }
+            });
+        }, { rootMargin: "100px" });
+        visibilityObserver.observe(banner);
+
         const playMarquee = () => {
+            if (!isVisible) return; // Halts the CPU loop completely when banner is off-screen
+            
             const singleWidth = originalList.offsetWidth;
             
             if (singleWidth > 0) {
@@ -427,6 +440,8 @@ document.querySelectorAll('.trust-banner').forEach(banner => {
             document.body.classList.remove('is-dragging'); 
             
             setTimeout(() => { window.isMarqueeDragging = false; }, 50); 
+            
+            if (isVisible) requestAnimationFrame(playMarquee);
             
             window.removeEventListener('mousemove', handleMove);
             window.removeEventListener('mouseup', handleUp);

@@ -11,17 +11,14 @@
 @font-face { font-family: 'Sora'; font-style: normal; font-weight: 700; font-display: swap; src: url('./fonts/sora-v17-latin-700.woff2') format('woff2'); }
 @font-face { font-family: 'Sora'; font-style: normal; font-weight: 800; font-display: swap; src: url('./fonts/sora-v17-latin-800.woff2') format('woff2'); }
 
-/* Smooth Gradient Animation Support */
 @property --color-1 { syntax: '<color>'; inherits: true; initial-value: #3b82f6; }
 @property --color-2 { syntax: '<color>'; inherits: true; initial-value: #8b5cf6; }
 
-/* FOUC Preload Lock now blocks keyframes on load */
 .preload, .preload *, .preload ::before, .preload ::after {
     transition: none !important;
     animation: none !important;
 }
 
-/* Globally disables text highlighting while aggressively swiping */
 body.is-dragging {
     user-select: none !important;
     -webkit-user-select: none !important;
@@ -45,12 +42,9 @@ body.is-dragging {
     --accent-gradient: linear-gradient(135deg, var(--color-1) 0%, var(--color-2) 100%);
     
     --nav-height: 80px;
-    
-    /* Engine transitions for beautiful smooth resets */
     transition: --color-1 0.6s ease-in-out, --color-2 0.6s ease-in-out;
 }
 
-/* Light Theme Overrides */
 body.light-mode {
     --bg-base: #f8fafc;
     --bg-surface: rgba(0, 0, 0, 0.03);
@@ -78,7 +72,6 @@ body {
     transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out;
 }
 
-/* User Settings Overrides */
 body.disable-bg-animation .bg-glow { animation: none !important; }
 body.effect-float { --anim-name: float; }
 body.effect-pulse { --anim-name: pulse-glow; }
@@ -88,7 +81,6 @@ body.effect-orbit .bg-glow.bottom { animation-name: orbit-glow-2; animation-timi
 body.effect-spin .bg-glow.top { animation-name: spin-glow; }
 body.effect-spin .bg-glow.bottom { animation-name: spin-glow; animation-direction: reverse; }
 
-/* Interactive Cursor Mode */
 body.interactive-bg .bg-glow.top {
     animation: none !important;
     top: 0; left: 0;
@@ -98,7 +90,6 @@ body.interactive-bg .bg-glow.top {
     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Visual Viewport Smart Zoom Engine */
 body.is-zoomed nav { transform: translateY(-100%); opacity: 0; pointer-events: none; }
 body.is-zoomed .theme-settings-wrapper { transform: translateX(-150%); opacity: 0; pointer-events: none; }
 body.is-zoomed .back-to-top { transform: translateY(150%); opacity: 0; pointer-events: none; }
@@ -144,20 +135,31 @@ a, button {
     border: 0;
 }
 
-.sr-only.focus:not-sr-only {
-    position: static;
+/* CRITICAL FIX: The Skip Link gracefully appears on screen when tabbed into via keyboard */
+.skip-link:focus, .skip-link:focus-visible {
+    position: fixed;
+    top: 1.5rem;
+    left: 1.5rem;
     width: auto;
     height: auto;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1.5rem;
     margin: 0;
     overflow: visible;
     clip: auto;
     white-space: normal;
-    border: 2px solid var(--accent-glow);
-    background: var(--bg-base);
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(10px);
     color: var(--text-main);
-    z-index: 10006;
+    border: 2px solid var(--accent-glow);
+    border-radius: 8px;
+    z-index: 100000;
+    font-weight: 700;
+    font-family: 'Sora', sans-serif;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
+
+body.light-mode .skip-link:focus { background: rgba(248, 250, 252, 0.95); }
 
 ::selection {
     background: var(--accent-purple);
@@ -166,18 +168,10 @@ a, button {
 
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: var(--bg-base); }
-::-webkit-scrollbar-thumb {
-    background: rgba(128, 128, 128, 0.3);
-    border-radius: 10px;
-}
+::-webkit-scrollbar-thumb { background: rgba(128, 128, 128, 0.3); border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(128, 128, 128, 0.5); }
 
-/* --- UTILITIES --- */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
 
 .scroll-progress {
     position: fixed;
@@ -207,7 +201,6 @@ body.light-mode .bg-glow { opacity: 0.15; }
 .bg-glow.top { top: -20%; left: -10%; }
 .bg-glow.bottom { bottom: -20%; right: -10%; animation-delay: calc(var(--anim-duration) * -0.5); }
 
-/* Multi-Effect Keyframes */
 @keyframes float {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(5%, 10%) scale(1.1); }
@@ -304,18 +297,13 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
 .system-status {
     display: inline-flex;
     align-items: center;
-    
-    /* CRITICAL FIX: Pins the dot perfectly to the left wall. When the box shrinks, the dot NEVER moves! */
     justify-content: flex-start; 
-    
     gap: 8px;
     height: 32px;
     max-width: 180px;
     
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.2);
-    
-    /* Exactly 11px padding locks the dot seamlessly in the center of the 32px mobile circle */
     padding: 0 11px; 
     border-radius: 16px;
     font-size: 0.7rem;
@@ -326,11 +314,9 @@ body.light-mode nav { background: rgba(248, 250, 252, 0.85); }
     margin-left: 1.5rem;
     font-family: 'Inter', sans-serif;
     cursor: default;
-    
     user-select: none;
     -webkit-user-select: none;
     
-    /* Synced perfectly with the rest of the 0.6s responsive window elements */
     transition: max-width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
                 padding 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
                 margin-left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
@@ -349,7 +335,7 @@ body.light-mode .system-status {
 .status-dot {
     width: 8px;
     height: 8px;
-    min-width: 8px; /* Prevents dot from squishing during transitions */
+    min-width: 8px; 
     background-color: #10b981;
     border-radius: 50%;
     position: relative;
@@ -374,8 +360,7 @@ body.light-mode .system-status {
     max-width: 120px;
     display: inline-block;
     overflow: hidden;
-    transition: max-width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), 
-                opacity 0.4s ease; /* Fades the text slightly faster than the box crushes it */
+    transition: max-width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease; 
 }
 
 @keyframes statusPulse {
@@ -461,20 +446,9 @@ body.light-mode .system-status {
     transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.mobile-toggle .icon-close {
-    opacity: 0;
-    transform: rotate(-90deg) scale(0.5); 
-}
-
-.mobile-toggle.is-open .icon-bars {
-    opacity: 0;
-    transform: rotate(90deg) scale(0.5); 
-}
-
-.mobile-toggle.is-open .icon-close {
-    opacity: 1;
-    transform: rotate(0deg) scale(1); 
-}
+.mobile-toggle .icon-close { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+.mobile-toggle.is-open .icon-bars { opacity: 0; transform: rotate(90deg) scale(0.5); }
+.mobile-toggle.is-open .icon-close { opacity: 1; transform: rotate(0deg) scale(1); }
 
 .mobile-dropdown {
     position: absolute;
@@ -490,9 +464,7 @@ body.light-mode .system-status {
     pointer-events: none;
     transform: translateY(-20px);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s ease, background-color 0.6s ease-in-out;
-    
     z-index: 10003; 
-    
     will-change: opacity, transform;
     max-height: calc(100dvh - var(--nav-height));
     overflow-y: auto;
@@ -672,7 +644,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     backface-visibility: hidden;
 }
 
-/* Desktop Only Interactions */
 @media (hover: hover) and (pointer: fine) {
     body:not(.is-touch-device) .btn:hover, 
     body:not(.is-touch-device) .mobile-cta:hover, 
@@ -706,7 +677,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     margin-bottom: 2rem;
     -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
     mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    
     user-select: none;
     -webkit-user-select: none;
 }
@@ -732,14 +702,11 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     cursor: grab;
     touch-action: pan-y;
     padding: 12px 0;
-    
     user-select: none;
     -webkit-user-select: none;
 }
 
-.marquee-wrapper.active-drag {
-    cursor: grabbing;
-}
+.marquee-wrapper.active-drag { cursor: grabbing; }
 
 .tech-list {
     display: flex;
@@ -751,7 +718,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     flex-shrink: 0;
 }
 
-/* Marquee Item - Clean Floating Text */
 .tech-item {
     display: flex;
     align-items: center;
@@ -764,7 +730,6 @@ body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at
     text-decoration: none;
     white-space: nowrap;
     border-radius: 8px;
-    
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
     user-select: none;
@@ -1370,13 +1335,8 @@ body.light-mode .back-to-top { background: rgba(248, 250, 252, 0.8); }
     }
     
     .system-status {
-        /* Pushes badge smoothly towards the logo when scaling down */
         margin-left: 12px; 
-        
-        /* 32px clamps the box, perfectly cutting off the right-side text smoothly */
         max-width: 32px; 
-        
-        /* Padding remains identical so the dot stays perfectly still inside its box */
         padding: 0 11px; 
         gap: 0;
     }

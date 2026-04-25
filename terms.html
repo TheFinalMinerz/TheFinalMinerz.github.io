@@ -46,7 +46,7 @@
             document.documentElement.style.setProperty('--cursor-y', `${window.innerHeight / 2}px`);
         })();
     </script>
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-accent-glow focus:text-white focus:rounded">Skip to main content</a>
+    <a href="#main-content" class="skip-link sr-only">Skip to main content</a>
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="bg-glow top"></div>
     <div class="bg-glow bottom"></div>
@@ -55,7 +55,7 @@
         <div class="nav-content">
             <div style="display: flex; align-items: center;">
                 <a href="#home" class="logo-container">
-                    <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
+                    <img src="/favicon.svg" alt="" aria-hidden="true" loading="lazy" class="logo-icon" width="32" height="32">
                     <span class="logo-text">EguSystems LLC</span>
                 </a>
                 
@@ -204,7 +204,7 @@
             <div class="footer-grid reveal">
                 <div class="footer-col">
                     <div class="logo-container">
-                        <img src="/favicon.svg" alt="EguSystems Icon" loading="lazy" class="logo-icon" width="32" height="32">
+                        <img src="/favicon.svg" alt="" aria-hidden="true" loading="lazy" class="logo-icon" width="32" height="32">
                         <span class="logo-text">EguSystems LLC</span>
                     </div>
                     <p>Your Safety, Everywhere You Go.<br>From global hubs to digital realms, EguSystems is always within reach.</p>
