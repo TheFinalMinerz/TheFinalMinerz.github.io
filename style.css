@@ -80,9 +80,10 @@ body.effect-spin .bg-glow.bottom { animation-name: spin-glow; animation-directio
 body.interactive-bg .bg-glow.top {
     animation: none !important;
     top: 0; left: 0;
-    margin-top: -30vw; margin-left: -30vw; 
+    margin-top: calc(max(60vw, 400px) / -2); 
+    margin-left: calc(max(60vw, 400px) / -2); 
     transform: translate3d(var(--cursor-x, 50vw), var(--cursor-y, 50vh), 0);
-    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 h1, h2, h3, h4, h5, h6, .logo-text, .nav-cta, .mobile-cta, .btn, .card-icon, .expert-info h4, .footer-col h4 {
@@ -175,8 +176,8 @@ a, button {
 
 .bg-glow {
     position: fixed;
-    width: 60vw;
-    height: 60vw;
+    width: max(60vw, 400px); 
+    height: max(60vw, 400px);
     border-radius: 50%;
     background: var(--accent-gradient);
     filter: blur(120px);
@@ -511,6 +512,7 @@ section {
 }
 /* Stronger spotlight overlay for light mode */
 body.light-mode .spotlight-overlay { background: radial-gradient(800px circle at var(--mouse-x) var(--mouse-y), rgba(0, 0, 0, 0.08), transparent 40%); }
+
 
 .spotlight-content-wrapper {
     position: relative;
@@ -962,6 +964,10 @@ body.light-mode .theme-toggle-btn { background: rgba(248, 250, 252, 0.8); }
     visibility: hidden;
     transform: translateX(-20px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* CRITICAL FIX: Safe height bound for mobile landscape orientation */
+    max-height: 80vh;
+    overflow-y: auto;
 }
 body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
 
@@ -980,7 +986,21 @@ body.light-mode .theme-panel { background: rgba(248, 250, 252, 0.95); }
     padding-bottom: 0.5rem;
 }
 
-/* CRITICAL FIX: Proper explicit focus rings for accessibility overrides */
+/* Custom CSS Scrollbar specifically for the Theme Panel */
+.theme-panel::-webkit-scrollbar {
+    width: 6px;
+}
+.theme-panel::-webkit-scrollbar-track {
+    background: transparent;
+}
+.theme-panel::-webkit-scrollbar-thumb {
+    background: rgba(128, 128, 128, 0.3);
+    border-radius: 10px;
+}
+.theme-panel::-webkit-scrollbar-thumb:hover {
+    background: rgba(128, 128, 128, 0.5);
+}
+
 #closeTheme:hover {
     color: var(--accent-glow);
 }

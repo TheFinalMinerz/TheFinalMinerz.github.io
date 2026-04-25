@@ -92,14 +92,17 @@ mobileToggle.addEventListener('click', () => {
     
     if(mobileToggle.classList.contains('is-open')){
         mobileToggle.innerHTML = '✕'; 
+        // Focus management: move focus to first menu item when opened
         const firstMenuItem = mobileDropdown.querySelector('a');
         if (firstMenuItem) firstMenuItem.focus();
     } else {
         mobileToggle.innerHTML = '☰';
+        // Return focus to toggle button when closed
         mobileToggle.focus();
     }
 });
 
+// Close mobile dropdown when a link is clicked
 document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -110,6 +113,7 @@ document.querySelectorAll('.mobile-nav-links a').forEach(link => {
     });
 });
 
+// Keyboard navigation for mobile menu
 document.addEventListener('keydown', (e) => {
     if (!mobileDropdown.classList.contains('active')) return;
     
@@ -127,12 +131,12 @@ document.addEventListener('keydown', (e) => {
     }
 
     if (e.key === 'Tab') {
-        if (e.shiftKey) { 
+        if (e.shiftKey) { // Shift + Tab
             if (document.activeElement === firstElement) {
                 e.preventDefault();
                 lastElement.focus();
             }
-        } else { 
+        } else { // Tab
             if (document.activeElement === lastElement) {
                 e.preventDefault();
                 firstElement.focus();
@@ -141,6 +145,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
+// Smart Failsafe: Smoothly hide mobile menu if window is resized to desktop width
 window.addEventListener('resize', () => {
     if (window.innerWidth > 900 && mobileDropdown.classList.contains('active')) {
         mobileToggle.setAttribute('aria-expanded', 'false');
@@ -242,6 +247,7 @@ if (form) {
             btn.style.opacity = '1';
         }, 3000);
     });
+    
 }
 
 document.querySelectorAll('.trust-banner').forEach(banner => {
@@ -323,7 +329,7 @@ const clearSpotlight = () => {
 document.addEventListener('touchend', clearSpotlight);
 document.addEventListener('touchcancel', clearSpotlight);
 
-// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting ---
+// --- Enterprise Mobile UX: Fluid Touch-Drag Highlighting (for marquee items) ---
 let currentTouchedItem = null;
 let isDragging = false;
 let isNavigating = false; 
@@ -354,8 +360,10 @@ document.addEventListener('touchmove', (e) => {
                 clearAllTouches();
                 if (techItem) {
                     techItem.classList.add('touch-active');
+                    
                     const wrapper = techItem.closest('.marquee-wrapper');
                     if (wrapper) wrapper.classList.add('is-paused');
+                    
                     currentTouchedItem = techItem;
                 }
             }
@@ -371,8 +379,10 @@ document.addEventListener('touchstart', (e) => {
     
     if (techItem) {
         techItem.classList.add('touch-active');
+        
         const wrapper = techItem.closest('.marquee-wrapper');
         if (wrapper) wrapper.classList.add('is-paused');
+        
         currentTouchedItem = techItem;
     }
 }, { passive: true });
@@ -418,7 +428,6 @@ document.querySelectorAll('.tech-item').forEach(item => {
         }, 50);
     });
 });
-
 
 // --- Theme Personalization Engine & Accessibility Tracker ---
 const themeBtn = document.getElementById('themeToggleBtn');
@@ -518,14 +527,35 @@ if (themeBtn && themePanel) {
     });
 }
 
-// Global Cursor Background Tracker
+// Global Cursor Background Tracker (Desktop and Mobile)
+let interactiveCursorTicking = false;
+const updateInteractiveCursor = (x, y) => {
+    if (!document.body.classList.contains('interactive-bg')) return;
+    if (!interactiveCursorTicking) {
+        window.requestAnimationFrame(() => {
+            document.documentElement.style.setProperty('--cursor-x', `${x}px`);
+            document.documentElement.style.setProperty('--cursor-y', `${y}px`);
+            interactiveCursorTicking = false;
+        });
+        interactiveCursorTicking = true;
+    }
+};
+
 document.addEventListener('mousemove', (e) => {
-    if (document.body.classList.contains('interactive-bg')) {
-        document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
-        document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+    updateInteractiveCursor(e.clientX, e.clientY);
+}, { passive: true });
+
+document.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+        updateInteractiveCursor(e.touches[0].clientX, e.touches[0].clientY);
     }
 }, { passive: true });
 
+document.addEventListener('touchstart', (e) => {
+    if (e.touches.length > 0) {
+        updateInteractiveCursor(e.touches[0].clientX, e.touches[0].clientY);
+    }
+}, { passive: true });
 
 const updateColors = (c1, c2) => {
     document.documentElement.style.setProperty('--color-1', c1);
@@ -560,7 +590,7 @@ if (animTypeSelect) {
     });
 }
 
-// Slider mapped so 1 is slow (40s), 100 is fast (5s)
+// Maps Slider (1-100) -> Speed (40s -> 5s)
 const updateSpeed = (val) => {
     const speedSecs = 40 - ((val - 1) * (35 / 99));
     document.documentElement.style.setProperty('--anim-duration', speedSecs + 's');
@@ -633,6 +663,10 @@ window.addEventListener('DOMContentLoaded', () => {
     const savedSpeed = localStorage.getItem('animSpeed');
     const savedAnim = localStorage.getItem('bgAnimation');
     const savedInteractive = localStorage.getItem('interactiveBg');
+
+    // Default cursor to center of screen before mouse moves
+    document.documentElement.style.setProperty('--cursor-x', `${window.innerWidth / 2}px`);
+    document.documentElement.style.setProperty('--cursor-y', `${window.innerHeight / 2}px`);
 
     if (savedC1 && savedC2) {
         if(color1Picker) color1Picker.value = savedC1;
